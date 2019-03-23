@@ -64,6 +64,20 @@ using namespace std;
 
 class database_api_impl;
 
+struct dm_order {
+    float price;
+    float quote;
+    float base;
+};
+
+struct dm_order_book
+{
+    string                      base;
+    string                      quote;
+    vector< dm_order >          bids;
+    vector< dm_order >          asks;
+};
+
 struct order
 {
    string                     price;
@@ -171,6 +185,9 @@ class database_api
        *   be notified.
        */
       void set_pending_transaction_callback( std::function<void(const variant& signed_transaction_object)> cb );
+
+      void set_order_book_callback( std::function<void(const variant& dm_order_book)> cb );
+
       /**
        * @brief Register a callback handle which will get notified when a block is pushed to database
        * @param cb The callback handle to register
@@ -763,6 +780,7 @@ FC_API(graphene::app::database_api,
    // Subscriptions
    (set_subscribe_callback)
    (set_pending_transaction_callback)
+   (set_order_book_callback)
    (set_block_applied_callback)
    (cancel_all_subscriptions)
 
