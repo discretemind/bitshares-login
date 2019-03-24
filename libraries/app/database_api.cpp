@@ -2593,41 +2593,39 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
 
 
 void database_api_impl::on_pending_transaction(const signed_transaction& trx, uint32_t limit)
-    for( auto& op : trx.operations ){
-        if( !op.valid() )
-            continue;
-
-        auto receives_id = op.receives.asset_id
-        auto pays_id = op.pays.asset_id
-        auto orders = get_limit_orders(op.pays.asset_id, op.receives.asset_id, limit)
-        _order_book_callback(fc::variant(orders))
-    }
-//    for(const optional< operation_history_object >& o_op : trx.operations)
-//    {
+//    for( auto& op : trx.operations ){
 //        if( !op.valid() )
-//        continue;
-//        const operation_history_object& op = *o_op;
+//            continue;
 //
-//        optional< std::pair<asset_id_type,asset_id_type> > market;
-//        switch(op.op.which())
-//        {
-//            /*  This is sent via the object_changed callback
-//            case operation::tag<limit_order_create_operation>::value:
-//               market = op.op.get<limit_order_create_operation>().get_market();
-//               break;
-//            */
-//            case operation::tag<fill_order_operation>::value:
-//                market = op.op.get<fill_order_operation>().get_market();
-//                break;
-//                /*
-//             case operation::tag<limit_order_cancel_operation>::value:
-//             */
-//            default: break;
-//        }
-//        if( market.valid() && _market_subscriptions.count(*market) )
-//            // FIXME this may cause fill_order_operation be pushed before order creation
-//            subscribed_markets_ops[*market].emplace_back(std::make_pair(op.op, op.result));
+//        auto receives_id = op.receives.asset_id
+//        auto pays_id = op.pays.asset_id
+//        auto orders = get_limit_orders(op.pays.asset_id, op.receives.asset_id, limit)
+//        _order_book_callback(fc::variant(orders))
 //    }
+    for(const optional< operation_history_object >& o_op : trx.operations)
+    {
+        if( !op.valid() )
+        continue;
+        const operation_history_object& op = *o_op;
+
+        optional< std::pair<asset_id_type,asset_id_type> > market;
+        switch(op.op.which())
+        {
+            case operation::tag<limit_order_create_operation>::value:
+               market = op.op.get<limit_order_create_operation>().get_market();
+               break;
+            case operation::tag<fill_order_operation>::value:
+                market = op.op.get<fill_order_operation>().get_market();
+                break;
+                /*
+             case operation::tag<limit_order_cancel_operation>::value:
+             */
+            default: break;
+        }
+        if( market.valid())
+            auto orders = get_limit_orders(market.first, market.second, limit)
+            _order_book_callback(fc::variant(orders))
+    }
 }
 
 /** note: this method cannot yield because it is called in the middle of
