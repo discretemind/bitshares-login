@@ -2574,16 +2574,14 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
         switch(op.op.which())
         {
             case operation::tag<limit_order_create_operation>::value:
-                const auto& lop = op.op.get<limit_order_create_operation>();
-
-//                market = op.op.get<limit_order_create_operation>().get_market();
-                if ( _new_order_callback ){
-                    limit_order ord;
-                    ord.seller = lop.seller;
-                    ord.base = lop.amount_to_sell;
-                    ord.quote = lop.min_to_receive;
-                    _new_order_callback( fc::variant(ord,1) );
-                }
+//                const auto& lop = op.op.get<limit_order_create_operation>();
+//                if ( _new_order_callback ){
+//                    limit_order ord;
+//                    ord.seller = lop.seller;
+//                    ord.base = lop.amount_to_sell;
+//                    ord.quote = lop.min_to_receive;
+//                    _new_order_callback( fc::variant(ord,1) );
+//                }
                 break;
 //            case operation::tag<fill_order_operation>::value:
 //                market = op.op.get<fill_order_operation>().get_market();
