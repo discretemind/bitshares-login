@@ -2568,7 +2568,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 {
 
     if (_new_order_callback) {
-        vector <variant> orders;
+        vector<limit_order> orders;
 
         for (const optional <operation_history_object> &o_op : trx.operations) {
             const operation_history_object &op = *o_op;
@@ -2581,7 +2581,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                     ord.seller = (*new_order).seller;
                     ord.base = (*new_order).amount_to_sell;
                     ord.quote = (*new_order).min_to_receive;
-                    orders.push_back(ord)
+                    orders.push_back(ord);
                     break;
 
                 default:
@@ -2589,7 +2589,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             }
 
         }
-        _new_order_callback(fc::variant(orders, 2));
+//        _new_order_callback(fc::variant(orders, 2));
     }
 //    {vector<variant> updates;
     for(const optional< operation_history_object >& o_op : trx.operations)
