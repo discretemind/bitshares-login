@@ -2622,8 +2622,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             default: break;
         }
         if( market.valid())
-            auto orders = get_limit_orders(market.first, market.second, limit)
-            _order_book_callback(fc::variant(orders))
+            auto orders = get_limit_orders((*market).first, (*market).second, limit)
+            _order_book_callback(fc::variant(orders));
     }
 }
 
