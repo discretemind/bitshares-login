@@ -2594,15 +2594,6 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
 
 void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_t limit)
 {
-//    for( auto& op : trx.operations ){
-//        if( !op.valid() )
-//            continue;
-//
-//        auto receives_id = op.receives.asset_id
-//        auto pays_id = op.pays.asset_id
-//        auto orders = get_limit_orders(op.pays.asset_id, op.receives.asset_id, limit)
-//        _order_book_callback(fc::variant(orders))
-//    }
     for(const optional< operation_history_object >& o_op : trx.operations)
     {
         const operation_history_object& op = *o_op;
@@ -2621,7 +2612,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
              */
             default: break;
         }
-        if( market.valid())
+        if( market.valid() && _order_book_callback)
             auto orders = get_limit_orders((*market).first, (*market).second, limit)
             _order_book_callback(fc::variant(orders));
     }
