@@ -61,7 +61,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       void set_pending_transaction_callback( std::function<void(const variant&)> cb );
       void set_block_applied_callback( std::function<void(const variant& block_id)> cb );
       void set_limit_order_callback( std::function<void(const variant&)> cb );
-      void set_new_order_callback( std::function<void(const variant& limit_order_create_operation)> cb );
+      void set_new_orders_callback( std::function<void(const variant& orders)> cb );
 
       void cancel_all_subscriptions(bool reset_callback, bool reset_market_subscriptions);
 
@@ -356,7 +356,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       std::function<void(const fc::variant&)> _pending_trx_callback;
       std::function<void(const fc::variant&)> _block_applied_callback;
       std::function<void(const fc::variant&)> _limit_order_callback;
-      std::function<void(const fc::variant&)> _new_order_callback;
+      std::function<void(const fc::variant&)> _new_orders_callback;
 
       boost::signals2::scoped_connection                                                                                           _new_connection;
       boost::signals2::scoped_connection                                                                                           _change_connection;
@@ -562,14 +562,14 @@ void database_api_impl::set_limit_order_callback( std::function<void(const varia
 }
 
 
-void database_api::set_new_order_callback( std::function<void(const variant&)> cb )
+void database_api::set_new_orders_callback( std::function<void(const variant&)> cb )
 {
-    my->set_new_order_callback( cb );
+    my->set_new_orders_callback( cb );
 }
 
-void database_api_impl::set_new_order_callback( std::function<void(const variant&)> cb )
+void database_api_impl::set_new_orders_callback( std::function<void(const variant&)> cb )
 {
-    _new_order_callback = cb;
+    _new_orders_callback = cb;
 }
 
 
@@ -2567,7 +2567,7 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
 void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_t limit)
 {
 
-    if (_new_order_callback) {
+    if (_new_orders_callback) {
         vector<limit_order> orders;
 
         for (const optional <operation_history_object> &o_op : trx.operations) {
