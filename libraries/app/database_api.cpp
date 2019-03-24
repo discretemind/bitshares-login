@@ -395,9 +395,7 @@ database_api_impl::database_api_impl( graphene::chain::database& db, const appli
    _applied_block_connection = _db.applied_block.connect([this](const signed_block&){ on_applied_block(); });
 
    _pending_trx_connection = _db.on_pending_transaction.connect([this](const signed_transaction& trx ){
-                        if ( _limit_order_callback ){
-                            on_pending_orders(trx, 3);
-                        }
+                        on_pending_orders(trx, 3);
                         if( _pending_trx_callback ) _pending_trx_callback( fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS) );
                       });
 }
@@ -2576,16 +2574,18 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
         switch(op.op.which())
         {
             case operation::tag<limit_order_create_operation>::value:
-                market = op.op.get<limit_order_create_operation>().get_market();
-
-                if _new_order_callback{
+//                market = op.op.get<limit_order_create_operation>().get_market();
+                if ( _new_order_callback ){
                     limit_order ord;
+                    ord.seller = operation.seller
+                    ord.base = operation.amount_to_sell
+                    ord.quote = operation.min_to_receive
                     _new_order_callback(ord)
                 }
                 break;
-            case operation::tag<fill_order_operation>::value:
-                market = op.op.get<fill_order_operation>().get_market();
-                break;
+//            case operation::tag<fill_order_operation>::value:
+//                market = op.op.get<fill_order_operation>().get_market();
+//                break;
                 /*
              case operation::tag<limit_order_cancel_operation>::value:
              */

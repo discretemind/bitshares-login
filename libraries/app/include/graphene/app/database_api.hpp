@@ -76,9 +76,9 @@ struct asset_amount {
 };
 
 struct limit_order {
-    float           price;
-    asset_amount    base;
-    asset_amount    quote;
+    account_id_type seller;
+    asset           base;
+    asset           quote;
 };
 
 struct dm_order_book
