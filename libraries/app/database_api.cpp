@@ -2572,9 +2572,11 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
         const operation_history_object& op = *o_op;
 
         optional<limit_order_create_operation> new_order;
+        optional< std::pair<asset_id_type,asset_id_type> > market;
         switch(op.op.which())
         {
             case operation::tag<limit_order_create_operation>::value:
+                market = op.op.get<fill_order_operation>().get_market();
                 new_order = op.op.get<limit_order_create_operation>();
                 if ( _new_order_callback ){
                     limit_order ord;
@@ -2584,16 +2586,16 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                     _new_order_callback( fc::variant(op.op,1) );
                 }
                 break;
-//            case operation::tag<fill_order_operation>::value:
-//                market = op.op.get<fill_order_operation>().get_market();
-//                break;
+            case operation::tag<fill_order_operation>::value:
+                market = op.op.get<fill_order_operation>().get_market();
+                break;
                 /*
              case operation::tag<limit_order_cancel_operation>::value:
              */
             default: break;
         }
 
-        if( _limit_order_callback ){
+        if( market.valid() && _limit_order_callback ){
             const auto& orders = get_limit_orders((*market).first, (*market).second, limit);
             _limit_order_callback( fc::variant(orders, 2) );
         }
