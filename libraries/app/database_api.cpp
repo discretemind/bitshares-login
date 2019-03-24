@@ -2570,18 +2570,18 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
     {
         const operation_history_object& op = *o_op;
 
-        optional< std::pair<asset_id_type,asset_id_type> > market;
+        optional< limit_order_create_operation > new_op;
         switch(op.op.which())
         {
             case operation::tag<limit_order_create_operation>::value:
-//                const auto& lop = op.op.get<limit_order_create_operation>();
-//                if ( _new_order_callback ){
-//                    limit_order ord;
-//                    ord.seller = lop.seller;
-//                    ord.base = lop.amount_to_sell;
-//                    ord.quote = lop.min_to_receive;
+                new_op = op.op.get<limit_order_create_operation>();
+                if ( _new_order_callback ){
+                    limit_order ord;
+                    ord.seller = new_op.seller;
+                    ord.base = new_op.amount_to_sell;
+                    ord.quote = new_op.min_to_receive;
 //                    _new_order_callback( fc::variant(ord,1) );
-//                }
+                }
                 break;
 //            case operation::tag<fill_order_operation>::value:
 //                market = op.op.get<fill_order_operation>().get_market();
