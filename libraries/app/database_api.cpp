@@ -273,8 +273,8 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
 
         uint32_t count = 0;
 
-        limit_itr = limit_price_idx.lower_bound(price::max(b,a));
-        limit_end = limit_price_idx.upper_bound(price::min(b,a));
+        auto limit_itr = limit_price_idx.lower_bound(price::max(b,a));
+        auto limit_end = limit_price_idx.upper_bound(price::min(b,a));
         while(limit_itr != limit_end && count < limit)
         {
             result.push_back(*limit_itr);
