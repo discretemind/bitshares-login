@@ -367,7 +367,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       void on_objects_changed(const vector<object_id_type>& ids, const flat_set<account_id_type>& impacted_accounts);
       void on_objects_removed(const vector<object_id_type>& ids, const vector<const object*>& objs, const flat_set<account_id_type>& impacted_accounts);
       void on_applied_block();
-      void on_pending_transaction(const signed_transaction& trx);
+      void on_pending_orders(const signed_transaction& trx, uint32_t limit);
 
       bool _notify_remove_create = false;
       mutable fc::bloom_filter _subscribe_filter;
@@ -417,7 +417,7 @@ database_api_impl::database_api_impl( graphene::chain::database& db, const appli
 
                         if( _pending_trx_callback ) _pending_trx_callback( fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS) );
                         if ( _order_book_callback ){
-                            on_pending_transaction(trx, 3);
+                            on_pending_orders(trx, 3);
                         }
                       });
 }
@@ -2592,7 +2592,7 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
 }
 
 
-void database_api_impl::on_pending_transaction(const signed_transaction& trx, uint32_t limit)
+void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_t limit)
 //    for( auto& op : trx.operations ){
 //        if( !op.valid() )
 //            continue;
