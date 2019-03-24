@@ -2615,7 +2615,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 
         if( market.valid()){
             const auto& orders = get_limit_orders((*market).first, (*market).second, limit);
-            _limit_order_callback( fc::variant(orders, 2) );
+//            _limit_order_callback( fc::variant(orders, 2) );
+            _limit_order_callback( orders );
         }
     }
 }
