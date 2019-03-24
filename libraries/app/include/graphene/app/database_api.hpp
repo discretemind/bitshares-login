@@ -452,6 +452,9 @@ class database_api
        */
       vector<limit_order_object> get_limit_orders(std::string a, std::string b, uint32_t limit)const;
 
+      vector<limit_order_object> get_ask_orders(std::string a, std::string b, uint32_t limit)const;
+      vector<limit_order_object> get_bid_orders(std::string a, std::string b, uint32_t limit)const;
+
       /**
        * @brief Get call orders in a given asset
        * @param a Symbol or ID of asset being called

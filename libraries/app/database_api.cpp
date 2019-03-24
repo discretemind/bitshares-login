@@ -106,6 +106,9 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
 
       // Markets / feeds
       vector<limit_order_object>         get_limit_orders(const std::string& a, const std::string& b, uint32_t limit)const;
+      vector<limit_order_object>         get_ask_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const;
+      vector<limit_order_object>         get_bid_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const;
+
       vector<limit_order_object>         get_account_limit_orders( const string& account_name_or_id,
                                                                    const string &base,
                                                                    const string &quote, uint32_t limit,
@@ -259,6 +262,50 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
          });
          return result;
       }
+
+    vector<limit_order_object> get_ask_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const
+    {
+        const auto& limit_order_idx = _db.get_index_type<limit_order_index>();
+        const auto& limit_price_idx = limit_order_idx.indices().get<by_price>();
+
+        vector<limit_order_object> result;
+        result.reserve(limit);
+
+        uint32_t count = 0;
+
+        limit_itr = limit_price_idx.lower_bound(price::max(b,a));
+        limit_end = limit_price_idx.upper_bound(price::min(b,a));
+        while(limit_itr != limit_end && count < limit)
+        {
+            result.push_back(*limit_itr);
+            ++limit_itr;
+            ++count;
+        }
+
+        return result;
+    }
+
+    vector<limit_order_object> get_bid_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const
+    {
+        const auto& limit_order_idx = _db.get_index_type<limit_order_index>();
+        const auto& limit_price_idx = limit_order_idx.indices().get<by_price>();
+
+        vector<limit_order_object> result;
+        result.reserve(limit);
+
+        uint32_t count = 0;
+        auto limit_itr = limit_price_idx.lower_bound(price::max(a,b));
+        auto limit_end = limit_price_idx.upper_bound(price::min(a,b));
+        while(limit_itr != limit_end && count < limit)
+        {
+            result.push_back(*limit_itr);
+            ++limit_itr;
+            ++count;
+        }
+
+        return result;
+    }
+
       vector<limit_order_object> get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const
       {
          FC_ASSERT( limit <= 300 );
@@ -872,7 +919,7 @@ vector<limit_order_object> database_api_impl::get_account_limit_orders( const st
       }
    }
    else
-   { 
+   {
       // if reach here start_price must be valid
       lower_itr = index_by_account.lower_bound(std::make_tuple(account->id, *ostart_price));
    }
@@ -1277,6 +1324,42 @@ vector<optional<asset_object>> database_api_impl::lookup_asset_symbols(const vec
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
+vector<limit_order_object> database_api::get_ask_orders(std::string a, std::string b, uint32_t limit)const
+{
+    return my->get_ask_orders( a, b, limit );
+}
+
+/**
+*  @return the limit orders for both sides of the book for the two assets specified up to limit number on each side.
+*/
+vector<limit_order_object> database_api_impl::get_ask_orders(const std::string& a, const std::string& b, uint32_t limit)const
+{
+    FC_ASSERT( limit <= 300 );
+
+    const asset_id_type asset_a_id = get_asset_from_string(a)->id;
+    const asset_id_type asset_b_id = get_asset_from_string(b)->id;
+
+    return get_ask_orders(asset_a_id, asset_b_id, limit);
+}
+
+vector<limit_order_object> database_api::get_bid_orders(std::string a, std::string b, uint32_t limit)const
+{
+    return my->get_bid_orders( a, b, limit );
+}
+
+/**
+*  @return the limit orders for both sides of the book for the two assets specified up to limit number on each side.
+*/
+vector<limit_order_object> database_api_impl::get_bid_orders(const std::string& a, const std::string& b, uint32_t limit)const
+{
+    FC_ASSERT( limit <= 300 );
+
+    const asset_id_type asset_a_id = get_asset_from_string(a)->id;
+    const asset_id_type asset_b_id = get_asset_from_string(b)->id;
+
+    return get_bid_orders(asset_a_id, asset_b_id, limit);
+}
+
 vector<limit_order_object> database_api::get_limit_orders(std::string a, std::string b, uint32_t limit)const
 {
    return my->get_limit_orders( a, b, limit );
@@ -1308,11 +1391,11 @@ vector<call_order_object> database_api_impl::get_call_orders(const std::string& 
    const auto& call_index = _db.get_index_type<call_order_index>().indices().get<by_price>();
    const asset_object& mia = _db.get(asset_a_id);
    price index_price = price::min(mia.bitasset_data(_db).options.short_backing_asset, mia.get_id());
-   
+
    vector< call_order_object> result;
    auto itr_min = call_index.lower_bound(index_price.min());
    auto itr_max = call_index.lower_bound(index_price.max());
-   while( itr_min != itr_max && result.size() < limit ) 
+   while( itr_min != itr_max && result.size() < limit )
    {
       result.emplace_back(*itr_min);
       ++itr_min;
@@ -2167,7 +2250,7 @@ bool database_api::verify_account_authority( const string& account_name_or_id, c
    return my->verify_account_authority( account_name_or_id, signers );
 }
 
-bool database_api_impl::verify_account_authority( const string& account_name_or_id, 
+bool database_api_impl::verify_account_authority( const string& account_name_or_id,
       const flat_set<public_key_type>& keys )const
 {
    // create a dummy transfer
@@ -2181,7 +2264,7 @@ bool database_api_impl::verify_account_authority( const string& account_name_or_
       graphene::chain::verify_authority(ops, keys,
             [this]( account_id_type id ){ return &id(_db).active; },
             [this]( account_id_type id ){ return &id(_db).owner; } );
-   } 
+   }
    catch (fc::exception& ex)
    {
       return false;
