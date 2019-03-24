@@ -367,6 +367,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       void on_objects_changed(const vector<object_id_type>& ids, const flat_set<account_id_type>& impacted_accounts);
       void on_objects_removed(const vector<object_id_type>& ids, const vector<const object*>& objs, const flat_set<account_id_type>& impacted_accounts);
       void on_applied_block();
+      void on_pending_transaction(const signed_transaction& trx);
 
       bool _notify_remove_create = false;
       mutable fc::bloom_filter _subscribe_filter;
@@ -414,8 +415,10 @@ database_api_impl::database_api_impl( graphene::chain::database& db, const appli
 
    _pending_trx_connection = _db.on_pending_transaction.connect([this](const signed_transaction& trx ){
 
-                         if( _pending_trx_callback ) _pending_trx_callback( fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS) );
-
+                        if( _pending_trx_callback ) _pending_trx_callback( fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS) );
+                        if ( _order_book_callback ){
+                            on_pending_transaction(trx, 3);
+                        }
                       });
 }
 
@@ -2586,6 +2589,45 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
       if( broadcast_queue.size() )
          broadcast_market_updates(broadcast_queue);
    }
+}
+
+
+void database_api_impl::on_pending_transaction(const signed_transaction& trx, uint32_t limit)
+    for( auto& op : trx.operations ){
+        if( !op.valid() )
+            continue;
+
+        auto receives_id = op.receives.asset_id
+        auto pays_id = op.pays.asset_id
+        auto orders = get_limit_orders(op.pays.asset_id, op.receives.asset_id, limit)
+        _order_book_callback(fc::variant(orders))
+    }
+//    for(const optional< operation_history_object >& o_op : trx.operations)
+//    {
+//        if( !op.valid() )
+//        continue;
+//        const operation_history_object& op = *o_op;
+//
+//        optional< std::pair<asset_id_type,asset_id_type> > market;
+//        switch(op.op.which())
+//        {
+//            /*  This is sent via the object_changed callback
+//            case operation::tag<limit_order_create_operation>::value:
+//               market = op.op.get<limit_order_create_operation>().get_market();
+//               break;
+//            */
+//            case operation::tag<fill_order_operation>::value:
+//                market = op.op.get<fill_order_operation>().get_market();
+//                break;
+//                /*
+//             case operation::tag<limit_order_cancel_operation>::value:
+//             */
+//            default: break;
+//        }
+//        if( market.valid() && _market_subscriptions.count(*market) )
+//            // FIXME this may cause fill_order_operation be pushed before order creation
+//            subscribed_markets_ops[*market].emplace_back(std::make_pair(op.op, op.result));
+//    }
 }
 
 /** note: this method cannot yield because it is called in the middle of
