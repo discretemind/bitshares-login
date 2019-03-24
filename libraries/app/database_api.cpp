@@ -2566,17 +2566,19 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
 
 void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_t limit)
 {
+//    {vector<variant> updates;
     for(const optional< operation_history_object >& o_op : trx.operations)
     {
         const operation_history_object& op = *o_op;
 
+        optional<limit_order_create_operation> new_order;
         switch(op.op.which())
         {
             case operation::tag<limit_order_create_operation>::value:
-//                new_op = op.op.get<limit_order_create_operation>();
+                new_order = op.op.get<limit_order_create_operation>();
                 if ( _new_order_callback ){
-//                    limit_order ord;
-//                    ord.seller = new_op.seller;
+                    limit_order ord;
+                    ord.seller = (*new_order).seller;
 //                    ord.base = new_op.amount_to_sell;
 //                    ord.quote = new_op.min_to_receive;
                     _new_order_callback( fc::variant(op.op,1) );
