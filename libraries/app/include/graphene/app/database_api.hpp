@@ -70,6 +70,17 @@ struct dm_order {
     float base;
 };
 
+struct asset_amount {
+    asset_id_type   asset;
+    float           amount;
+};
+
+struct limit_order {
+    float           price;
+    asset_amount    base;
+    asset_amount    quote;
+};
+
 struct dm_order_book
 {
     string                      base;
@@ -187,6 +198,8 @@ class database_api
       void set_pending_transaction_callback( std::function<void(const variant& signed_transaction_object)> cb );
 
       void set_limit_order_callback( std::function<void(const variant& dm_order_book)> cb );
+
+      void set_new_order_callback( std::function<void(const variant& limit_order)> cb );
 
       /**
        * @brief Register a callback handle which will get notified when a block is pushed to database
@@ -452,8 +465,7 @@ class database_api
        */
       vector<limit_order_object> get_limit_orders(std::string a, std::string b, uint32_t limit)const;
 
-      vector<limit_order_object> get_ask_orders(std::string a, std::string b, uint32_t limit)const;
-      vector<limit_order_object> get_bid_orders(std::string a, std::string b, uint32_t limit)const;
+      vector<limit_order_object> get_market_orders(std::string a, std::string b, uint32_t limit)const;
 
       /**
        * @brief Get call orders in a given asset
@@ -785,6 +797,7 @@ FC_API(graphene::app::database_api,
    (set_pending_transaction_callback)
    (set_limit_order_callback)
    (set_block_applied_callback)
+   (set_new_order_callback)
    (cancel_all_subscriptions)
 
    // Blocks and transactions
@@ -832,8 +845,7 @@ FC_API(graphene::app::database_api,
    // Markets / feeds
    (get_order_book)
    (get_limit_orders)
-   (get_ask_orders)
-   (get_bid_orders)
+   (get_market_orders)
    (get_account_limit_orders)
    (get_call_orders)
    (get_settle_orders)

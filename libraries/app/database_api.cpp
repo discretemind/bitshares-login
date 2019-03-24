@@ -61,6 +61,8 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       void set_pending_transaction_callback( std::function<void(const variant&)> cb );
       void set_block_applied_callback( std::function<void(const variant& block_id)> cb );
       void set_limit_order_callback( std::function<void(const variant&)> cb );
+      void set_new_order_callback( std::function<void(const variant& limit_order)> cb );
+
       void cancel_all_subscriptions(bool reset_callback, bool reset_market_subscriptions);
 
       // Blocks and transactions
@@ -106,8 +108,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
 
       // Markets / feeds
       vector<limit_order_object>         get_limit_orders(const std::string& a, const std::string& b, uint32_t limit)const;
-      vector<limit_order_object>         get_ask_orders(const std::string& a, const std::string& b, uint32_t limit)const;
-      vector<limit_order_object>         get_bid_orders(const std::string& a, const std::string& b, uint32_t limit)const;
+      vector<limit_order_object>         get_market_orders(const std::string& a, const std::string& b, uint32_t limit)const;
 
       vector<limit_order_object>         get_account_limit_orders( const string& account_name_or_id,
                                                                    const string &base,
@@ -263,7 +264,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
          return result;
       }
 
-    vector<limit_order_object> get_ask_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const
+    vector<limit_order_object> get_market_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const
     {
         const auto& limit_order_idx = _db.get_index_type<limit_order_index>();
         const auto& limit_price_idx = limit_order_idx.indices().get<by_price>();
@@ -275,27 +276,6 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
 
         auto limit_itr = limit_price_idx.lower_bound(price::max(b,a));
         auto limit_end = limit_price_idx.upper_bound(price::min(b,a));
-        while(limit_itr != limit_end && count < limit)
-        {
-            result.push_back(*limit_itr);
-            ++limit_itr;
-            ++count;
-        }
-
-        return result;
-    }
-
-    vector<limit_order_object> get_bid_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const
-    {
-        const auto& limit_order_idx = _db.get_index_type<limit_order_index>();
-        const auto& limit_price_idx = limit_order_idx.indices().get<by_price>();
-
-        vector<limit_order_object> result;
-        result.reserve(limit);
-
-        uint32_t count = 0;
-        auto limit_itr = limit_price_idx.lower_bound(price::max(a,b));
-        auto limit_end = limit_price_idx.upper_bound(price::min(a,b));
         while(limit_itr != limit_end && count < limit)
         {
             result.push_back(*limit_itr);
@@ -376,6 +356,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       std::function<void(const fc::variant&)> _pending_trx_callback;
       std::function<void(const fc::variant&)> _block_applied_callback;
       std::function<void(const fc::variant&)> _limit_order_callback;
+      std::function<void(const fc::variant&)> _new_order_callback;
 
       boost::signals2::scoped_connection                                                                                           _new_connection;
       boost::signals2::scoped_connection                                                                                           _change_connection;
@@ -414,11 +395,10 @@ database_api_impl::database_api_impl( graphene::chain::database& db, const appli
    _applied_block_connection = _db.applied_block.connect([this](const signed_block&){ on_applied_block(); });
 
    _pending_trx_connection = _db.on_pending_transaction.connect([this](const signed_transaction& trx ){
-
-                        if( _pending_trx_callback ) _pending_trx_callback( fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS) );
                         if ( _limit_order_callback ){
                             on_pending_orders(trx, 3);
                         }
+                        if( _pending_trx_callback ) _pending_trx_callback( fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS) );
                       });
 }
 
@@ -582,6 +562,18 @@ void database_api_impl::set_limit_order_callback( std::function<void(const varia
 {
     _limit_order_callback = cb;
 }
+
+
+void database_api::set_new_order_callback( std::function<void(const variant&)> cb )
+{
+    my->set_new_order_callback( cb );
+}
+
+void database_api_impl::set_new_order_callback( std::function<void(const variant&)> cb )
+{
+    _new_order_callback = cb;
+}
+
 
 void database_api::cancel_all_subscriptions()
 {
@@ -1327,40 +1319,22 @@ vector<optional<asset_object>> database_api_impl::lookup_asset_symbols(const vec
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-vector<limit_order_object> database_api::get_ask_orders(std::string a, std::string b, uint32_t limit)const
+vector<limit_order_object> database_api::get_market_orders(std::string a, std::string b, uint32_t limit)const
 {
-    return my->get_ask_orders( a, b, limit );
+    return my->get_market_orders( a, b, limit );
 }
 
 /**
 *  @return the limit orders for both sides of the book for the two assets specified up to limit number on each side.
 */
-vector<limit_order_object> database_api_impl::get_ask_orders(const std::string& a, const std::string& b, uint32_t limit)const
+vector<limit_order_object> database_api_impl::get_market_orders(const std::string& a, const std::string& b, uint32_t limit)const
 {
     FC_ASSERT( limit <= 300 );
 
     const asset_id_type asset_a_id = get_asset_from_string(a)->id;
     const asset_id_type asset_b_id = get_asset_from_string(b)->id;
 
-    return get_ask_orders(asset_a_id, asset_b_id, limit);
-}
-
-vector<limit_order_object> database_api::get_bid_orders(std::string a, std::string b, uint32_t limit)const
-{
-    return my->get_bid_orders( a, b, limit );
-}
-
-/**
-*  @return the limit orders for both sides of the book for the two assets specified up to limit number on each side.
-*/
-vector<limit_order_object> database_api_impl::get_bid_orders(const std::string& a, const std::string& b, uint32_t limit)const
-{
-    FC_ASSERT( limit <= 300 );
-
-    const asset_id_type asset_a_id = get_asset_from_string(a)->id;
-    const asset_id_type asset_b_id = get_asset_from_string(b)->id;
-
-    return get_bid_orders(asset_a_id, asset_b_id, limit);
+    return get_market_orders(asset_a_id, asset_b_id, limit);
 }
 
 vector<limit_order_object> database_api::get_limit_orders(std::string a, std::string b, uint32_t limit)const
@@ -2602,8 +2576,13 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
         switch(op.op.which())
         {
             case operation::tag<limit_order_create_operation>::value:
-               market = op.op.get<limit_order_create_operation>().get_market();
-               break;
+                market = op.op.get<limit_order_create_operation>().get_market();
+
+                if _new_order_callback{
+                    limit_order ord;
+                    _new_order_callback(ord)
+                }
+                break;
             case operation::tag<fill_order_operation>::value:
                 market = op.op.get<fill_order_operation>().get_market();
                 break;
@@ -2616,7 +2595,6 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
         if( market.valid()){
             const auto& orders = get_limit_orders((*market).first, (*market).second, limit);
             _limit_order_callback( fc::variant(orders, 2) );
-//            _limit_order_callback( orders );
         }
     }
 }
