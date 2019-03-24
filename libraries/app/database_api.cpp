@@ -2587,7 +2587,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             }
 
         }
-//        _new_order_callback(fc::variant(orders, 2));
+        _new_order_callback(fc::variant(orders,2));
     }
 //    {vector<variant> updates;
     for(const optional< operation_history_object >& o_op : trx.operations)
