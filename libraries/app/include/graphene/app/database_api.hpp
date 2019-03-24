@@ -832,6 +832,8 @@ FC_API(graphene::app::database_api,
    // Markets / feeds
    (get_order_book)
    (get_limit_orders)
+   (get_ask_orders)
+   (get_bid_orders)
    (get_account_limit_orders)
    (get_call_orders)
    (get_settle_orders)

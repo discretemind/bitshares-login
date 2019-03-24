@@ -106,8 +106,8 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
 
       // Markets / feeds
       vector<limit_order_object>         get_limit_orders(const std::string& a, const std::string& b, uint32_t limit)const;
-      vector<limit_order_object>         get_ask_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const;
-      vector<limit_order_object>         get_bid_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit)const;
+      vector<limit_order_object>         get_ask_orders(const std::string& a, const std::string& b, uint32_t limit)const;
+      vector<limit_order_object>         get_bid_orders(const std::string& a, const std::string& b, uint32_t limit)const;
 
       vector<limit_order_object>         get_account_limit_orders( const string& account_name_or_id,
                                                                    const string &base,
