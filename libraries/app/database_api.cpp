@@ -60,7 +60,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       void set_subscribe_callback( std::function<void(const variant&)> cb, bool notify_remove_create );
       void set_pending_transaction_callback( std::function<void(const variant&)> cb );
       void set_block_applied_callback( std::function<void(const variant& block_id)> cb );
-      void set_order_book_callback( std::function<void(const variant& dm_order_book)> cb );
+      void set_limit_order_callback( std::function<void(const variant& limit_orders)> cb );
       void cancel_all_subscriptions(bool reset_callback, bool reset_market_subscriptions);
 
       // Blocks and transactions
@@ -375,7 +375,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       std::function<void(const fc::variant&)> _subscribe_callback;
       std::function<void(const fc::variant&)> _pending_trx_callback;
       std::function<void(const fc::variant&)> _block_applied_callback;
-      std::function<void(const fc::variant&)> _order_book_callback;
+      std::function<void(const fc::variant&)> _limit_order_callback;
 
       boost::signals2::scoped_connection                                                                                           _new_connection;
       boost::signals2::scoped_connection                                                                                           _change_connection;
@@ -416,7 +416,7 @@ database_api_impl::database_api_impl( graphene::chain::database& db, const appli
    _pending_trx_connection = _db.on_pending_transaction.connect([this](const signed_transaction& trx ){
 
                         if( _pending_trx_callback ) _pending_trx_callback( fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS) );
-                        if ( _order_book_callback ){
+                        if ( _limit_order_callback ){
                             on_pending_orders(trx, 3);
                         }
                       });
@@ -573,14 +573,14 @@ void database_api_impl::set_block_applied_callback( std::function<void(const var
    _block_applied_callback = cb;
 }
 
-void database_api::set_order_book_callback( std::function<void(const variant&)> cb )
+void database_api::set_limit_order_callback( std::function<void(const variant&)> cb )
 {
-  my->set_order_book_callback( cb );
+  my->set_limit_order_callback( cb );
 }
 
-void database_api_impl::set_order_book_callback( std::function<void(const variant&)> cb )
+void database_api_impl::set_limit_order_callback( std::function<void(const variant&)> cb )
 {
-  _order_book_callback = cb;
+    _limit_order_callback = cb;
 }
 
 void database_api::cancel_all_subscriptions()
@@ -2613,9 +2613,9 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             default: break;
         }
 
-        if( market.valid() && _order_book_callback){
+        if( market.valid()){
             auto orders = get_limit_orders((*market).first, (*market).second, limit);
-            _order_book_callback(fc::variant(orders));
+            _limit_order_callback(fc::variant(orders));
         }
     }
 }
