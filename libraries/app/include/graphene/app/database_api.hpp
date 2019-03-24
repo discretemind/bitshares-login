@@ -199,7 +199,7 @@ class database_api
 
       void set_limit_order_callback( std::function<void(const variant& dm_order_book)> cb );
 
-      void set_new_order_callback( std::function<void(const variant& limit_order)> cb );
+      void set_new_order_callback( std::function<void(const variant& limit_order_create_operation)> cb );
 
       /**
        * @brief Register a callback handle which will get notified when a block is pushed to database

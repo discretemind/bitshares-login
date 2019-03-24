@@ -61,7 +61,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       void set_pending_transaction_callback( std::function<void(const variant&)> cb );
       void set_block_applied_callback( std::function<void(const variant& block_id)> cb );
       void set_limit_order_callback( std::function<void(const variant&)> cb );
-      void set_new_order_callback( std::function<void(const variant& limit_order)> cb );
+      void set_new_order_callback( std::function<void(const variant& limit_order_create_operation)> cb );
 
       void cancel_all_subscriptions(bool reset_callback, bool reset_market_subscriptions);
 
@@ -2570,17 +2570,16 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
     {
         const operation_history_object& op = *o_op;
 
-        optional< limit_order_create_operation > new_op;
         switch(op.op.which())
         {
             case operation::tag<limit_order_create_operation>::value:
-                new_op = op.op.get<limit_order_create_operation>();
+//                new_op = op.op.get<limit_order_create_operation>();
                 if ( _new_order_callback ){
-                    limit_order ord;
-                    ord.seller = new_op.seller;
-                    ord.base = new_op.amount_to_sell;
-                    ord.quote = new_op.min_to_receive;
-//                    _new_order_callback( fc::variant(ord,1) );
+//                    limit_order ord;
+//                    ord.seller = new_op.seller;
+//                    ord.base = new_op.amount_to_sell;
+//                    ord.quote = new_op.min_to_receive;
+                    _new_order_callback( fc::variant(op.op,1) );
                 }
                 break;
 //            case operation::tag<fill_order_operation>::value:
