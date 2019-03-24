@@ -2578,8 +2578,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                     new_order = op.op.get<limit_order_create_operation>();
                     limit_order ord;
                     ord.seller = (*new_order).seller;
-//                    ord.base = (*new_order).amount_to_sell;
-//                    ord.quote = (*new_order).min_to_receive;
+                    ord.base = (*new_order).amount_to_sell;
+                    ord.quote = (*new_order).min_to_receive;
 //                    orders.push_back(ord);
                     break;
 //                default:
