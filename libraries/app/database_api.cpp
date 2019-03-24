@@ -2568,7 +2568,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 {
 
     if (_new_orders_callback) {
-        vector<limit_order> orders;
+        vector<limit_order_create_operation> orders;
 
         for (const optional <operation_history_object> &o_op : trx.operations) {
             const operation_history_object &op = *o_op;
@@ -2576,11 +2576,11 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             switch (op.op.which()) {
                 case operation::tag<limit_order_create_operation>::value:
                     new_order = op.op.get<limit_order_create_operation>();
-                    limit_order ord;
-                    ord.seller = (*new_order).seller;
-                    ord.base = (*new_order).amount_to_sell;
-                    ord.quote = (*new_order).min_to_receive;
-                    orders.push_back(ord);
+//                    limit_order ord;
+//                    ord.seller = (*new_order).seller;
+//                    ord.base = (*new_order).amount_to_sell;
+//                    ord.quote = (*new_order).min_to_receive;
+                    orders.push_back(*new_order);
                     break;
 //                default:
 //                    break;
