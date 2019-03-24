@@ -2593,6 +2593,7 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
 
 
 void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_t limit)
+{
 //    for( auto& op : trx.operations ){
 //        if( !op.valid() )
 //            continue;
