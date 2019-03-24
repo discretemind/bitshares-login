@@ -2605,8 +2605,6 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 //    }
     for(const optional< operation_history_object >& o_op : trx.operations)
     {
-        if( !op.valid() )
-        continue;
         const operation_history_object& op = *o_op;
 
         optional< std::pair<asset_id_type,asset_id_type> > market;
