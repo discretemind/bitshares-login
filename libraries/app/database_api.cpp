@@ -60,7 +60,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       void set_subscribe_callback( std::function<void(const variant&)> cb, bool notify_remove_create );
       void set_pending_transaction_callback( std::function<void(const variant&)> cb );
       void set_block_applied_callback( std::function<void(const variant& block_id)> cb );
-      void set_limit_order_callback( std::function<void(const variant& limit_orders)> cb );
+      void set_limit_order_callback( std::function<void(const variant&)> cb );
       void cancel_all_subscriptions(bool reset_callback, bool reset_market_subscriptions);
 
       // Blocks and transactions

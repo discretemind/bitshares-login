@@ -186,7 +186,7 @@ class database_api
        */
       void set_pending_transaction_callback( std::function<void(const variant& signed_transaction_object)> cb );
 
-      void set_order_book_callback( std::function<void(const variant& dm_order_book)> cb );
+      void set_limit_order_callback( std::function<void(const variant& dm_order_book)> cb );
 
       /**
        * @brief Register a callback handle which will get notified when a block is pushed to database
@@ -783,7 +783,7 @@ FC_API(graphene::app::database_api,
    // Subscriptions
    (set_subscribe_callback)
    (set_pending_transaction_callback)
-   (set_order_book_callback)
+   (set_limit_order_callback)
    (set_block_applied_callback)
    (cancel_all_subscriptions)
 
