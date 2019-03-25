@@ -2575,7 +2575,6 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 //            std::cout << typeid(T).name() << '\n';
 
             std::cout << trx.operations.size();
-            std::cout << std::boolalpha << (trx) << std::endl;
 //            std::cout << jsonExport(trx) << "\n";
             for (const auto &o_op : trx.operations) {
     //            const operation_history_object &op = *o_op;
