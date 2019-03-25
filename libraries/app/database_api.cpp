@@ -2580,10 +2580,10 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 
                         std::cout << "new_order: " << typeid(*new_order).name() << '\n';
 
-                        using boost::lexical_cast;
-                        using std::string;
+                        std::cout<<std::cout.precision();
 
-                        cout << "amount_to_sell: " << lexical_cast<string>(limit_order.amount_to_sell.amount) << endl;
+                        std::cout << "value1: " << limit_order.amount_to_sell.amount << std::endl;
+//                        cout << "amount_to_sell: " << lexical_cast<string>(limit_order.amount_to_sell.amount) << endl;
 //                        auto value = fc::variant(new_order,2)
 
     ////                    limit_order ord;
