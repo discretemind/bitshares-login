@@ -2568,24 +2568,26 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 {
     if (_new_orders_callback) {
         vector<limit_order_create_operation> orders;
-        std::cout << "trx";
-        for (const optional <operation_history_object> &o_op : trx.operations) {
-            const operation_history_object &op = *o_op;
-            optional <limit_order_create_operation> new_order;
-            switch (op.op.which()) {
-                case operation::tag<limit_order_create_operation>::value:
-                    new_order = op.op.get<limit_order_create_operation>();
-                    std::cout << "new order";
-                    std::cout << (*new_order).amount_to_sell;
-////                    limit_order ord;
-////                    ord.seller = (*new_order).seller;
-////                    ord.base = (*new_order).amount_to_sell;
-////                    ord.quote = (*new_order).min_to_receive;
-//                    orders.push_back(*new_order);
-                    break;
-//            }
-//
+
+        if (trx && trx.operations){
+
+            std::cout << trx.operations.size()
+            for (const auto &o_op : trx.operations) {
+    //            const operation_history_object &op = *o_op;
+    //            optional <limit_order_create_operation> new_order;
+    //            switch (op.op.which()) {
+    //                case operation::tag<limit_order_create_operation>::value:
+    //                    new_order = op.op.get<limit_order_create_operation>();
+    ////                    limit_order ord;
+    ////                    ord.seller = (*new_order).seller;
+    ////                    ord.base = (*new_order).amount_to_sell;
+    ////                    ord.quote = (*new_order).min_to_receive;
+    //                    orders.push_back(*new_order);
+    //                    break;
+            }
+
         }
+    }
 //        _new_orders_callback(fc::variant(orders,2));
     }
     if ( _limit_order_callback )
