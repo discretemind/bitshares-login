@@ -2570,10 +2570,11 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
         vector<limit_order_create_operation> orders;
 
 //        if (trx && trx.operations){
-            std::cout << typeid(trx).name() << '\n';
+            std::cout << "Type: " << typeid(trx).name() << '\n';
 //            std::cout << typeid(T).name() << '\n';
 
-            std::cout << trx.operations.size();
+            std::cout << "Operations Type : " << typeid(trx.operations).name() << '\n';
+            std::cout << "Operations: " << trx.operations.size() << '\n';
 //            std::cout << jsonExport(trx) << "\n";
             for (const auto &o_op : trx.operations) {
     //            const operation_history_object &op = *o_op;
