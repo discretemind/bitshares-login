@@ -2578,7 +2578,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                         new_order = op.op.get<limit_order_create_operation>();
 
                         std::cout << "new_order: " << typeid(*new_order).name() << '\n';
-                        std::cout << 'amount_to_sell: ' << typeid(*new_order).amount_to_sell;
+                        std::cout << 'amount_to_sell: ' << (*new_order).amount_to_sell;
+//                        auto value = fc::variant(new_order,2)
 
     ////                    limit_order ord;
     ////                    ord.seller = (*new_order).seller;
@@ -2586,7 +2587,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
     ////                    ord.quote = (*new_order).min_to_receive;
 //                        orders.push_back(*new_order);
 //                        _new_orders_callback(fc::variant(*new_order,2));
-//                        _new_orders_callback(fc::variant(orders,2));
+//                        _new_orders_callback(value);
                         break;
             }
 
