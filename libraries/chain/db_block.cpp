@@ -768,7 +768,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 //        ilog( " appling_ops: ${op}", ("op", *(_applied_ops[i])) );
 //        _applied_ops[i].reset();
 //    }
-FC_LOG_AND_RETHROW() }
+} FC_LOG_AND_RETHROW() }
 
 
 
