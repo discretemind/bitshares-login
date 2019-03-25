@@ -436,6 +436,8 @@ namespace graphene { namespace chain {
    private:
          template<typename Trx>
          void _precompute_parallel( const Trx* trx, const size_t count, const uint32_t skip )const;
+         template<typename Trx>
+         void _precompute_fetch_parallel( const Trx* trx)const;
 
    protected:
          //Mark pop_undo() as protected -- we do not want outside calling pop_undo(); it should call pop_block() instead

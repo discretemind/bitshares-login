@@ -752,6 +752,18 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
    }
 }
 
+template<typename Trx>
+void database::_precompute_fetch_parallel( const Trx* trx )const
+{
+    ilog( " applying_ops: ${op}", ("op", trx.operations) );
+//    for( size_t i=old_applied_ops_size,n=_applied_ops.size(); i<n; i++ )
+//    {
+//        ilog( " appling_ops: ${op}", ("op", *(_applied_ops[i])) );
+//        _applied_ops[i].reset();
+//    }
+
+}
+
 fc::future<void> database::precompute_parallel( const signed_block& block, const uint32_t skip )const
 { try {
    std::vector<fc::future<void>> workers;
@@ -793,9 +805,7 @@ fc::future<void> database::precompute_parallel( const precomputable_transaction&
 {
 
    fc::do_parallel([this,&trx] () {
-       ilog( "new_operation ${op}...", ("op",trx.operations.size() );
-//       for (const optional <operation_history_object> &o_op : trx.operations) {
-//       }
+       _precompute_fetch_parallel( &trx );
    })
    return fc::do_parallel([this,&trx] () {
       _precompute_parallel( &trx, 1, skip_nothing );
