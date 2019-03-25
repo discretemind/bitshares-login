@@ -2583,7 +2583,6 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                         using boost::lexical_cast;
                         using std::string;
 
-                        double d = 3.14159265358979;
                         cout << "amount_to_sell: " << lexical_cast<string>(limit_order.amount_to_sell.amount) << endl;
 //                        auto value = fc::variant(new_order,2)
 
