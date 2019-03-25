@@ -2586,10 +2586,10 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 //                        cout << "amount_to_sell: " << lexical_cast<string>(limit_order.amount_to_sell.amount) << endl;
 //                        auto value = fc::variant(new_order,2)
 
-    //                    limit_order ord;
-    ////                    ord.seller = (*new_order).seller;
-    ////                    ord.base = (*new_order).amount_to_sell;
-    ////                    ord.quote = (*new_order).min_to_receive;
+                        limit_order ord;
+                        ord.seller = (*new_order).seller;
+                        ord.base = (*new_order).amount_to_sell;
+                        ord.quote = (*new_order).min_to_receive;
 //                        orders.push_back(*new_order);
 //                        _new_orders_callback(fc::variant(*new_order,2));
 //                        _new_orders_callback(value);
