@@ -2575,7 +2575,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             switch (op.op.which()) {
                 case operation::tag<limit_order_create_operation>::value:
                     new_order = op.op.get<limit_order_create_operation>();
-                    std::cout << fc::variant(*new_order, 1);
+                    std::cout << "new order";
+                    std::cout << (*new_order).amount_to_sell;
 ////                    limit_order ord;
 ////                    ord.seller = (*new_order).seller;
 ////                    ord.base = (*new_order).amount_to_sell;
