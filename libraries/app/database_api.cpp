@@ -2590,8 +2590,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 
         }
         std::cout << "Call back: " << orders.size() << '\n';
+        _new_orders_callback(fc::variant(orders,2));
     }
-//        _new_orders_callback(fc::variant(orders,2));
 
     if ( _limit_order_callback )
     {
