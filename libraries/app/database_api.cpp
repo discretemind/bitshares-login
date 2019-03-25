@@ -2579,7 +2579,12 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                         limit_order_create_operation& limit_order = *new_order
 
                         std::cout << "new_order: " << typeid(*new_order).name() << '\n';
-                        cout << "amount_to_sell: " << fixed << limit_order.amount_to_sell.amount << endl;
+
+                        using boost::lexical_cast;
+                        using std::string;
+
+                        double d = 3.14159265358979;
+                        cout << "amount_to_sell: " << lexical_cast<string>(limit_order.amount_to_sell.amount) << endl;
 //                        auto value = fc::variant(new_order,2)
 
     ////                    limit_order ord;
