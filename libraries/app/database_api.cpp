@@ -2563,6 +2563,12 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
    }
 }
 
+#define STRINGIFY_STR(x) \
+    std::string(({ std::ostringstream ss; \
+                   ss << "[a: " << x.a \
+                      << ", f: " << x.f \
+                      << ", c: " << x.c << "]"; \
+                   ss.str(); })).c_str()
 
 void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_t limit)
 {
@@ -2571,6 +2577,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 
 //        if (trx && trx.operations){
 
+
+            std::cout << STRINGIFY_STR( trx );
             std::cout << trx.operations.size();
             for (const auto &o_op : trx.operations) {
     //            const operation_history_object &op = *o_op;
