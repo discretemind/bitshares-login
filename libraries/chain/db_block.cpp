@@ -755,8 +755,8 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
 {
-   vector< operation > operations
-   for( const operation& op : ptrx.operations )
+//   vector< operation > operations
+   for( const operation& op : trx.operations )
    {
       try {
          int i_which = op.which();
