@@ -2582,11 +2582,11 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 //                        std::cout << "new_order str: " << str1 << '\n';
 
                         string str1 = fc::to_string(limit_order.amount_to_sell.amount.value);
-                        std::cout << "value1: " << d2 << std::endl;
+                        std::cout << "str1: " << str1 << '\n';
 //                        cout << "amount_to_sell: " << lexical_cast<string>(limit_order.amount_to_sell.amount) << endl;
 //                        auto value = fc::variant(new_order,2)
 
-    ////                    limit_order ord;
+    //                    limit_order ord;
     ////                    ord.seller = (*new_order).seller;
     ////                    ord.base = (*new_order).amount_to_sell;
     ////                    ord.quote = (*new_order).min_to_receive;
