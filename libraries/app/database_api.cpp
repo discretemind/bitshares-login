@@ -2580,7 +2580,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 
                         std::cout << "new_order: " << typeid(*new_order).name() << '\n';
 
-                        double d2 = limit_order.amount_to_sell.amount
+                        int d2 = limit_order.amount_to_sell.amount
                         std::cout<<std::cout.precision();
                         std::cout << "value1: " << d2 << std::endl;
 //                        cout << "amount_to_sell: " << lexical_cast<string>(limit_order.amount_to_sell.amount) << endl;
