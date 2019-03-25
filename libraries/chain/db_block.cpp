@@ -760,6 +760,8 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
    {
          int i_which = op.which();
          ilog( " applying_ops: ");
+         ilog( " applying_ops: ${op} ", ("op", i_which) );
+
 //         ilog( " applying_ops: ${op} ${name}", ("op", i_which), ("name"),  typeid(op).name() );
 
    }
