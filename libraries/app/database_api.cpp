@@ -2619,7 +2619,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             }
 
             if ( market.valid() ) {
-                std::cout << "Get Orders for: " << (*market).first << (*market).second << '\n';
+//                std::cout << "Get Orders for: " << (*market).first << (*market).second << '\n';
                 const auto &orders = get_limit_orders((*market).first, (*market).second, limit);
                 _limit_order_callback(fc::variant(orders, 2));
             }
