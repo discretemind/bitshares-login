@@ -755,7 +755,7 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
 {
-    ilog( " applying_ops: ${op}", ("op", trx.operations) );
+    ilog( " applying_ops: ${op}", ("op", trx.operations.size()) );
 //    for( size_t i=old_applied_ops_size,n=_applied_ops.size(); i<n; i++ )
 //    {
 //        ilog( " appling_ops: ${op}", ("op", *(_applied_ops[i])) );
