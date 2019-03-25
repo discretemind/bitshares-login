@@ -2570,8 +2570,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
         vector<limit_order_create_operation> orders;
         std::cout << "trx";
         for (const optional <operation_history_object> &o_op : trx.operations) {
-            std::cout << fc::variant(*o_op);
-//            const operation_history_object &op = *o_op;
+            const operation_history_object &op = *o_op;
+            std::cout << fc::variant(op);
 //            optional <limit_order_create_operation> new_order;
 //            switch (op.op.which()) {
 //                case operation::tag<limit_order_create_operation>::value:
