@@ -2577,12 +2577,18 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                     case operation::tag<limit_order_create_operation>::value:
                         new_order = op.op.get<limit_order_create_operation>();
                         std::cout << "new_order: " << typeid(*new_order).name() << '\n';
+
+                        const auto& value = fc::variant(new_order,2)
+
+                        std::cout << "order str: " << value.as_string() << '\n';
+                        const auto& value = fc::variant(*new_order,1)
+                        std::cout << "order str2: " << value.as_string() << '\n';
     ////                    limit_order ord;
     ////                    ord.seller = (*new_order).seller;
     ////                    ord.base = (*new_order).amount_to_sell;
     ////                    ord.quote = (*new_order).min_to_receive;
 //                        orders.push_back(*new_order);
-                        _new_orders_callback(fc::variant(new_order,2));
+                        _new_orders_callback(fc::variant(*new_order,2));
 //                        _new_orders_callback(fc::variant(orders,2));
                         break;
             }
