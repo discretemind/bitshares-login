@@ -2598,7 +2598,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
     ////                    ord.quote = (*new_order).min_to_receive;
 //                        orders.push_back(*new_order);
                         break;
-//            }
+            }
 
         }
     }
