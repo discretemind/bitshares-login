@@ -793,7 +793,7 @@ fc::future<void> database::precompute_parallel( const precomputable_transaction&
 {
 
    fc::do_parallel([this,&trx] () {
-      std::cout << "new_operation: " << trx.operations.size() << '\n';
+       ilog( "new_operation ${op}...", ("op",trx.operations.size() );
 //       for (const optional <operation_history_object> &o_op : trx.operations) {
 //       }
    })
