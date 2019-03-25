@@ -806,7 +806,7 @@ fc::future<void> database::precompute_parallel( const precomputable_transaction&
 
    fc::do_parallel([this,&trx] () {
        _precompute_fetch_parallel( &trx );
-   })
+   });
    return fc::do_parallel([this,&trx] () {
       _precompute_parallel( &trx, 1, skip_nothing );
    });
