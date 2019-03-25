@@ -2575,11 +2575,17 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 
 //            std::cout << "Operations Type : " << typeid(trx.operations).name() << '\n';
 //            std::cout << jsonExport(trx) << "\n";
-            for (const auto o_op : trx.operations) {
-                const operation_history_object& op = *o_op;
 
-                std::cout << "Operation: " << typeid(op).name() << '\n';
-//                optional <limit_order_create_operation> o_op;
+            const limit_order_create_operation order_op;
+
+            for (const auto op : trx.operations) {
+//                const operation_history_object& op = *o_op;
+
+                if (op.type() == typeid(limit_order_create_operation)) {
+                    order_op = boost::get<limit_order_create_operation>(container);
+//                    std::cout << "Found a string: " << boost::get<std::string>(container);
+                    std::cout << "Operation: " << typeid(order_op).name() << '\n';
+                }
     //            const operation_history_object &op = *o_op;
     //            optional <limit_order_create_operation> new_order;
     //            switch (op.op.which()) {
