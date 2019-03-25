@@ -2578,7 +2578,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 
             const limit_order_create_operation order_op;
 
-            for (const auto op : trx.operations) {
+            for (const variant& op : trx.operations) {
 //                const operation_history_object& op = *o_op;
 
                 if (op.type() == typeid(limit_order_create_operation)) {
