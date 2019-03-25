@@ -2571,14 +2571,20 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             const limit_order_create_operation order_op;
 
             for (const optional <operation_history_object> &o_op : trx.operations) {
-                _limit_order_callback(fc::variant(*o_op,1));
+
+//                _limit_order_callback(fc::variant(*o_op,1));
 //                std::cout << "order str2: " << fc::variant(o_op,1).as_string() << '\n';
-//                const operation_history_object& op = *o_op;
-//                optional <limit_order_create_operation> new_order;
-//                switch (op.op.which()) {
-//                    case operation::tag<limit_order_create_operation>::value:
-//                        new_order = op.op.get<limit_order_create_operation>();
-//                        std::vector<char> packed_current_time = fc::raw::pack(*new_order);
+                const operation_history_object& op = *o_op;
+                optional <limit_order_create_operation> new_order;
+                switch (op.op.which()) {
+                    case operation::tag<limit_order_create_operation>::value:
+                        new_order = op.op.get<limit_order_create_operation>();
+                        std::cout << "order1 " << '\n';
+                        const auto& value = fc::variant(op.op,2);
+                        std::cout << "order2 " << '\n';
+
+
+
 //                        std::cout << "new_order: " << typeid(*new_order).name() << '\n';
 //                        const auto& value = fc::variant(*new_order,2);
 //                        std::cout << "order str: " << value.as_string() << '\n';
@@ -2591,8 +2597,8 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 ////                        orders.push_back(*new_order);
 ////                        _new_orders_callback(fc::variant(*new_order,2));
 ////                        _new_orders_callback(fc::variant(orders,2));
-//                        break;
-//            }
+                        break;
+            }
 
         }
 //        std::cout << "Call back: " << orders.size() << '\n';
