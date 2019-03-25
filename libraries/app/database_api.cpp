@@ -2576,16 +2576,10 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                 switch (op.op.which()) {
                     case operation::tag<limit_order_create_operation>::value:
                         new_order = op.op.get<limit_order_create_operation>();
-                        limit_order_create_operation& limit_order = *new_order;
-
+                        limit_order_create_operation& lo = *new_order;
                         std::cout << "new_order: " << typeid(*new_order).name() << '\n';
-//                        std::cout << "new_order str: " << str1 << '\n';
-
-                        string str1 = fc::to_string(limit_order.amount_to_sell.amount.value);
+                        string str1 = fc::to_string(lo.amount_to_sell.amount.value);
                         std::cout << "str1: " << str1 << '\n';
-//                        cout << "amount_to_sell: " << lexical_cast<string>(limit_order.amount_to_sell.amount) << endl;
-//                        auto value = fc::variant(new_order,2)
-
                         limit_order ord;
                         ord.seller = (*new_order).seller;
                         ord.base = (*new_order).amount_to_sell;
