@@ -2568,13 +2568,10 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 {
     if (_new_orders_callback) {
         vector<limit_order_create_operation> orders;
-            std::cout << "Type: " << typeid(trx).name() << '\n';
             const limit_order_create_operation order_op;
 
             for (const optional <operation_history_object> &o_op : trx.operations) {
                 const operation_history_object& op = *o_op;
-                std::cout << "Op: " << typeid(o_op).name() << '\n';
-                std::cout << "op.op: " << typeid(op.op).name() << '\n';
                 optional <limit_order_create_operation> new_order;
                 switch (op.op.which()) {
                     case operation::tag<limit_order_create_operation>::value:
@@ -2584,13 +2581,15 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
     ////                    ord.seller = (*new_order).seller;
     ////                    ord.base = (*new_order).amount_to_sell;
     ////                    ord.quote = (*new_order).min_to_receive;
-                        orders.push_back(*new_order);
+//                        orders.push_back(*new_order);
+                        _new_orders_callback(op.op)
+//                        _new_orders_callback(fc::variant(orders,2));
                         break;
             }
 
         }
-        std::cout << "Call back: " << orders.size() << '\n';
-        _new_orders_callback(fc::variant(orders,2));
+//        std::cout << "Call back: " << orders.size() << '\n';
+
     }
 
     if ( _limit_order_callback )
