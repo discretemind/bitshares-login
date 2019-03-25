@@ -2579,24 +2579,25 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             const limit_order_create_operation order_op;
 
             for (const optional <operation_history_object> &o_op : trx.operations) {
-//                const operation_history_object& op = *o_op;
+                const operation_history_object& op = *o_op;
 
 //                if (op.type() == typeid(limit_order_create_operation)) {
 //                    order_op = boost::get<limit_order_create_operation>(container);
 //                    std::cout << "Found a string: " << boost::get<std::string>(container);
-                std::cout << "Operation: " << typeid(o_op).name() << '\n';
+                std::cout << "Op: " << typeid(o_op).name() << '\n';
+                std::cout << "op.op: " << typeid(op.op).name() << '\n';
 //                }
-    //            const operation_history_object &op = *o_op;
     //            optional <limit_order_create_operation> new_order;
-    //            switch (op.op.which()) {
-    //                case operation::tag<limit_order_create_operation>::value:
-    //                    new_order = op.op.get<limit_order_create_operation>();
+                switch (op.op.which()) {
+                    case operation::tag<limit_order_create_operation>::value:
+                        new_order = op.op.get<limit_order_create_operation>();
+                        std::cout << "new_order: " << typeid(new_order).name() << '\n';
     ////                    limit_order ord;
     ////                    ord.seller = (*new_order).seller;
     ////                    ord.base = (*new_order).amount_to_sell;
     ////                    ord.quote = (*new_order).min_to_receive;
-    //                    orders.push_back(*new_order);
-    //                    break;
+//                        orders.push_back(*new_order);
+                        break;
 //            }
 
         }
