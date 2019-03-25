@@ -2569,7 +2569,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
     if (_new_orders_callback) {
         vector<limit_order_create_operation> orders;
 
-        if (trx && trx.operations){
+//        if (trx && trx.operations){
 
             std::cout << trx.operations.size()
             for (const auto &o_op : trx.operations) {
@@ -2584,7 +2584,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
     ////                    ord.quote = (*new_order).min_to_receive;
     //                    orders.push_back(*new_order);
     //                    break;
-            }
+//            }
 
         }
     }
