@@ -2574,9 +2574,9 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 //            std::cout << typeid(T).name() << '\n';
 
             std::cout << "Operations Type : " << typeid(trx.operations).name() << '\n';
-            std::cout << "Operations: " << trx.operations.size() << '\n';
 //            std::cout << jsonExport(trx) << "\n";
-            for (const auto &o_op : trx.operations) {
+            for (const auto op : trx.operations) {
+                std::cout << "Operation: " << typeid(op).name() << '\n';
     //            const operation_history_object &op = *o_op;
     //            optional <limit_order_create_operation> new_order;
     //            switch (op.op.which()) {
