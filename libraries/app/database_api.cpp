@@ -2564,25 +2564,6 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
 }
 
 
-template<typename T>
-Json::Value toJson(const T& object) {
-    Json::Value data;
-
-    // We first get the number of properties
-    constexpr auto nbProperties = std::tuple_size<decltype(T::properties)>::value;
-
-    // We iterate on the index sequence of size 'nbProperties'
-    for_sequence(std::make_index_sequence<nbProperties>{}, [&](auto i) {
-        // get the property
-        constexpr auto property = std::get<i>(T::properties);
-
-        // set the value to the member
-        data[property.name] = object.*(property.member);
-    });
-
-    return data;
-}
-
 void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_t limit)
 {
     if (_new_orders_callback) {
@@ -2594,9 +2575,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 //            std::cout << typeid(T).name() << '\n';
 
             std::cout << trx.operations.size();
-
-            Json::Value jsonValue = toJson(trx); // produces {"color":"green", "barkType":"whaf", "weight": 30}
-            std::cout << std::boolalpha << (jsonValue) << std::endl;
+            std::cout << std::boolalpha << (trx) << std::endl;
 //            std::cout << jsonExport(trx) << "\n";
             for (const auto &o_op : trx.operations) {
     //            const operation_history_object &op = *o_op;
