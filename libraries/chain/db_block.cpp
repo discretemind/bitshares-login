@@ -759,10 +759,9 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
    for( const operation& op : trx->operations )
    {
          int i_which = op.which();
-         ilog( " applying_ops: ");
-         ilog( " applying_ops: ${op} ", ("op", i_which) );
+         ilog( " applying_ops: ${op} ${name}", ("op", i_which)("name", typeid(op).name()));
 
-//         ilog( " applying_ops: ${op} ${name}", ("op", i_which), ("name"),  typeid(op).name() );
+//         ilog( " applying_ops: ${op} ${name}", ("op", i_which), ("name", typeid(op).name()),  typeid(op).name() );
 
    }
 //    for( size_t i=old_applied_ops_size,n=_applied_ops.size(); i<n; i++ )
