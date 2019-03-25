@@ -758,7 +758,6 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 //   vector< operation > operations
    for( const operation& op : trx.operations )
    {
-
          int i_which = op.which();
          ilog( " applying_ops: ${op} ${name}", ("op", i_which), ("name"),  typeid(op).name() );
 
