@@ -2589,7 +2589,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
         }
     }
 //        _new_orders_callback(fc::variant(orders,2));
-    }
+
     if ( _limit_order_callback )
     {
         for (const optional <operation_history_object> &o_op : trx.operations) {
