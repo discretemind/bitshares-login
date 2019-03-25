@@ -760,9 +760,12 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
    for( const operation& op : trx->operations )
    {
          int i_which = op.which();
-         new_order = op.get<limit_order_create_operation>();
-         limit_order_create_operation& lo = *new_order;
-         ilog( " applying_ops: ${op}, amount: ${amount}", ("op", i_which)("amount", lo.amount_to_sell.amount.value));
+         if (i_which == 1)
+         {
+            new_order = op.get<limit_order_create_operation>();
+            limit_order_create_operation& lo = *new_order;
+            ilog( " applying_ops: ${op}, amount: ${amount}", ("op", i_which)("amount", lo.amount_to_sell.amount.value));
+         }
 
 //         ilog( " applying_ops: ${op} ${name}", ("op", i_which), ("name", typeid(op).name()),  typeid(op).name() );
 
