@@ -2566,7 +2566,6 @@ void database_api_impl::handle_object_changed(bool force_notify, bool full_objec
 
 void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_t limit)
 {
-
     if (_new_orders_callback) {
         vector<limit_order_create_operation> orders;
 
@@ -2582,36 +2581,35 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
 //                    ord.quote = (*new_order).min_to_receive;
                     orders.push_back(*new_order);
                     break;
-//                default:
-//                    break;
             }
 
         }
         _new_orders_callback(fc::variant(orders,2));
     }
-//    {vector<variant> updates;
-    for(const optional< operation_history_object >& o_op : trx.operations)
+    if ( _limit_order_callback )
     {
-        const operation_history_object& op = *o_op;
+        for (const optional <operation_history_object> &o_op : trx.operations) {
+            const operation_history_object &op = *o_op;
 
-        optional< std::pair<asset_id_type,asset_id_type> > market;
-        switch(op.op.which())
-        {
-            case operation::tag<limit_order_create_operation>::value:
-                market = op.op.get<fill_order_operation>().get_market();
-                break;
-            case operation::tag<fill_order_operation>::value:
-                market = op.op.get<fill_order_operation>().get_market();
-                break;
-                /*
-             case operation::tag<limit_order_cancel_operation>::value:
-             */
-            default: break;
-        }
+            optional <std::pair<asset_id_type, asset_id_type>> market;
+            switch (op.op.which()) {
+                case operation::tag<limit_order_create_operation>::value:
+                    market = op.op.get<fill_order_operation>().get_market();
+                    break;
+                case operation::tag<fill_order_operation>::value:
+                    market = op.op.get<fill_order_operation>().get_market();
+                    break;
+                    /*
+                 case operation::tag<limit_order_cancel_operation>::value:
+                 */
+                default:
+                    break;
+            }
 
-        if( market.valid() && _limit_order_callback ){
-            const auto& orders = get_limit_orders((*market).first, (*market).second, limit);
-            _limit_order_callback( fc::variant(orders, 2) );
+            if ( market.valid() ) {
+                const auto &orders = get_limit_orders((*market).first, (*market).second, limit);
+                _limit_order_callback(fc::variant(orders, 2));
+            }
         }
     }
 }
