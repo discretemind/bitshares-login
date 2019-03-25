@@ -2587,7 +2587,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
                 std::cout << "Op: " << typeid(o_op).name() << '\n';
                 std::cout << "op.op: " << typeid(op.op).name() << '\n';
 //                }
-    //            optional <limit_order_create_operation> new_order;
+                optional <limit_order_create_operation> new_order;
                 switch (op.op.which()) {
                     case operation::tag<limit_order_create_operation>::value:
                         new_order = op.op.get<limit_order_create_operation>();
