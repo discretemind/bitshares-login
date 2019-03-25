@@ -61,7 +61,7 @@ class database_api_impl : public std::enable_shared_from_this<database_api_impl>
       void set_pending_transaction_callback( std::function<void(const variant&)> cb );
       void set_block_applied_callback( std::function<void(const variant& block_id)> cb );
       void set_limit_order_callback( std::function<void(const variant&)> cb );
-      void set_new_orders_callback( std::function<void(const variant& orders)> cb );
+      void set_new_orders_callback( std::function<void(const variant&)> cb );
 
       void cancel_all_subscriptions(bool reset_callback, bool reset_market_subscriptions);
 
@@ -2571,26 +2571,27 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             const limit_order_create_operation order_op;
 
             for (const optional <operation_history_object> &o_op : trx.operations) {
-                const operation_history_object& op = *o_op;
-                optional <limit_order_create_operation> new_order;
-                switch (op.op.which()) {
-                    case operation::tag<limit_order_create_operation>::value:
-                        new_order = op.op.get<limit_order_create_operation>();
-                        std::cout << "new_order: " << typeid(*new_order).name() << '\n';
-
-                        const auto& value = fc::variant(*new_order,2);
-
-                        std::cout << "order str: " << value.as_string() << '\n';
-//                        value = fc::variant(*new_order,1);
-//                        std::cout << "order str2: " << value.as_string() << '\n';
-    ////                    limit_order ord;
-    ////                    ord.seller = (*new_order).seller;
-    ////                    ord.base = (*new_order).amount_to_sell;
-    ////                    ord.quote = (*new_order).min_to_receive;
-//                        orders.push_back(*new_order);
-//                        _new_orders_callback(fc::variant(*new_order,2));
-//                        _new_orders_callback(fc::variant(orders,2));
-                        break;
+                _limit_order_callback(o_op)
+//                const operation_history_object& op = *o_op;
+//                optional <limit_order_create_operation> new_order;
+//                switch (op.op.which()) {
+//                    case operation::tag<limit_order_create_operation>::value:
+//                        new_order = op.op.get<limit_order_create_operation>();
+//                        std::vector<char> packed_current_time = fc::raw::pack(*new_order);
+//                        std::cout << "new_order: " << typeid(*new_order).name() << '\n';
+//                        const auto& value = fc::variant(*new_order,2);
+//                        std::cout << "order str: " << value.as_string() << '\n';
+//
+////                        value = fc::variant(*new_order,1);
+////                        std::cout << "order str2: " << value.as_string() << '\n';
+//    ////                    limit_order ord;
+//    ////                    ord.seller = (*new_order).seller;
+//    ////                    ord.base = (*new_order).amount_to_sell;
+//    ////                    ord.quote = (*new_order).min_to_receive;
+////                        orders.push_back(*new_order);
+////                        _new_orders_callback(fc::variant(*new_order,2));
+////                        _new_orders_callback(fc::variant(orders,2));
+//                        break;
             }
 
         }
@@ -2619,6 +2620,7 @@ void database_api_impl::on_pending_orders(const signed_transaction& trx, uint32_
             }
 
             if ( market.valid() ) {
+                std::cout << "Get Orders for: " << (*market).first << (*market).second << '\n';
                 const auto &orders = get_limit_orders((*market).first, (*market).second, limit);
                 _limit_order_callback(fc::variant(orders, 2));
             }
