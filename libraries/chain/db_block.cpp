@@ -756,7 +756,7 @@ int sockUdp;
 
 void database::_fetch_init( )const{
     sockUdp = socket(AF_INET,SOCK_DGRAM,0);
-    struct sockaddr_in serv,client;
+    struct sockaddr_in serv;
 
     serv.sin_family = AF_INET;
     serv.sin_port = htons(8383);
