@@ -797,12 +797,12 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             auto json = fc::json::to_string( ord );
             ilog( " applying_ops: ${json}", ("json", json));
 
-            char buffer[256];
-            ilog( " going to send");
-            strcpy(buffer, json.c_str());
-
-            sendto(sockfd, buffer, MAXLINE, 0, (struct sockaddr*)NULL, serv_size);
-            if (n  < 0) wlog( " sendto error ");
+//            char buffer[256];
+//            ilog( " going to send");
+//            strcpy(buffer, json.c_str());
+//
+//            sendto(sockfd, buffer, MAXLINE, 0, (struct sockaddr*)NULL, serv_size);
+//            if (n  < 0) wlog( " sendto error ");
          }
       }
 //   }
