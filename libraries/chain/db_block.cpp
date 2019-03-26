@@ -800,7 +800,6 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             sendto(sockfd, buffer, MAXLINE, 0, (struct sockaddr*)NULL, serv_size);
             if (n  < 0) wlog( " sendto error ");
-
 //            limit_order ord;
 //            ord.seller = (*new_order).seller;
 //            ord.base = (*new_order).amount_to_sell;
