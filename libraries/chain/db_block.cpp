@@ -775,6 +775,10 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             new_order = op.get<limit_order_create_operation>();
             limit_order_create_operation &lo = *new_order;
             ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
+
+            auto json = fc::json::to_string( *new_order )
+            ilog( " applying_ops: ${json}", ("json", json));
+
 //            limit_order ord;
 //            ord.seller = (*new_order).seller;
 //            ord.base = (*new_order).amount_to_sell;
