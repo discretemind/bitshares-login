@@ -754,10 +754,8 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
 
 int sockUdp;
 
-
-
 void database::_fetch_init( )const{
-    sockfd = socket(AF_INET,SOCK_DGRAM,0);
+    sockUdp = socket(AF_INET,SOCK_DGRAM,0);
     struct sockaddr_in serv,client;
 
     serv.sin_family = AF_INET;
