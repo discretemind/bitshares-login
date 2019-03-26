@@ -433,6 +433,7 @@ namespace graphene { namespace chain {
           *         precomputations applied
           */
          fc::future<void> precompute_parallel( const precomputable_transaction& trx )const;
+         fc::future<void> prefetch_parallel( const precomputable_transaction& trx )const;
    private:
          template<typename Trx>
          void _precompute_parallel( const Trx* trx, const size_t count, const uint32_t skip )const;

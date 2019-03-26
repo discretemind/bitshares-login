@@ -757,19 +757,19 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 {try {
 //   vector< operation > operations
    optional <limit_order_create_operation> new_order;
-   for( const operation& op : trx->operations )
-   {
+   if (trx->operations && trx->operations.size()== 1) {
+      for (const operation &op : trx->operations) {
          int i_which = op.which();
-         if (i_which == 1)
-         {
-            new_order = op.get<limit_order_create_operation>();
-            limit_order_create_operation& lo = *new_order;
+         if (i_which == 1) {
+//            new_order = op.get<limit_order_create_operation>();
+//            limit_order_create_operation &lo = *new_order;
 //            ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
             //                        limit_order ord;
 //                        ord.seller = (*new_order).seller;
 //                        ord.base = (*new_order).amount_to_sell;
 //                        ord.quote = (*new_order).min_to_receive;
          }
+      }
    }
 } FC_LOG_AND_RETHROW() }
 
@@ -812,12 +812,16 @@ fc::future<void> database::precompute_parallel( const signed_block& block, const
    return *first;
 } FC_LOG_AND_RETHROW() }
 
+
+fc::future<void> database::prefetch_parallel( const precomputable_transaction& trx )const
+{
+   return fc::do_parallel([this,&trx] () {
+       _precompute_fetch_parallel( &trx);
+   });
+}
+
 fc::future<void> database::precompute_parallel( const precomputable_transaction& trx )const
 {
-
-   fc::do_parallel([this,&trx] () {
-       _precompute_fetch_parallel( &trx );
-   });
    return fc::do_parallel([this,&trx] () {
       _precompute_parallel( &trx, 1, skip_nothing );
    });
