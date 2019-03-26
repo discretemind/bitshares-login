@@ -753,6 +753,7 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
 }
 
 int sockfd;
+socklen_t serv_size;
 #define PORT 8383
 
 void database::_fetch_init( )const{
@@ -761,6 +762,7 @@ void database::_fetch_init( )const{
     serv.sin_family = AF_INET;
     serv.sin_port = htons(PORT);
     serv.sin_addr.s_addr = inet_addr("0.0.0.0");
+    serv_size = sizeof(serv);
 //
 //   struct sockaddr_in servaddr;
 //   bzero(&servaddr, sizeof(servaddr));
@@ -818,7 +820,6 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             ilog( " applying_ops: ${json}", ("json", json));
 
              char buffer[256];
-             socklen_t l = sizeof(serv);
              //socklen_t m = client;
              cout<<"\ngoing to send\n";
              strcpy(buffer, json.c_str());
