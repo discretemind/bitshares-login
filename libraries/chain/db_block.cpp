@@ -821,7 +821,6 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
              char buffer[256];
              //socklen_t m = client;
-             cout<<"\ngoing to send\n";
              strcpy(buffer, json.c_str());
 //             sendto(sockfd,buffer,sizeof(buffer),0,(struct sockaddr *)&serv,l);
 //            char buffer[256];
