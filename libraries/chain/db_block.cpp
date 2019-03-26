@@ -819,9 +819,9 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             auto json = fc::json::to_string( *new_order);
             ilog( " applying_ops: ${json}", ("json", json));
 
-             char buffer[256];
+//             char buffer[256];
              //socklen_t m = client;
-             strcpy(buffer, json.c_str());
+//             strcpy(buffer, json.c_str());
 //             sendto(sockfd,buffer,sizeof(buffer),0,(struct sockaddr *)&serv,l);
 //            char buffer[256];
 //            ilog( " going to send");
