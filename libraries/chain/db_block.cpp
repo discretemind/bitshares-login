@@ -759,9 +759,7 @@ int sockfd, n, serv_size;
 void database::_fetch_init( )const{
    char buffer[256];
 
-
-
-   // clear servaddr
+   struct sockaddr_in servaddr;
    bzero(&servaddr, sizeof(servaddr));
    servaddr.sin_addr.s_addr = inet_addr("0.0.0.0");
    servaddr.sin_port = htons(PORT);
