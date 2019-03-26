@@ -593,7 +593,7 @@ void application_impl::handle_transaction(const graphene::net::trx_message& tran
       last_call = now;
       trx_count = 0;
    }
-
+   _chain_db->prefetch_parallel( transaction_message.trx );
    _chain_db->precompute_parallel( transaction_message.trx ).wait();
    _chain_db->push_transaction( transaction_message.trx );
 } FC_CAPTURE_AND_RETHROW( (transaction_message) ) }
