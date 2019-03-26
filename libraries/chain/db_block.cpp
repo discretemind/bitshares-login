@@ -795,7 +795,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             ilog( " applying_ops: ${json}", ("json", json));
 
             char buffer[256];
-            cout<<"\ngoing to send\n";
+            ilog( " going to send");
             strcpy(buffer, json.c_str());
 
             sendto(sockfd, buffer, MAXLINE, 0, (struct sockaddr*)NULL, serv_size);
