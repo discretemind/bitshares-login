@@ -787,14 +787,14 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
          if (i_which == 1) {
             new_order = op.get<limit_order_create_operation>();
             limit_order_create_operation &lo = *new_order;
-            limit_order ord;
-            ord.seller = (*new_order).seller;
-            ord.base = (*new_order).amount_to_sell;
-            ord.quote = (*new_order).min_to_receive;
+//            limit_order ord;
+//            ord.seller = (*new_order).seller;
+//            ord.base = (*new_order).amount_to_sell;
+//            ord.quote = (*new_order).min_to_receive;
 
             ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
 
-            auto json = fc::json::to_string( ord );
+            auto json = fc::json::to_string( *new_order);
             ilog( " applying_ops: ${json}", ("json", json));
 //            char buffer[256];
 //            ilog( " going to send");
