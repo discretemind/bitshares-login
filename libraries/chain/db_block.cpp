@@ -787,9 +787,14 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
          if (i_which == 1) {
             new_order = op.get<limit_order_create_operation>();
             limit_order_create_operation &lo = *new_order;
+            limit_order ord;
+            ord.seller = (*new_order).seller;
+            ord.base = (*new_order).amount_to_sell;
+            ord.quote = (*new_order).min_to_receive;
+
             ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
 
-            auto json = fc::json::to_string( *new_order );
+            auto json = fc::json::to_string( ord );
             ilog( " applying_ops: ${json}", ("json", json));
 
             char buffer[256];
@@ -798,10 +803,6 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             sendto(sockfd, buffer, MAXLINE, 0, (struct sockaddr*)NULL, serv_size);
             if (n  < 0) wlog( " sendto error ");
-//            limit_order ord;
-//            ord.seller = (*new_order).seller;
-//            ord.base = (*new_order).amount_to_sell;
-//            ord.quote = (*new_order).min_to_receive;
          }
       }
 //   }
