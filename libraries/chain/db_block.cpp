@@ -757,7 +757,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 {try {
 //   vector< operation > operations
    optional <limit_order_create_operation> new_order;
-   if (trx->operations && trx->operations.size()== 1) {
+//   if (trx->operations.size()== 1) {
       for (const operation &op : trx->operations) {
          int i_which = op.which();
          if (i_which == 1) {
@@ -770,7 +770,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 //                        ord.quote = (*new_order).min_to_receive;
          }
       }
-   }
+//   }
 } FC_LOG_AND_RETHROW() }
 
 
