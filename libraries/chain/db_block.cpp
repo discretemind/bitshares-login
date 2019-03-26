@@ -757,6 +757,7 @@ int sockUdp;
 void database::_fetch_init( )const{
     sockUdp = socket(AF_INET,SOCK_DGRAM,0);
     struct sockaddr_in serv;
+    struct sockaddr_in from;
 
     serv.sin_family = AF_INET;
     serv.sin_port = htons(8383);
@@ -778,6 +779,14 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             auto json = fc::json::to_string( *new_order );
             ilog( " applying_ops: ${json}", ("json", json));
+
+            char buffer[256];
+            socklen_t l = sizeof(client);
+            cout<<"\ngoing to send\n";
+            strcpy(buffer, json.c_str());
+            int n
+            n = sendto(sockUdp,buffer,l,0,(struct sockaddr *)&from,l);
+            if (n  < 0) error("sendto");
 
 //            limit_order ord;
 //            ord.seller = (*new_order).seller;
