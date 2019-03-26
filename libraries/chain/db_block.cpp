@@ -752,16 +752,32 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
    }
 }
 
-int sockUdp;
+int sockfd, n, serv_size;
+#define PORT 8383
+#define MAXLINE 1000
 
 void database::_fetch_init( )const{
-    sockUdp = socket(AF_INET,SOCK_DGRAM,0);
-    struct sockaddr_in serv;
-    struct sockaddr_in from;
+   char buffer[256];
 
-    serv.sin_family = AF_INET;
-    serv.sin_port = htons(8383);
-    serv.sin_addr.s_addr = inet_addr("0.0.0.0");
+
+
+   // clear servaddr
+   bzero(&servaddr, sizeof(servaddr));
+   servaddr.sin_addr.s_addr = inet_addr("0.0.0.0");
+   servaddr.sin_port = htons(PORT);
+   servaddr.sin_family = AF_INET;
+
+   serv_size = sizeof(servaddr)
+   // create datagram socket
+   sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+
+   // connect to server
+   if(connect(sockfd, (struct sockaddr *)&servaddr, serv_size) < 0)
+   {
+      printf("\n Error : Connect Failed \n");
+      exit(0);
+   }
+
 }
 
 template<typename Trx>
@@ -784,8 +800,8 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             socklen_t l = sizeof(client);
             cout<<"\ngoing to send\n";
             strcpy(buffer, json.c_str());
-            int n
-            n = sendto(sockUdp,buffer,l,0,(struct sockaddr *)&from,l);
+
+            sendto(sockfd, buffer, MAXLINE, 0, (struct sockaddr*)NULL, serv_size);
             if (n  < 0) error("sendto");
 
 //            limit_order ord;
