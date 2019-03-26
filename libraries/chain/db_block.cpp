@@ -765,7 +765,7 @@ void database::_fetch_init( )const{
    servaddr.sin_port = htons(PORT);
    servaddr.sin_family = AF_INET;
 
-   serv_size = sizeof(servaddr)
+   serv_size = sizeof(servaddr);
    // create datagram socket
    sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
