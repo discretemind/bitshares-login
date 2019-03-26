@@ -795,7 +795,6 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             ilog( " applying_ops: ${json}", ("json", json));
 
             char buffer[256];
-            socklen_t l = sizeof(client);
             cout<<"\ngoing to send\n";
             strcpy(buffer, json.c_str());
 
