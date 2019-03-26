@@ -796,7 +796,6 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             auto json = fc::json::to_string( ord );
             ilog( " applying_ops: ${json}", ("json", json));
-
 //            char buffer[256];
 //            ilog( " going to send");
 //            strcpy(buffer, json.c_str());
