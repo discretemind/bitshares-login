@@ -752,27 +752,32 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
    }
 }
 
-int sockfd, n, serv_size;
+int sockfd;
 #define PORT 8383
-#define MAXLINE 1000
 
 void database::_fetch_init( )const{
-   struct sockaddr_in servaddr;
-   bzero(&servaddr, sizeof(servaddr));
-   servaddr.sin_addr.s_addr = inet_addr("0.0.0.0");
-   servaddr.sin_port = htons(PORT);
-   servaddr.sin_family = AF_INET;
-
-   serv_size = sizeof(servaddr);
-   // create datagram socket
-   sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-
-   // connect to server
-   if(connect(sockfd, (struct sockaddr *)&servaddr, serv_size) < 0)
-   {
-      printf("\n Error : Connect Failed \n");
-      exit(0);
-   }
+    sockfd = socket(AF_INET,SOCK_DGRAM,0);
+    struct sockaddr_in serv;
+    serv.sin_family = AF_INET;
+    serv.sin_port = htons(PORT);
+    serv.sin_addr.s_addr = inet_addr("0.0.0.0");
+//
+//   struct sockaddr_in servaddr;
+//   bzero(&servaddr, sizeof(servaddr));
+//   servaddr.sin_addr.s_addr = inet_addr("0.0.0.0");
+//   servaddr.sin_port = htons(PORT);
+//   servaddr.sin_family = AF_INET;
+//
+//   serv_size = sizeof(servaddr);
+//   // create datagram socket
+//   sockfd = socket(AF_INET, SOCK_DGRAM, 0);
+//
+//   // connect to server
+//   if(connect(sockfd, (struct sockaddr *)&servaddr, serv_size) < 0)
+//   {
+//      printf("\n Error : Connect Failed \n");
+//      exit(0);
+//   }
 
 }
 
@@ -787,7 +792,22 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
          if (i_which == 1) {
             new_order = op.get<limit_order_create_operation>();
             limit_order_create_operation &lo = *new_order;
-//            limit_order ord;
+//               int sockfd;
+//    sockfd = socket(AF_INET,SOCK_DGRAM,0);
+//    struct sockaddr_in serv,client;
+//
+//    serv.sin_family = AF_INET;
+//    serv.sin_port = htons(53000);
+//    serv.sin_addr.s_addr = inet_addr("127.0.0.1");
+//
+//    char buffer[256];
+//    socklen_t l = sizeof(client);
+//    socklen_t m = sizeof(serv);
+//    //socklen_t m = client;
+//    cout<<"\ngoing to send\n";
+//    cout<<"\npls enter the mssg to be sent\n";
+//    fgets(buffer,256,stdin);
+//    sendto(sockfd,buffer,sizeof(buffer),0,(struct sockaddr *)&serv,m); ord;
 //            ord.seller = (*new_order).seller;
 //            ord.base = (*new_order).amount_to_sell;
 //            ord.quote = (*new_order).min_to_receive;
@@ -796,9 +816,16 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             auto json = fc::json::to_string( *new_order);
             ilog( " applying_ops: ${json}", ("json", json));
+
+             char buffer[256];
+             socklen_t l = sizeof(serv);
+             //socklen_t m = client;
+             cout<<"\ngoing to send\n";
+             strcpy(buffer, json.c_str());
+//             sendto(sockfd,buffer,sizeof(buffer),0,(struct sockaddr *)&serv,l);
 //            char buffer[256];
 //            ilog( " going to send");
-//            strcpy(buffer, json.c_str());
+
 //
 //            sendto(sockfd, buffer, MAXLINE, 0, (struct sockaddr*)NULL, serv_size);
 //            if (n  < 0) wlog( " sendto error ");
