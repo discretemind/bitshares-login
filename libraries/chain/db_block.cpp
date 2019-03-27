@@ -779,11 +779,12 @@ void publishMessage( const string message ){
    mtx.unlock();
 }
 //using namespace graphene::app;
-//struct limit_order {
+struct limit_order {
+    limit_order() {}
 //   account_id_type seller;
 //   asset           base;
 //   asset           quote;
-//};
+};
 
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
