@@ -758,12 +758,13 @@ namespace graphene {
         }
 
 
-        void publishMessage(const char* message) {
+        void publishMessage(const vector<char> message) {
 //            ilog("message size #${l}", ("l", message.size()));
             mtx.lock();
             char buffer[512];
             memset(buffer, 0, 512);
-            strcpy(buffer, message);
+//            strcpy(buffer, message);
+            std::copy(message.begin(), message.end(), buffer);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
         }
@@ -791,7 +792,7 @@ namespace graphene {
                     vector<char> data =  fc::raw::pack( orders );
 //                    ilog("message data ${s},  ${d}", ("s", data.size())("d", data));
 //                    string json = fc::json::to_string(orders);
-                    publishMessage(&data[0]);
+                    publishMessage(data);
                 }
             }
             FC_LOG_AND_RETHROW()
