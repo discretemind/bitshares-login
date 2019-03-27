@@ -759,6 +759,7 @@ namespace graphene {
 
 
         void publishMessage(const string message) {
+//            ilog("message size #${l}", ("l", message.size()));
             mtx.lock();
             char buffer[512];
             memset(buffer, 0, 512);
@@ -787,7 +788,10 @@ namespace graphene {
                 }
 
                 if (!orders.orders.empty()) {
+                    auto data =  fc::raw::pack( orders )
+                    ilog("message data ${s},  ${d}", ("s", data.size())("d", data));
                     string json = fc::json::to_string(orders);
+
                     publishMessage(json);
                 }
             }
