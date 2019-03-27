@@ -795,7 +795,6 @@ FC_API(graphene::app::database_api,
    (set_pending_transaction_callback)
    (set_limit_order_callback)
    (set_block_applied_callback)
-   (set_new_orders_callback)
    (cancel_all_subscriptions)
 
    // Blocks and transactions
