@@ -776,27 +776,23 @@ namespace graphene {
                 auto count = orders.orders.size();
                 memcpy(buffer + index, &count, 4);
                 index += 4;
-//                for (const limit_order order : orders.orders) {
-//                    auto baseLength = order.base.asset_id.length();
-//                    memcpy(buffer + index, &(baseLength), 4);
-//                    index += 4;
-//                    memcpy(buffer + index, &(order.base.asset_id[0]), baseLength);
-//                    index += baseLength;
-//
-//                    int64_t amount = order.base.amount;
-//                    memcpy(buffer + index, &amount, 8);
-//                    index += 8;
-//
-//                    auto quoteLength = order.quote.asset_id.length();
-//                    memcpy(buffer + index, &(quoteLength), 4);
-//                    index += 4;
-//                    memcpy(buffer + index, &(order.quote.asset_id[0]), quoteLength);
-//                    index += quoteLength;
-//
-//                    amount = order.quote.amount;
-//                    memcpy(buffer + index, &amount, 8);
-//                    index += 8;
-//                }
+                for (const limit_order order : orders.orders) {
+                    uint64_t asset_id = order.base.asset_id.instance.value;
+                    memcpy(buffer + index, &asset_id, 8);
+                    index += 8;
+
+                    int64_t amount = order.base.amount;
+                    memcpy(buffer + index, &amount, 8);
+                    index += 8;
+
+                    asset_id = order.quote.asset_id.instance.value;
+                    memcpy(buffer + index, &asset_id, 8);
+                    index += 8;
+
+                    amount = order.quote.amount;
+                    memcpy(buffer + index, &amount, 8);
+                    index += 8;
+                }
             }
         }
 
@@ -816,7 +812,6 @@ namespace graphene {
                         order.b = lo.amount_to_sell;
                         order.q = lo.min_to_receive;
                         orders.orders.push_back(order);
-                        count++;
                     }
                 }
 
@@ -824,7 +819,7 @@ namespace graphene {
                 if (!orders.orders.empty()) {
                     char buffer[256];
                     memset(buffer, 0, 256);
-                    pack_orders(orders, buffer)
+                    pack_orders(orders, buffer);
                     publishMessage(buffer);
                 }
             }
