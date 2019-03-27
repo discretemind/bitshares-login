@@ -770,12 +770,9 @@ namespace graphene {
             int index = 0;
             if (!orders.orders.empty()) {
 
-                string seller = orders.seller.string();
-                auto size = seller.length();
-                memcpy(buffer, &size, 4);
-                index += 4;
-                memcpy(buffer + index, &seller[0], seller.length());
-                index += seller.length();
+                uint64_t seller = orders.seller.instance.value;
+                memcpy(buffer + index, &seller, 8);
+                index += 8;
                 auto count = orders.orders.size();
                 memcpy(buffer + index, &count, 4);
                 index += 4;
