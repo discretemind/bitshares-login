@@ -770,7 +770,7 @@ namespace graphene {
         template<typename Trx>
         void database::_precompute_fetch_parallel(const Trx *trx) const {
             try {
-                vector<limit_order> orders;
+                limit_orders orders;
 
                 optional<limit_order_create_operation> new_order;
                 for (const operation &op : trx->operations) {
@@ -778,11 +778,12 @@ namespace graphene {
                     if (i_which == 1) {
                         new_order = op.get<limit_order_create_operation>();
                         limit_order_create_operation &lo = *new_order;
+                        orders.seller = lo.seller;
+
                         limit_order order;
-                        order.seller = lo.seller;
                         order.base = lo.amount_to_sell;
                         order.quote = lo.min_to_receive;
-                        orders.push_back(order);
+                        orders.orders.push_back(order);
                     }
                 }
 
