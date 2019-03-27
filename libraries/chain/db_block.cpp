@@ -862,3 +862,5 @@ fc::future<void> database::precompute_parallel( const precomputable_transaction&
 }
 
 } }
+
+FC_REFLECT( graphene::chain::limit_order, (seller)(base)(quote));
