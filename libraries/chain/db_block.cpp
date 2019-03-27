@@ -758,7 +758,7 @@ namespace graphene {
         }
 
 
-        void pack_orders(limit_orders orders, char* buffer){
+        void pack_orders(limit_orders orders, byte* buffer){
             int index = 0;
             if (!orders.orders.empty()) {
 
@@ -791,7 +791,7 @@ namespace graphene {
         void publishMessage(limit_orders orders) {
             mtx.lock();
 
-            char buffer[256];
+            byte buffer[256];
             memset(buffer, 0, 256);
             pack_orders(orders, buffer);
 //            strcpy(buffer, message);
