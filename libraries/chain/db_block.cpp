@@ -747,9 +747,15 @@ namespace graphene {
 
             serv.sin_family = AF_INET;
             serv.sin_port = htons(58585);
-            serv.sin_addr.s_addr = inet_addr("0.0.0.0");
+//            serv.sin_addr.s_addr = inet_addr("0.0.0.0");
+            serv.sin_addr.s_addr = inet_addr("192.168.1.200");
             serv_size = sizeof(serv);
-            ilog("UDP Initialized");
+
+//            char buffer[512];
+//            memset(buffer, 0, 512);
+//            strcpy(buffer, message.c_str());
+            ilog("Send test message");
+            sendto(sockfd, "test", sizeof(512), 0, (struct sockaddr *) &serv, serv_size);
         }
 
 
