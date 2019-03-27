@@ -778,56 +778,33 @@ void publishMessageLimitOrder( const string message ){
    mtx.unlock();
 }
 
+struct limit_order {
+   account_id_type seller;
+   asset           base;
+   asset           quote;
+};
+
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
 {try {
-//   vector< operation > operations
    optional <limit_order_create_operation> new_order;
-//   if (trx->operations.size()== 1) {
       for (const operation &op : trx->operations) {
          int i_which = op.which();
          if (i_which == 1) {
             new_order = op.get<limit_order_create_operation>();
             limit_order_create_operation &lo = *new_order;
-//               int sockfd;
-//    sockfd = socket(AF_INET,SOCK_DGRAM,0);
-//    struct sockaddr_in serv,client;
-//
-//    serv.sin_family = AF_INET;
-//    serv.sin_port = htons(53000);
-//    serv.sin_addr.s_addr = inet_addr("127.0.0.1");
-//
-//    char buffer[256];
-//    socklen_t l = sizeof(client);
-//    socklen_t m = sizeof(serv);
-//    //socklen_t m = client;
-//    cout<<"\ngoing to send\n";
-//    cout<<"\npls enter the mssg to be sent\n";
-//    fgets(buffer,256,stdin);
-//    sendto(sockfd,buffer,sizeof(buffer),0,(struct sockaddr *)&serv,m); ord;
-//            ord.seller = (*new_order).seller;
-//            ord.base = (*new_order).amount_to_sell;
-//            ord.quote = (*new_order).min_to_receive;
-
             ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
 
-            string json = fc::json::to_string( *new_order);
+            limit_order order;
+            order.seller = (*new_order).seller
+            order.base = (*new_order).amount_to_sell
+            order.quote = (*new_order).min_to_receive
+
+            string json = fc::json::to_string( order );
             ilog( " applying_ops: ${json}", ("json", json));
-
             publishMessageLimitOrder(json);
-//             char buffer[256];
-             //socklen_t m = client;
-//             strcpy(buffer, json.c_str());
-//             sendto(sockfd,buffer,sizeof(buffer),0,(struct sockaddr *)&serv,l);
-//            char buffer[256];
-//            ilog( " going to send");
-
-//
-//            sendto(sockfd, buffer, MAXLINE, 0, (struct sockaddr*)NULL, serv_size);
-//            if (n  < 0) wlog( " sendto error ");
          }
       }
-//   }
 } FC_LOG_AND_RETHROW() }
 
 fc::future<void> database::precompute_parallel( const signed_block& block, const uint32_t skip )const
