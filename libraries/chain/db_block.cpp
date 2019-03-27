@@ -796,9 +796,9 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
 
             limit_order order;
-            order.seller = (*new_order).seller
-            order.base = (*new_order).amount_to_sell
-            order.quote = (*new_order).min_to_receive
+            order.seller = (*new_order).seller;
+            order.base = (*new_order).amount_to_sell;
+            order.quote = (*new_order).min_to_receive;
 
             string json = fc::json::to_string( order );
             ilog( " applying_ops: ${json}", ("json", json));
