@@ -781,8 +781,8 @@ namespace graphene {
                         string json = fc::json::to_string(order);
                         ilog("json: ${json} ", ("json", json));
                         publishMessage(json);
-                        
-                        orders.push_back(order)
+
+                        orders.push_back(order);
                     }
                 }
 
