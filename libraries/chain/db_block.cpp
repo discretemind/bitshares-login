@@ -778,7 +778,7 @@ namespace graphene {
                 index += 4;
                 for (const limit_order order : orders.orders) {
                     string asset_name = order.base.asset_id.instance.name;
-                    ilog("asset_name size #${ln", ("n", asset_name));
+                    ilog("asset_name size #${n}", ("n", asset_name));
                     uint64_t asset_id = (uint64_t)order.base.asset_id.instance.value;
                     memcpy(buffer + index, &asset_id, 8);
                     index += 8;
