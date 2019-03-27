@@ -786,7 +786,7 @@ namespace graphene {
                     }
                 }
 
-                if (!orders.empty()) {
+                if (!orders.orders.empty()) {
                     string json = fc::json::to_string(orders);
                     publishMessage(json);
                 }
