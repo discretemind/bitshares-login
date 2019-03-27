@@ -758,6 +758,7 @@ namespace graphene {
             char buffer[512];
             memset(buffer, 0, 512);
             strcpy(buffer, message.c_str());
+            ilog("Send json: ${json} ", ("json", buffer));
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
         }
@@ -779,7 +780,7 @@ namespace graphene {
                         order.quote = lo.min_to_receive;
 
                         string json = fc::json::to_string(order);
-                        ilog("json: ${json} ", ("json", json));
+//                        ilog("json: ${json} ", ("json", json));
                         publishMessage(json);
 
                         orders.push_back(order);
