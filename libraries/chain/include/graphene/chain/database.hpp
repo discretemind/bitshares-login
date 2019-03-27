@@ -47,7 +47,13 @@ namespace graphene { namespace chain {
    class transaction_evaluation_state;
 
    struct budget_record;
+   struct limit_order {
+       account_id_type seller;
+       asset           base;
+       asset           quote;
+   };
 
+   FC_REFLECT( graphene::chain::limit_order, (seller)(base)(quote));
    /**
     *   @class database
     *   @brief tracks the blockchain state in an extensible manner
