@@ -832,6 +832,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             memset(buffer, 0, 256);
             ilog( "UDP Sending. Fill buffer");
             strcpy(buffer, json.c_str());
+            ilog( "UDP Sending. Filled buffer");
             socklen_t l = sizeof(serv);
             ilog( "Send to");
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, l);
