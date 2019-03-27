@@ -777,19 +777,17 @@ namespace graphene {
                 memcpy(buffer + index, &count, 4);
                 index += 4;
                 for (const limit_order order : orders.orders) {
-                    string asset_name = order.base.asset_id.instance.symbol;
-                    ilog("asset_name size #${n}", ("n", asset_name));
-                    uint64_t asset_id = (uint64_t)order.base.asset_id.instance.value;
-                    memcpy(buffer + index, &asset_id, 8);
-                    index += 8;
+                    uint32_t asset_id = (uint32_t)order.base.asset_id.instance;
+                    memcpy(buffer + index, &asset_id, 4);
+                    index += 4;
 
                     int64_t amount = (int64_t)order.base.amount.value;
                     memcpy(buffer + index, &amount, 8);
                     index += 8;
 
-                    asset_id = (uint64_t)order.quote.asset_id.instance.value;
-                    memcpy(buffer + index, &asset_id, 8);
-                    index += 8;
+                    asset_id = (uint32_t)order.quote.asset_id.instance;
+                    memcpy(buffer + index, &asset_id, 4);
+                    index += 4;
 
                     amount = (int64_t)order.quote.amount.value;
                     memcpy(buffer + index, &amount, 8);
