@@ -786,11 +786,12 @@ namespace graphene {
                     }
                 }
 
-//                if (orders.size() > 0) {
+                if (!orders.empty()) {
+                    ilog("orders: ${orders} ", ("orders", orders.size()));
 //                    string json = fc::json::to_string(orders);
 //                    ilog("json: ${json} ", ("json", json));
 //                    publishMessage(json);
-//                }
+                }
             }
             FC_LOG_AND_RETHROW()
         }
