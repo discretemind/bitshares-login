@@ -779,10 +779,9 @@ namespace graphene {
                         new_order = op.get<limit_order_create_operation>();
                         limit_order_create_operation &lo = *new_order;
                         orders.seller = lo.seller;
-
                         limit_order order;
-                        order.base = lo.amount_to_sell;
-                        order.quote = lo.min_to_receive;
+                        order.b = lo.amount_to_sell;
+                        order.q = lo.min_to_receive;
                         orders.orders.push_back(order);
                     }
                 }
