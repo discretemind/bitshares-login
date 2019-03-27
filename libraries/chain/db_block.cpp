@@ -779,9 +779,9 @@ void publishMessage( const string message ){
 }
 //using namespace graphene::chain;
 struct limit_order {
-   account_id_type seller;
-   asset           base;
-   asset           quote;
+//   account_id_type seller;
+//   asset           base;
+//   asset           quote;
 };
 
 template<typename Trx>
@@ -796,11 +796,11 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 //            ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
 
             limit_order order;
-            order.seller = lo.seller;
-            order.base = lo.amount_to_sell;
-            order.quote = lo.min_to_receive;
+//            order.seller = lo.seller;
+//            order.base = lo.amount_to_sell;
+//            order.quote = lo.min_to_receive;
 
-            string json = fc::json::to_string( &order );
+            string json = fc::json::to_string( order );
             ilog( " applying_ops: ${json}", ("json", json));
             publishMessage(json);
          }
