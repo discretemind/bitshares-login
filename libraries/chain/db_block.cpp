@@ -784,6 +784,7 @@ void database::_fetch_init( )const{
 }
 
 using namespace std;
+std::mutex mtx;
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
 {try {
