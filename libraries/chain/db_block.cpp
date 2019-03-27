@@ -766,7 +766,7 @@ void database::_fetch_init( )const{
    serv.sin_port = htons(58585);
    serv.sin_addr.s_addr = inet_addr("0.0.0.0");
    serv_size = sizeof(serv);
-   ilog( "UDP Initialized, Port", 58585);
+   ilog( "UDP Initialized" );
 }
 
 
