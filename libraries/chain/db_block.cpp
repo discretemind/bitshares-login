@@ -758,9 +758,9 @@ namespace graphene {
         }
 
 
-        void publishMessage(const limit_orders orders) {
-//            ilog("message size #${l}", ("l", message.size()));
+        void publishMessage(limit_orders orders) {
             mtx.lock();
+
             char buffer[256];
             memset(buffer, 0, 256);
             pack_orders(orders, buffer);
