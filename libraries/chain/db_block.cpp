@@ -790,10 +790,10 @@ namespace graphene {
 
         void publishMessage(limit_orders orders) {
             mtx.lock();
-
             uint8_t buffer[256];
-            memset(buffer, 0, 256);
-            pack_orders(orders, buffer);
+            memset(buffer, 1, 1);
+            memset(buffer +1, 0, 255);
+            pack_orders(orders, buffer + 1);
 //            strcpy(buffer, message);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
