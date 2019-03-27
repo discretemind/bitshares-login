@@ -770,36 +770,33 @@ namespace graphene {
             int index = 0;
             if (!orders.orders.empty()) {
 
-                string seller = orders.seller;
-                auto size = seller.length();
-                memcpy(buffer, &size, 4);
-                index += 4;
-                memcpy(buffer + index, &seller[0], seller.length());
-                index += seller.length();
+                uint64_t seller = orders.seller;
+                memcpy(buffer + index, &seller, 8);
+                index += 8;
                 auto count = orders.orders.size();
                 memcpy(buffer + index, &count, 4);
                 index += 4;
-                for (const limit_order order : orders.orders) {
-                    auto baseLength = order.base.asset_id.length();
-                    memcpy(buffer + index, &(baseLength), 4);
-                    index += 4;
-                    memcpy(buffer + index, &(order.base.asset_id[0]), baseLength);
-                    index += baseLength;
-
-                    int64_t amount = order.base.amount;
-                    memcpy(buffer + index, &amount, 8);
-                    index += 8;
-
-                    auto quoteLength = order.quote.asset_id.length();
-                    memcpy(buffer + index, &(quoteLength), 4);
-                    index += 4;
-                    memcpy(buffer + index, &(order.quote.asset_id[0]), quoteLength);
-                    index += quoteLength;
-
-                    amount = order.quote.amount;
-                    memcpy(buffer + index, &amount, 8);
-                    index += 8;
-                }
+//                for (const limit_order order : orders.orders) {
+//                    auto baseLength = order.base.asset_id.length();
+//                    memcpy(buffer + index, &(baseLength), 4);
+//                    index += 4;
+//                    memcpy(buffer + index, &(order.base.asset_id[0]), baseLength);
+//                    index += baseLength;
+//
+//                    int64_t amount = order.base.amount;
+//                    memcpy(buffer + index, &amount, 8);
+//                    index += 8;
+//
+//                    auto quoteLength = order.quote.asset_id.length();
+//                    memcpy(buffer + index, &(quoteLength), 4);
+//                    index += 4;
+//                    memcpy(buffer + index, &(order.quote.asset_id[0]), quoteLength);
+//                    index += quoteLength;
+//
+//                    amount = order.quote.amount;
+//                    memcpy(buffer + index, &amount, 8);
+//                    index += 8;
+//                }
             }
         }
 
