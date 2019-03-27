@@ -46,8 +46,8 @@ namespace graphene {
     namespace chain {
 
         struct limit_order {
-            asset b;
-            asset q;
+            asset base;
+            asset quote;
         };
 
         struct limit_orders {
@@ -56,7 +56,7 @@ namespace graphene {
         };
     }
 }
-FC_REFLECT( graphene::chain::limit_order, (b)(q));
+FC_REFLECT( graphene::chain::limit_order, (base)(quote));
 FC_REFLECT( graphene::chain::limit_orders, (seller)(orders));
 
 namespace graphene {
