@@ -782,6 +782,8 @@ void database::_fetch_init( )const{
 
 }
 
+std::mutex mtx;
+
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
 {try {
@@ -817,7 +819,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             string json = fc::json::to_string( *new_order);
             ilog( " applying_ops: ${json}", ("json", json));
-
+            mtx.lock();
             int sockfd;
             sockfd = socket(AF_INET,SOCK_DGRAM,0);
             struct sockaddr_in serv;
@@ -833,7 +835,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             socklen_t l = sizeof(serv);
             ilog( "Send to");
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, l);
-
+            mtx.unlock();
 //             char buffer[256];
              //socklen_t m = client;
 //             strcpy(buffer, json.c_str());
