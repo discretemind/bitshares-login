@@ -788,7 +788,7 @@ namespace graphene {
                 }
 
                 if (!orders.orders.empty()) {
-                    auto data =  fc::raw::pack( orders )
+                    auto data =  fc::raw::pack( orders );
                     ilog("message data ${s},  ${d}", ("s", data.size())("d", data));
                     string json = fc::json::to_string(orders);
 
