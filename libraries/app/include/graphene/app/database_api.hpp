@@ -64,11 +64,11 @@ using namespace std;
 
 class database_api_impl;
 
-struct dm_order {
-    float price;
-    float quote;
-    float base;
-};
+//struct dm_order {
+//    float price;
+//    float quote;
+//    float base;
+//};
 
 struct asset_amount {
     asset_id_type   asset;
@@ -81,13 +81,13 @@ struct limit_order {
     asset           quote;
 };
 
-struct dm_order_book
-{
-    string                      base;
-    string                      quote;
-    vector< dm_order >          bids;
-    vector< dm_order >          asks;
-};
+//struct dm_order_book
+//{
+//    string                      base;
+//    string                      quote;
+//    vector< dm_order >          bids;
+//    vector< dm_order >          asks;
+//};
 
 struct order
 {

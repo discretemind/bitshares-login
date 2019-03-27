@@ -38,7 +38,6 @@
 #include <graphene/chain/evaluator.hpp>
 
 #include <fc/thread/parallel.hpp>
-#include <graphene/app/database_api.hpp>
 #include <mutex>
 
 namespace graphene { namespace chain {
@@ -797,7 +796,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             limit_order_create_operation &lo = *new_order;
 //            ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
 
-            limit_order order;
+            limit_order& order;
 //            order.seller = lo.seller;
 //            order.base = lo.amount_to_sell;
 //            order.quote = lo.min_to_receive;
