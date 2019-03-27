@@ -777,7 +777,7 @@ void publishMessage( const string message ){
    sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
    mtx.unlock();
 }
-using namespace graphene::app;
+using namespace graphene::chain;
 //struct limit_order {
 //   account_id_type seller;
 //   asset           base;
