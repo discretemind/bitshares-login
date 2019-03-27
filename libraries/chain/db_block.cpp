@@ -777,12 +777,12 @@ void publishMessage( const string message ){
    sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
    mtx.unlock();
 }
-
-struct limit_order {
-   account_id_type seller;
-   asset           base;
-   asset           quote;
-};
+using namespace graphene::app;
+//struct limit_order {
+//   account_id_type seller;
+//   asset           base;
+//   asset           quote;
+//};
 
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
