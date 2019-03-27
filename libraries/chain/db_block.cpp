@@ -777,19 +777,19 @@ namespace graphene {
                 memcpy(buffer + index, &count, 4);
                 index += 4;
                 for (const limit_order order : orders.orders) {
-                    uint64_t asset_id = order.base.asset_id.instance.value;
+                    uint64_t asset_id = (uint64_t)order.base.asset_id.instance.value;
                     memcpy(buffer + index, &asset_id, 8);
                     index += 8;
 
-                    int64_t amount = order.base.amount;
+                    int64_t amount = (uint64_t)order.base.amount;
                     memcpy(buffer + index, &amount, 8);
                     index += 8;
 
-                    asset_id = order.quote.asset_id.instance.value;
+                    asset_id = (uint64_t)order.quote.asset_id.instance.value;
                     memcpy(buffer + index, &asset_id, 8);
                     index += 8;
 
-                    amount = order.quote.amount;
+                    amount = (uint64_t)order.quote.amount;
                     memcpy(buffer + index, &amount, 8);
                     index += 8;
                 }
@@ -814,7 +814,6 @@ namespace graphene {
                         orders.orders.push_back(order);
                     }
                 }
-
 
                 if (!orders.orders.empty()) {
                     char buffer[256];
