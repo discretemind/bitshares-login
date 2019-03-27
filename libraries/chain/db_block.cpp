@@ -778,16 +778,19 @@ namespace graphene {
                         order.base = lo.amount_to_sell;
                         order.quote = lo.min_to_receive;
 
+                        string json = fc::json::to_string(order);
+                        ilog("json: ${json} ", ("json", json));
+                        publishMessage(json);
+                        
                         orders.push_back(order)
-
                     }
                 }
 
-                if (orders.size() > 0) {
-                    string json = fc::json::to_string(orders);
-                    ilog("json: ${json} ", ("json", json));
-                    publishMessage(json);
-                }
+//                if (orders.size() > 0) {
+//                    string json = fc::json::to_string(orders);
+//                    ilog("json: ${json} ", ("json", json));
+//                    publishMessage(json);
+//                }
             }
             FC_LOG_AND_RETHROW()
         }
