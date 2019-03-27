@@ -765,7 +765,7 @@ void database::_fetch_init( )const{
    serv.sin_family = AF_INET;
    serv.sin_port = htons(58585);
    serv.sin_addr.s_addr = inet_addr("0.0.0.0");
-   serv_sizw = sizeof(serv);
+   serv_size = sizeof(serv);
    ilog( "UDP Initialized:");
 }
 
@@ -773,7 +773,7 @@ void publishMessageLimitOrder( const string message ){
    mtx.lock();
    char buffer[512];
    memset(buffer, 0, 512);
-   strcpy(buffer, json.c_str());
+   strcpy(buffer, message.c_str());
    sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
    mtx.unlock();
 }
