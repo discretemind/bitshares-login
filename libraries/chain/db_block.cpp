@@ -788,7 +788,7 @@ namespace graphene {
                 }
 
                 if (!orders.orders.empty()) {
-                    char* data =  fc::raw::pack( orders );
+                    vector<char> data =  fc::raw::pack( orders );
 //                    ilog("message data ${s},  ${d}", ("s", data.size())("d", data));
 //                    string json = fc::json::to_string(orders);
                     publishMessage(&data[0]);
