@@ -38,6 +38,7 @@
 #include <graphene/chain/evaluator.hpp>
 
 #include <fc/thread/parallel.hpp>
+#include <graphene/app/database_api.hpp>
 #include <mutex>
 
 namespace graphene { namespace chain {
@@ -769,6 +770,7 @@ void database::_fetch_init( )const{
    ilog( "UDP Initialized:");
 }
 
+
 void publishMessage( const string message ){
    mtx.lock();
    char buffer[512];
@@ -777,12 +779,12 @@ void publishMessage( const string message ){
    sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
    mtx.unlock();
 }
-//using namespace graphene::chain;
-struct limit_order {
+//using namespace graphene::app;
+//struct limit_order {
 //   account_id_type seller;
 //   asset           base;
 //   asset           quote;
-};
+//};
 
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
