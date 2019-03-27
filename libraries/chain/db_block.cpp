@@ -828,8 +828,8 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             serv.sin_addr.s_addr = inet_addr("0.0.0.0");
             ilog( "UDP Initialized:");
 
-            char buffer[256];
-            memset(buffer, 0, 256);
+            char buffer[512];
+            memset(buffer, 0, 512);
             ilog( "UDP Sending. Fill buffer");
             strcpy(buffer, json.c_str());
             ilog( "UDP Sending. Filled buffer");
