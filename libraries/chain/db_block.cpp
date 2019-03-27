@@ -769,6 +769,44 @@ namespace graphene {
             mtx.unlock();
         }
 
+        void pack_orders(limit_orders orders, char* buffer){
+            int index = 0;
+            if (!orders.orders.empty()) {
+
+                string seller = orders.seller;
+                auto size = seller.length();
+                std::cout << size << '\n';
+                memcpy(buffer, &size, 4);
+                index += 4;
+                memcpy(buffer + index, &seller[0], seller.length());
+                index += seller.length();
+                auto count = orders.orders.size();
+                memcpy(buffer + index, &count, 4);
+                index += 4;
+                for (const limit_order order : orders.orders) {
+                    auto baseLength = order.base.asset_id.length();
+                    memcpy(buffer + index, &(baseLength), 4);
+                    index += 4;
+                    memcpy(buffer + index, &(order.base.asset_id[0]), baseLength);
+                    index += baseLength;
+
+                    int64_t amount = order.base.amount;
+                    memcpy(buffer + index, &amount, 8);
+                    index += 8;
+
+                    auto quoteLength = order.quote.asset_id.length();
+                    memcpy(buffer + index, &(quoteLength), 4);
+                    index += 4;
+                    memcpy(buffer + index, &(order.quote.asset_id[0]), quoteLength);
+                    index += quoteLength;
+
+                    amount = order.quote.amount;
+                    memcpy(buffer + index, &amount, 8);
+                    index += 8;
+                }
+            }
+        }
+
         template<typename Trx>
         void database::_precompute_fetch_parallel(const Trx *trx) const {
             try {
@@ -785,13 +823,16 @@ namespace graphene {
                         order.b = lo.amount_to_sell;
                         order.q = lo.min_to_receive;
                         orders.orders.push_back(order);
+                        count++;
                     }
                 }
 
+
                 if (!orders.orders.empty()) {
-                    vector<char> data =  fc::raw::pack( orders );
-//                    ilog("message data ${s},  ${d}", ("s", data.size())("d", data));
-//                    string json = fc::json::to_string(orders);
+                    char buffer[256];
+                    memset(buffer, 0, 256);
+                    pack_orders(orders, buffer)
+                    vector<char> data =  fc::raw::pack( buffer );
                     publishMessage(data);
                 }
             }
