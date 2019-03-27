@@ -777,12 +777,12 @@ void publishMessage( const string message ){
    sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
    mtx.unlock();
 }
-using namespace graphene::chain;
-//struct limit_order {
-//   account_id_type seller;
-//   asset           base;
-//   asset           quote;
-//};
+//using namespace graphene::chain;
+struct limit_order {
+   account_id_type seller;
+   asset           base;
+   asset           quote;
+};
 
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
@@ -795,7 +795,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             limit_order_create_operation &lo = *new_order;
 //            ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
 
-            limit_order order;
+            limit_order& order;
 
             order.seller = lo.seller;
             order.base = lo.amount_to_sell;
