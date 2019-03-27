@@ -791,7 +791,7 @@ namespace graphene {
                     char* data =  fc::raw::pack( orders );
 //                    ilog("message data ${s},  ${d}", ("s", data.size())("d", data));
 //                    string json = fc::json::to_string(orders);
-                    publishMessage(data);
+                    publishMessage(&data[0]);
                 }
             }
             FC_LOG_AND_RETHROW()
