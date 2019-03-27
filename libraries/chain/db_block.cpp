@@ -766,14 +766,14 @@ void database::_fetch_init( )const{
    serv.sin_port = htons(58585);
    serv.sin_addr.s_addr = inet_addr("0.0.0.0");
    serv_size = sizeof(serv);
-   ilog( "UDP Initialized:");
+   ilog( "UDP Initialized, Port", 58585);
 }
 
 
 void publishMessage( const string message ){
    mtx.lock();
-   char buffer[512];
-   memset(buffer, 0, 512);
+   char buffer[256];
+   memset(buffer, 0, 256);
    strcpy(buffer, message.c_str());
    sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
    mtx.unlock();
@@ -788,14 +788,11 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
          if (i_which == 1) {
             new_order = op.get<limit_order_create_operation>();
             limit_order_create_operation &lo = *new_order;
-//            ilog( " applying_ops: ${op}, amount: ${amount}", ("op", trx->operations.size())("amount", lo.amount_to_sell.amount.value));
-
             limit_order order;
             order.seller = lo.seller;
             order.base = lo.amount_to_sell;
             order.quote = lo.min_to_receive;
             string json = fc::json::to_string( order );
-            ilog( " applying_ops: ${json}", ("json", json));
             publishMessage(json);
          }
       }
