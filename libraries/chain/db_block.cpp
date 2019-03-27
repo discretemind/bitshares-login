@@ -781,7 +781,7 @@ namespace graphene {
                     memcpy(buffer + index, &asset_id, 8);
                     index += 8;
 
-                    int64_t amount = (uint64_t)order.base.amount;
+                    int64_t amount = (int64_t)order.base.amount;
                     memcpy(buffer + index, &amount, 8);
                     index += 8;
 
@@ -789,7 +789,7 @@ namespace graphene {
                     memcpy(buffer + index, &asset_id, 8);
                     index += 8;
 
-                    amount = (uint64_t)order.quote.amount;
+                    amount = (int64_t)order.quote.amount;
                     memcpy(buffer + index, &amount, 8);
                     index += 8;
                 }
