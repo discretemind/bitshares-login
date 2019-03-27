@@ -797,7 +797,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             limit_order& order;
 
-            order = &limit_order;
+            order = &limit_order();
             order.seller = lo.seller;
             order.base = lo.amount_to_sell;
             order.quote = lo.min_to_receive;
