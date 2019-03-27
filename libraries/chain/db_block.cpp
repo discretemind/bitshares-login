@@ -794,8 +794,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 //            order.seller = lo.seller;
 //            order.base = lo.amount_to_sell;
 //            order.quote = lo.min_to_receive;
-
-            string json = fc::json::to_string( &order );
+            string json = fc::json::to_string( order );
             ilog( " applying_ops: ${json}", ("json", json));
             publishMessage(json);
          }
