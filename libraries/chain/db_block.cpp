@@ -758,11 +758,14 @@ namespace graphene {
         }
 
 
-        void publishMessage(const char* message) {
+        void publishMessage(const limit_orders orders) {
 //            ilog("message size #${l}", ("l", message.size()));
             mtx.lock();
+            char buffer[256];
+            memset(buffer, 0, 256);
+            pack_orders(orders, buffer);
 //            strcpy(buffer, message);
-            sendto(sockfd, message, sizeof(message), 0, (struct sockaddr *) &serv, serv_size);
+            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
         }
 
@@ -816,14 +819,7 @@ namespace graphene {
                 }
 
                 if (!orders.orders.empty()) {
-                    char buffer[256];
-                    memset(buffer, 0, 256);
-                    pack_orders(orders, buffer);
-                    for (const char& c : buffer) {
-                        printf("%c", c);
-                    }
-                    printf("\n");
-                    publishMessage(buffer);
+                    publishMessage(orders);
                 }
             }
             FC_LOG_AND_RETHROW()
