@@ -819,6 +819,10 @@ namespace graphene {
                     char buffer[256];
                     memset(buffer, 0, 256);
                     pack_orders(orders, buffer);
+                    for (const char& c : buffer) {
+                        printf("%c", c);
+                    }
+                    printf("\n");
                     publishMessage(buffer);
                 }
             }
