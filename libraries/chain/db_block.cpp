@@ -753,38 +753,31 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
    }
 }
 
-//int sockfd;
-//socklen_t serv_size;
-
-void database::_fetch_init( )const{
-//    sockfd = socket(AF_INET,SOCK_DGRAM,0);
-//    struct sockaddr_in serv;
-//    serv.sin_family = AF_INET;
-//    serv.sin_port = htons(8383);
-//    serv.sin_addr.s_addr = inet_addr("0.0.0.0");
-//    serv_size = sizeof(serv);
-//
-//   struct sockaddr_in servaddr;
-//   bzero(&servaddr, sizeof(servaddr));
-//   servaddr.sin_addr.s_addr = inet_addr("0.0.0.0");
-//   servaddr.sin_port = htons(PORT);
-//   servaddr.sin_family = AF_INET;
-//
-//   serv_size = sizeof(servaddr);
-//   // create datagram socket
-//   sockfd = socket(AF_INET, SOCK_DGRAM, 0);
-//
-//   // connect to server
-//   if(connect(sockfd, (struct sockaddr *)&servaddr, serv_size) < 0)
-//   {
-//      printf("\n Error : Connect Failed \n");
-//      exit(0);
-//   }
-
-}
-
 using namespace std;
 std::mutex mtx;
+int sockfd;
+socklen_t serv_size;
+struct sockaddr_in serv;
+
+void database::_fetch_init( )const{
+   sockfd = socket(AF_INET,SOCK_DGRAM,0);
+
+   serv.sin_family = AF_INET;
+   serv.sin_port = htons(58585);
+   serv.sin_addr.s_addr = inet_addr("0.0.0.0");
+   serv_sizw = sizeof(serv);
+   ilog( "UDP Initialized:");
+}
+
+void publishMessageLimitOrder( const string message ){
+   mtx.lock();
+   char buffer[512];
+   memset(buffer, 0, 512);
+   strcpy(buffer, json.c_str());
+   sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
+   mtx.unlock();
+}
+
 template<typename Trx>
 void database::_precompute_fetch_parallel( const Trx* trx )const
 {try {
@@ -820,24 +813,8 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             string json = fc::json::to_string( *new_order);
             ilog( " applying_ops: ${json}", ("json", json));
-            mtx.lock();
-            int sockfd;
-            sockfd = socket(AF_INET,SOCK_DGRAM,0);
-            struct sockaddr_in serv;
-            serv.sin_family = AF_INET;
-            serv.sin_port = htons(58585);
-            serv.sin_addr.s_addr = inet_addr("0.0.0.0");
-            ilog( "UDP Initialized:");
 
-            char buffer[512];
-            memset(buffer, 0, 512);
-            ilog( "UDP Sending. Fill buffer");
-            strcpy(buffer, json.c_str());
-            ilog( "UDP Sending. Filled buffer");
-            socklen_t l = sizeof(serv);
-            ilog( "Send to");
-            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, l);
-            mtx.unlock();
+            publishMessageLimitOrder(json)
 //             char buffer[256];
              //socklen_t m = client;
 //             strcpy(buffer, json.c_str());
