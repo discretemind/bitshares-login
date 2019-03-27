@@ -828,9 +828,8 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             char buffer[256];
             memset(buffer, 0, 256);
-            string json2 = R"({"fee":{"amount":2526,"asset_id":"1.3.0"},"seller":"1.2.1081936","amount_to_sell":{"amount":691200,"asset_id":"1.3.1570"},"min_to_receive":{"amount":"101647084558","asset_id":"1.3.4507"},"expiration":"2019-04-02T20:47:08","fill_or_kill":false,"extensions":[]})";
             ilog( "UDP Sending. Fill buffer");
-            strcpy(buffer, json2.c_str());
+            strcpy(buffer, json.c_str());
             socklen_t l = sizeof(serv);
             ilog( "Send to");
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, l);
