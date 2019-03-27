@@ -752,17 +752,16 @@ void database::_precompute_parallel( const Trx* trx, const size_t count, const u
    }
 }
 
-int sockfd;
-socklen_t serv_size;
-#define PORT 8383
+//int sockfd;
+//socklen_t serv_size;
 
 void database::_fetch_init( )const{
-    sockfd = socket(AF_INET,SOCK_DGRAM,0);
-    struct sockaddr_in serv;
-    serv.sin_family = AF_INET;
-    serv.sin_port = htons(PORT);
-    serv.sin_addr.s_addr = inet_addr("0.0.0.0");
-    serv_size = sizeof(serv);
+//    sockfd = socket(AF_INET,SOCK_DGRAM,0);
+//    struct sockaddr_in serv;
+//    serv.sin_family = AF_INET;
+//    serv.sin_port = htons(8383);
+//    serv.sin_addr.s_addr = inet_addr("0.0.0.0");
+//    serv_size = sizeof(serv);
 //
 //   struct sockaddr_in servaddr;
 //   bzero(&servaddr, sizeof(servaddr));
@@ -818,6 +817,21 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
 
             auto json = fc::json::to_string( *new_order);
             ilog( " applying_ops: ${json}", ("json", json));
+
+            int sockfd;
+            sockfd = socket(AF_INET,SOCK_DGRAM,0);
+            struct sockaddr_in serv;
+            serv.sin_family = AF_INET;
+            serv.sin_port = htons(58585);
+            serv.sin_addr.s_addr = inet_addr("0.0.0.0");
+
+            char buffer[256];
+            //socklen_t m = client;
+            ilog( " sending: ${buf}", ("buf", buffer));
+            string json = R"({"fee":{"amount":2526,"asset_id":"1.3.0"},"seller":"1.2.1081936","amount_to_sell":{"amount":691200,"asset_id":"1.3.1570"},"min_to_receive":{"amount":"101647084558","asset_id":"1.3.4507"},"expiration":"2019-04-02T20:47:08","fill_or_kill":false,"extensions":[]})";
+            strcpy(buffer, json.c_str());
+            socklen_t l = sizeof(serv);
+            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, l);
 
 //             char buffer[256];
              //socklen_t m = client;
