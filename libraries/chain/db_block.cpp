@@ -758,7 +758,7 @@ namespace graphene {
         }
 
 
-        void pack_orders(limit_orders orders, std::byte* buffer){
+        void pack_orders(limit_orders orders, uint8_t* buffer){
             int index = 0;
             if (!orders.orders.empty()) {
 
@@ -791,7 +791,7 @@ namespace graphene {
         void publishMessage(limit_orders orders) {
             mtx.lock();
 
-            std::byte buffer[256];
+            uint8_t buffer[256];
             memset(buffer, 0, 256);
             pack_orders(orders, buffer);
 //            strcpy(buffer, message);
