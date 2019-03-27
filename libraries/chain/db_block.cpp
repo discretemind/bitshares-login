@@ -758,17 +758,6 @@ namespace graphene {
         }
 
 
-        void publishMessage(limit_orders orders) {
-            mtx.lock();
-
-            char buffer[256];
-            memset(buffer, 0, 256);
-            pack_orders(orders, buffer);
-//            strcpy(buffer, message);
-            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
-            mtx.unlock();
-        }
-
         void pack_orders(limit_orders orders, char* buffer){
             int index = 0;
             if (!orders.orders.empty()) {
@@ -797,6 +786,17 @@ namespace graphene {
                     index += 8;
                 }
             }
+        }
+
+        void publishMessage(limit_orders orders) {
+            mtx.lock();
+
+            char buffer[256];
+            memset(buffer, 0, 256);
+            pack_orders(orders, buffer);
+//            strcpy(buffer, message);
+            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
+            mtx.unlock();
         }
 
         template<typename Trx>
