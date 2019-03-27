@@ -814,7 +814,7 @@ void database::_precompute_fetch_parallel( const Trx* trx )const
             string json = fc::json::to_string( *new_order);
             ilog( " applying_ops: ${json}", ("json", json));
 
-            publishMessageLimitOrder(json)
+            publishMessageLimitOrder(json);
 //             char buffer[256];
              //socklen_t m = client;
 //             strcpy(buffer, json.c_str());
