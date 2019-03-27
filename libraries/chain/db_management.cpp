@@ -44,7 +44,7 @@ database::database()
 {
    initialize_indexes();
    initialize_evaluators();
-//    _fetch_init();
+   _fetch_init();
 }
 
 database::~database()
