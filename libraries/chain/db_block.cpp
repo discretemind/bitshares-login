@@ -772,7 +772,6 @@ namespace graphene {
 
                 string seller = orders.seller;
                 auto size = seller.length();
-                std::cout << size << '\n';
                 memcpy(buffer, &size, 4);
                 index += 4;
                 memcpy(buffer + index, &seller[0], seller.length());
