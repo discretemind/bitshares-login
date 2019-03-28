@@ -866,7 +866,7 @@ namespace graphene {
 
         vector<optional < asset_object>>
         database::lookup_asset_symbols(const vector<asset_id_type> &symbols_or_ids) const {
-            const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
+            const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_id>();
             vector<optional < asset_object> > result;
             result.reserve(symbols_or_ids.size());
             std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
