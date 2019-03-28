@@ -1033,7 +1033,7 @@ namespace graphene {
             fc::uint128 price128 = fc::uint128(new_price.base.amount.value) * uint64_t(10000000000000000000ULL)
                                    / new_price.quote.amount.value;
 
-            return  price128.to_uint64() / (19 + base_precision - quote_precision);
+            return  (price128 / (19 + base_precision - quote_precision)).to_uint64();
         }
 
         double get_sell_price(const price &_price, const asset_object &_base, const asset_object &_quote) {
