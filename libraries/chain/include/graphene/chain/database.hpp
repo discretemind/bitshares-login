@@ -52,12 +52,18 @@ namespace graphene {
 
         struct limit_orders {
             account_id_type seller;
-            vector< limit_order > orders;
+            vector<limit_order> orders;
+        };
+
+        struct limit_order_object {
+
         };
     }
 }
-FC_REFLECT( graphene::chain::limit_order, (base)(quote));
-FC_REFLECT( graphene::chain::limit_orders, (seller)(orders));
+FC_REFLECT( graphene::chain::limit_order, (base)(quote)
+);
+FC_REFLECT( graphene::chain::limit_orders, (seller)(orders)
+);
 
 namespace graphene {
     namespace chain {
@@ -508,6 +514,10 @@ namespace graphene {
             fc::future<void> precompute_parallel(const precomputable_transaction &trx) const;
 
             fc::future<void> prefetch_parallel(const precomputable_transaction &trx) const;
+
+            vector<limit_order_object> get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const;
+
+            fc::future<void> fetch_orders_parallel(const precomputable_transaction &trx) const;
 
         private:
             void _fetch_init() const;

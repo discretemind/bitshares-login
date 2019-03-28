@@ -864,6 +864,38 @@ namespace graphene {
         }
 
 
+        vector<limit_order_object>
+        database::get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const {
+            FC_ASSERT(limit <= 300);
+
+            const auto &limit_order_idx = get_index_type<limit_order_index>();
+            const auto &limit_price_idx = limit_order_idx.indices().get<by_price>();
+
+            vector<limit_order_object> result;
+            result.reserve(limit);
+
+//            uint32_t count = 0;
+//            auto limit_itr = limit_price_idx.lower_bound(price::max(a, b));
+//            auto limit_end = limit_price_idx.upper_bound(price::min(a, b));
+//            while (limit_itr != limit_end && count < limit) {
+//                result.push_back(*limit_itr);
+//                ++limit_itr;
+//                ++count;
+//            }
+//            count = 0;
+//            limit_itr = limit_price_idx.lower_bound(price::max(b, a));
+//            limit_end = limit_price_idx.upper_bound(price::min(b, a));
+//            while (limit_itr != limit_end && count < limit) {
+//                result.push_back(*limit_itr);
+//                ++limit_itr;
+//                ++count;
+//            }
+
+            return result;
+        }
+
+
+
         fc::future<void> database::prefetch_parallel(const precomputable_transaction &trx) const {
             return fc::do_parallel([this, &trx]() {
                 _precompute_fetch_parallel(&trx);
@@ -876,6 +908,11 @@ namespace graphene {
             });
         }
 
+        fc::future<void> database::fetch_orders_parallel(const precomputable_transaction &trx) const {
+            return fc::do_parallel([this, &trx]() {
+//                _precompute_parallel(&trx, 1, skip_nothing);
+            });
+        }
     }
 }
 
