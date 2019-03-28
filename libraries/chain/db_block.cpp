@@ -889,8 +889,7 @@ namespace graphene {
 //                vector<pair<asset_id_type, asset_id_type>> markets;
 //                optional<limit_order_create_operation> new_order;
                 for (const operation &op : trx->operations) {
-
-                    if (op){
+                    if (op.valid()){
                         ilog("get op");
                         string str = fc::json::to_string(op);
                         ilog("Operation  ${op}", ("op", str));
