@@ -55,9 +55,9 @@ namespace graphene {
             vector<limit_order> orders;
         };
 
-        struct limit_order_object {
-
-        };
+//        struct limit_order_object {
+//
+//        };
     }
 }
 FC_REFLECT( graphene::chain::limit_order, (base)(quote)
