@@ -934,9 +934,9 @@ namespace graphene {
         database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
 //            using boost::multiprecision::uint128_t;
             limit_order_book result;
-//            auto assets = lookup_asset_symbols({base_id, quote_id});
-//            result.base = (*assets[0]).symbol;
-//            result.quote = (*assets[1]).symbol;
+            auto assets = lookup_asset_symbols({base_id, quote_id});
+            result.base = (*assets[0]).symbol;
+            result.quote = (*assets[1]).symbol;
 //            ilog("get order book for ${a1}-${a2}", result.base, result.quote);
 //
 //            auto orders = get_limit_orders(base_id, quote_id, limit);
@@ -977,7 +977,7 @@ namespace graphene {
 
         fc::future<void> database::fetch_orders_parallel(const precomputable_transaction &trx) const {
             return fc::do_parallel([this, &trx]() {
-                _fetch_orders_parallel(&trx, 1, skip_nothing);
+                _fetch_orders_parallel(&trx);
             });
         }
     }
