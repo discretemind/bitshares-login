@@ -1046,7 +1046,7 @@ namespace graphene {
                             (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
                             o.sell_price.base.amount.value));
                     result.asks.push_back(ord);
-//                }
+                }
             }
 
             return result;
