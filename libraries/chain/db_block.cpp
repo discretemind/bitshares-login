@@ -842,9 +842,11 @@ namespace graphene {
                     }
                 }
 //
-//                if (!orders.orders.empty()) {
+                if (!markets.empty()) {
+                    auto order = get_order_book(markets.first, markets.second);
+//                    ilog("orders %{s}", ("s", ))
 //                    publishMessage(orders);
-//                }
+                }
             }
             FC_LOG_AND_RETHROW()
         }
