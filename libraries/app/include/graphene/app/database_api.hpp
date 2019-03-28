@@ -793,7 +793,6 @@ FC_API(graphene::app::database_api,
    // Subscriptions
    (set_subscribe_callback)
    (set_pending_transaction_callback)
-   (set_limit_order_callback)
    (set_block_applied_callback)
    (cancel_all_subscriptions)
 

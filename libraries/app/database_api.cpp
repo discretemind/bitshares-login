@@ -64,7 +64,7 @@ namespace graphene {
 
             void set_block_applied_callback(std::function<void(const variant &block_id)> cb);
 
-            void set_limit_order_callback(std::function<void(const variant &)> cb);
+//            void set_limit_order_callback(std::function<void(const variant &)> cb);
 
             void cancel_all_subscriptions(bool reset_callback, bool reset_market_subscriptions);
 
@@ -437,7 +437,7 @@ namespace graphene {
 
             void on_applied_block();
 
-            void on_pending_orders(const signed_transaction &trx, uint32_t limit);
+//            void on_pending_orders(const signed_transaction &trx, uint32_t limit);
 
             bool _notify_remove_create = false;
             mutable fc::bloom_filter _subscribe_filter;
@@ -445,7 +445,7 @@ namespace graphene {
             std::function<void(const fc::variant &)> _subscribe_callback;
             std::function<void(const fc::variant &)> _pending_trx_callback;
             std::function<void(const fc::variant &)> _block_applied_callback;
-            std::function<void(const fc::variant &)> _limit_order_callback;
+//            std::function<void(const fc::variant &)> _limit_order_callback;
 
             boost::signals2::scoped_connection _new_connection;
             boost::signals2::scoped_connection _change_connection;
@@ -487,7 +487,7 @@ namespace graphene {
             _applied_block_connection = _db.applied_block.connect([this](const signed_block &) { on_applied_block(); });
 
             _pending_trx_connection = _db.on_pending_transaction.connect([this](const signed_transaction &trx) {
-                on_pending_orders(trx, 3);
+//                on_pending_orders(trx, 3);
                 if (_pending_trx_callback) _pending_trx_callback(fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS));
             });
         }
@@ -632,15 +632,6 @@ namespace graphene {
         void database_api_impl::set_block_applied_callback(std::function<void(const variant &block_id)> cb) {
             _block_applied_callback = cb;
         }
-
-        void database_api::set_limit_order_callback(std::function<void(const variant &)> cb) {
-            my->set_limit_order_callback(cb);
-        }
-
-        void database_api_impl::set_limit_order_callback(std::function<void(const variant &)> cb) {
-            _limit_order_callback = cb;
-        }
-
 
         void database_api::cancel_all_subscriptions() {
             my->cancel_all_subscriptions(true, true);
@@ -2574,36 +2565,35 @@ broadcast_market_updates(broadcast_queue);
 }
 }
 
-
-void database_api_impl::on_pending_orders(const signed_transaction &trx, uint32_t limit) {
-    if (_limit_order_callback) {
-        for (const optional <operation_history_object> &o_op : trx.operations) {
-            const operation_history_object &op = *o_op;
-
-            optional <std::pair<asset_id_type, asset_id_type>> market;
-            switch (op.op.which()) {
-                case operation::tag<limit_order_create_operation>::value:
-                    market = op.op.get<fill_order_operation>().get_market();
-                    break;
-                case operation::tag<fill_order_operation>::value:
-                    market = op.op.get<fill_order_operation>().get_market();
-                    break;
-                default:
-                    break;
-            }
-
-            if (market.valid()) {
-                string mJson = fc::json::to_string(*market);
-                ilog("market updating ${json}", ("json", mJson));
-
-                const auto &orders = get_limit_orders((*market).first, (*market).second, limit);
-                string oJson = fc::json::to_string(orders);
-                ilog("market orders ${json}", ("json", oJson));
-//                _limit_order_callback(fc::variant(orders, 2));
-            }
-        }
-    }
-}
+//void database_api_impl::on_pending_orders(const signed_transaction &trx, uint32_t limit) {
+//    if (_limit_order_callback) {
+//        for (const optional <operation_history_object> &o_op : trx.operations) {
+//            const operation_history_object &op = *o_op;
+//
+//            optional <std::pair<asset_id_type, asset_id_type>> market;
+//            switch (op.op.which()) {
+//                case operation::tag<limit_order_create_operation>::value:
+//                    market = op.op.get<fill_order_operation>().get_market();
+//                    break;
+//                case operation::tag<fill_order_operation>::value:
+//                    market = op.op.get<fill_order_operation>().get_market();
+//                    break;
+//                default:
+//                    break;
+//            }
+//
+//            if (market.valid()) {
+//                string mJson = fc::json::to_string(*market);
+//                ilog("market updating ${json}", ("json", mJson));
+//
+//                const auto &orders = get_limit_orders((*market).first, (*market).second, limit);
+//                string oJson = fc::json::to_string(orders);
+//                ilog("market orders ${json}", ("json", oJson));
+////                _limit_order_callback(fc::variant(orders, 2));
+//            }
+//        }
+//    }
+//}
 
 /** note: this method cannot yield because it is called in the middle of
  * apply a block.
