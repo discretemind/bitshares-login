@@ -889,22 +889,16 @@ namespace graphene {
 //        template<typename Trx>
         void database::fetch_orders_parallel(const signed_transaction &trx) {
             try {
-
                 for (const optional<operation_history_object> &o_op : trx.operations) {
                     const operation_history_object &op = *o_op;
-
                     optional<std::pair<asset_id_type, asset_id_type>> market;
                     switch (op.op.which()) {
                         case operation::tag<limit_order_create_operation>::value:
-                            market = op.op.get<fill_order_operation>().get_market();
-                            break;
-                        case operation::tag<fill_order_operation>::value:
-                            market = op.op.get<fill_order_operation>().get_market();
+                            market = op.op.get<limit_order_create_operation>().get_market();
                             break;
                         default:
                             break;
                     }
-
                     if (market.valid()) {
                         string mJson = fc::json::to_string(*market);
                         ilog("market updating ${json}", ("json", mJson));
