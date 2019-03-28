@@ -1030,7 +1030,7 @@ namespace graphene {
             }
 
             // times (10**19) so won't overflow but have good accuracy
-            return new_price.base.amount.value) *pow(10, base_precision)
+            return new_price.base.amount.value * pow(10, base_precision)
                                                 / (new_price.quote.amount.value * pow(10, quote_precision));
         }
 
