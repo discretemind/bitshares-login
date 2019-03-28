@@ -898,7 +898,6 @@ namespace graphene {
                     }
                     if (market.valid()) {
                         string mJson = fc::json::to_string(*market);
-                        ilog("market updating ${json}", ("json", mJson));
                         auto book = get_order_book((*market).first, (*market).second, 5);
                         publishOrderBook(book);
 
@@ -906,34 +905,6 @@ namespace graphene {
                 }
             }
             FC_LOG_AND_RETHROW()
-
-
-//                vector<pair<asset_id_type, asset_id_type>> markets;
-//                optional<limit_order_create_operation> new_order;
-//            for (const optional<operation> &op : trx->operations) {
-//                if (!op.valid()) {
-//                    ilog("op not valid");
-//                    continue;
-//                }
-//                ilog("get op");
-////                        string str = fc::json::to_string(*op);
-////                        ilog("Operation  ${op}", ("op", str));
-////                    int i_which = op.which();
-////                    if (i_which == 1) {
-////                        new_order = op.get<limit_order_create_operation>();
-//////                        limit_order_create_operation &lo = *new_order;
-//////                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
-////                    }
-//            }
-////                if (!markets.empty()) {
-////                    for (const pair<asset_id_type, asset_id_type> market : markets) {
-////                        ilog("get book");
-////                        auto order = get_order_book(market.first, market.second, 5);
-////                    }
-////                }
-//        }
-
-
         }
 
         fc::future<void> database::precompute_parallel(const signed_block &block, const uint32_t skip) const {
@@ -1026,8 +997,6 @@ namespace graphene {
                 new_price.base.amount = std::numeric_limits<int64_t>::max();
                 new_price.quote.amount = 1;
             }
-
-            // times (10**19) so won't overflow but have good accuracy
             return new_price.base.amount.value * pow(10, base_precision)
                                                 / (new_price.quote.amount.value * pow(10, quote_precision));
         }
@@ -1051,9 +1020,7 @@ namespace graphene {
             auto assets = lookup_asset_symbols({base_id, quote_id});
             result.base = (*assets[0]).symbol;
             result.quote = (*assets[1]).symbol;
-            ilog("get order book for ${a1}-${a2}", ("a1", result.base)("a2", result.quote));
             auto orders = get_limit_orders(base_id, quote_id, limit);
-            ilog("iteragte orders ${s}", ("s", orders.size()));
             for (const auto &o : orders) {
                 if (o.sell_price.base.asset_id == base_id) {
                     order ord;
