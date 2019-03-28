@@ -790,7 +790,7 @@ namespace graphene {
         }
 
 
-        void pack_orders(limit_order_book book, uint8_t *buffer) {
+        void pack_book(limit_order_book book, uint8_t *buffer) {
 
         }
 
