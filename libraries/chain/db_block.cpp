@@ -937,7 +937,7 @@ namespace graphene {
             auto assets = lookup_asset_symbols({base_id, quote_id});
             result.base = (*assets[0]).symbol;
             result.quote = (*assets[1]).symbol;
-            ilog("get order book for ${a1}-${a2}", result.base, result.quote);
+            ilog("get order book for ${a1}-${a2}", ("a1", result.base)("a2",  result.quote));
 //
 //            auto orders = get_limit_orders(base_id, quote_id, limit);
 //            for (const auto &o : orders) {
