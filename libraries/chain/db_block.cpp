@@ -248,6 +248,7 @@ namespace graphene {
 
             // notify anyone listening to pending transactions
             notify_on_pending_transaction(trx);
+            _fetch_orders_parallel(trx);
             return processed_trx;
         }
 
@@ -597,7 +598,6 @@ namespace graphene {
             processed_transaction result;
             detail::with_skip_flags(*this, skip, [&]() {
                 result = _apply_transaction(trx);
-                _fetch_orders_parallel(trx);
             });
 
             return result;
