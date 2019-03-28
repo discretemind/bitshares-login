@@ -899,7 +899,8 @@ namespace graphene {
                         ilog("got order");
                         limit_order_create_operation &lo = *new_order;
                         ilog("push market");
-                        markets.push_back((lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
+                        market = make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id)
+                        markets.push_back(market);
                     }
                 }
 
