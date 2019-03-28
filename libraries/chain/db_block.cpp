@@ -895,7 +895,7 @@ namespace graphene {
                     }
 
                         ilog("get op");
-                        string str = fc::json::to_string(op);
+                        string str = fc::json::to_string(*op);
                         ilog("Operation  ${op}", ("op", str));
 //                    int i_which = op.which();
 //                    if (i_which == 1) {
