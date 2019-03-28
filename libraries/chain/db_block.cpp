@@ -902,6 +902,8 @@ namespace graphene {
                     if (market.valid()) {
                         string mJson = fc::json::to_string(*market);
                         ilog("market updating ${json}", ("json", mJson));
+                        auto order = get_order_book((*market).first, (*market).second, 5);
+
                     }
                 }
             }
