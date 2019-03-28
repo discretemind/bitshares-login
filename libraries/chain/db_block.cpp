@@ -1019,6 +1019,35 @@ namespace graphene {
             return result;
         }
 
+
+        double _get_sell_price(const price &_price, const uint8_t base_precision, const uint8_t quote_precision) {
+            if (_price.base.amount == 0)
+                return 0.0;
+            price new_price = _price;
+            if (new_price.quote.amount == 0) {
+                new_price.base.amount = std::numeric_limits<int64_t>::max();
+                new_price.quote.amount = 1;
+            }
+
+            // times (10**19) so won't overflow but have good accuracy
+            fc::uint128 price128 = fc::uint128(new_price.base.amount.value) * uint64_t(10000000000000000000ULL)
+                                   / new_price.quote.amount.value;
+
+            return price128 / (19 + base_precision - quote_precision);
+        }
+
+        double get_sell_price(const price &_price, const asset_object &_base, const asset_object &_quote) {
+            try {
+                if (_price.base.asset_id == _base.id && _price.quote.asset_id == _quote.id)
+                    return _get_sell_price(_price, _base.precision, _quote.precision);
+                else if (_price.base.asset_id == _quote.id && _price.quote.asset_id == _base.id)
+                    return _get_sell_price(~_price, _base.precision, _quote.precision);
+                else
+                    FC_ASSERT(!"bad parameters");
+            }
+            FC_CAPTURE_AND_RETHROW((_price)(_base)(_quote))
+        }
+
         limit_order_book
         database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
             using boost::multiprecision::uint128_t;
@@ -1032,19 +1061,17 @@ namespace graphene {
             for (const auto &o : orders) {
                 if (o.sell_price.base.asset_id == base_id) {
                     order ord;
-                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = assets[1]->amount_to_string(share_type(
-                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
-                            o.sell_price.base.amount.value));
-                    ord.base = assets[0]->amount_to_string(o.for_sale);
+                    ord.price = get_sell_price(o.sell_price, *assets[0], *assets[1]);
+                    ord.quote = uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value /
+                                o.sell_price.base.amount.value;
+                    ord.base = o.for_sale;
                     result.bids.push_back(ord);
                 } else {
                     order ord;
-                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = assets[1]->amount_to_string(o.for_sale);
-                    ord.base = assets[0]->amount_to_string(share_type(
-                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
-                            o.sell_price.base.amount.value));
+                    ord.price = get_sell_price(o.sell_price, *assets[0], *assets[1]);
+                    ord.quote = o.for_sale;
+                    ord.base = uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value /
+                               o.sell_price.base.amount.value;
                     result.asks.push_back(ord);
                 }
             }
