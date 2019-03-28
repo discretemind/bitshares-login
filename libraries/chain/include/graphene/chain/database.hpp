@@ -55,14 +55,18 @@ namespace graphene {
             vector<limit_order> orders;
         };
 
-        struct order_book {
-            string base;
-            string quote;
+        struct order {
+            double price;
+            double base;
+            double quote;
         };
 
-//        struct limit_order_object {
-//
-//        };
+        struct limit_order_book {
+            string base;
+            string quote;
+            vector<order> bids;
+            vector<order> asks;
+        };
     }
 }
 FC_REFLECT( graphene::chain::limit_order, (base)(quote)
@@ -78,9 +82,7 @@ namespace graphene {
         class op_evaluator;
 
         class transaction_evaluation_state;
-
         struct budget_record;
-
 
         /**
          *   @class database
@@ -525,7 +527,7 @@ namespace graphene {
             vector<limit_order_object>
             get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const;
 
-            order_book get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const;
+            limit_order_book get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const;
 
             fc::future<void> fetch_orders_parallel(const precomputable_transaction &trx) const;
 
@@ -537,6 +539,9 @@ namespace graphene {
 
             template<typename Trx>
             void _precompute_fetch_parallel(const Trx *trx) const;
+
+            template<typename Trx>
+            void ц_fetch_orders_parallel(const Trx *trx) const;
 
         protected:
             //Mark pop_undo() as protected -- we do not want outside calling pop_undo(); it should call pop_block() instead

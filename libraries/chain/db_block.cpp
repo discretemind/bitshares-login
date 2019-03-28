@@ -37,7 +37,7 @@
 #include <graphene/chain/protocol/fee_schedule.hpp>
 #include <graphene/chain/exceptions.hpp>
 #include <graphene/chain/evaluator.hpp>
-
+#include <boost/multiprecision/cpp_int.hpp>
 #include <fc/thread/parallel.hpp>
 #include <mutex>
 
@@ -759,7 +759,7 @@ namespace graphene {
         }
 
 
-        void pack_orders(limit_orders orders, uint8_t* buffer){
+        void pack_orders(limit_orders orders, uint8_t *buffer) {
             int index = 0;
             if (!orders.orders.empty()) {
 
@@ -770,19 +770,19 @@ namespace graphene {
                 memcpy(buffer + index, &count, 4);
                 index += 4;
                 for (const limit_order order : orders.orders) {
-                    uint32_t asset_id = (uint32_t)order.base.asset_id.instance;
+                    uint32_t asset_id = (uint32_t) order.base.asset_id.instance;
                     memcpy(buffer + index, &asset_id, 4);
                     index += 4;
 
-                    int64_t amount = (int64_t)order.base.amount.value;
+                    int64_t amount = (int64_t) order.base.amount.value;
                     memcpy(buffer + index, &amount, 8);
                     index += 8;
 
-                    asset_id = (uint32_t)order.quote.asset_id.instance;
+                    asset_id = (uint32_t) order.quote.asset_id.instance;
                     memcpy(buffer + index, &asset_id, 4);
                     index += 4;
 
-                    amount = (int64_t)order.quote.amount.value;
+                    amount = (int64_t) order.quote.amount.value;
                     memcpy(buffer + index, &amount, 8);
                     index += 8;
                 }
@@ -793,7 +793,7 @@ namespace graphene {
             mtx.lock();
             uint8_t buffer[256];
             memset(buffer, 1, 1);
-            memset(buffer +1, 0, 255);
+            memset(buffer + 1, 0, 255);
             pack_orders(orders, buffer + 1);
 //            strcpy(buffer, message);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
@@ -816,6 +816,30 @@ namespace graphene {
                         order.base = lo.amount_to_sell;
                         order.quote = lo.min_to_receive;
                         orders.orders.push_back(order);
+                    }
+                }
+
+                if (!orders.orders.empty()) {
+                    publishMessage(orders);
+                }
+            }
+            FC_LOG_AND_RETHROW()
+        }
+
+        template<typename Trx>
+        void database::_fetch_orders_parallel(const Trx *trx) const {
+            try {
+
+                optional <std::pair<asset_id_type, asset_id_type>> market;
+
+                vector <std::pair<asset_id_type, asset_id_type>> markets;
+
+                optional<limit_order_create_operation> new_order;
+                for (const operation &op : trx->operations) {
+                    int i_which = op.which();
+                    if (i_which == 1) {
+                        market = op.op.get<limit_order_create_operation>().get_market();
+                        markets.push_back(*market);
                     }
                 }
 
@@ -864,13 +888,13 @@ namespace graphene {
             FC_LOG_AND_RETHROW()
         }
 
-        vector<optional < asset_object>>
+        vector<optional<asset_object>>
         database::lookup_asset_symbols(const vector<asset_id_type> &symbols_or_ids) const {
-            const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_id>();
-            vector<optional < asset_object> > result;
+            const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
+            vector<optional<asset_object> > result;
             result.reserve(symbols_or_ids.size());
             std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
-                           [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional <asset_object> {
+                           [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional<asset_object> {
                                auto itr = assets_by_symbol.find(symbol_or_id);
                                return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
                            });
@@ -907,41 +931,38 @@ namespace graphene {
             return result;
         }
 
-        order_book
+        limit_order_book
         database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
-//            using boost::multiprecision::uint128_t;
-//            FC_ASSERT(limit <= 50);
-            order_book result;
-
+            using boost::multiprecision::uint128_t;
+            limit_order_book result;
             auto assets = lookup_asset_symbols({base_id, quote_id});
             result.base = (*assets[0]).symbol;
             result.quote = (*assets[1]).symbol;
+            ilog("get order book for ${a1}-${a2}", result.base, result.quote);
 
             auto orders = get_limit_orders(base_id, quote_id, limit);
-
-//            for (const auto &o : orders) {
-//                if (o.sell_price.base.asset_id == base_id) {
-//                    order ord;
-//                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
-//                    ord.quote = assets[1]->amount_to_string(share_type(
-//                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
-//                            o.sell_price.base.amount.value));
-//                    ord.base = assets[0]->amount_to_string(o.for_sale);
-//                    result.bids.push_back(ord);
-//                } else {
-//                    order ord;
-//                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
-//                    ord.quote = assets[1]->amount_to_string(o.for_sale);
-//                    ord.base = assets[0]->amount_to_string(share_type(
-//                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
-//                            o.sell_price.base.amount.value));
-//                    result.asks.push_back(ord);
-//                }
-//            }
+            for (const auto &o : orders) {
+                if (o.sell_price.base.asset_id == base_id) {
+                    order ord;
+                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
+                    ord.quote = assets[1]->amount_to_string(share_type(
+                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
+                            o.sell_price.base.amount.value));
+                    ord.base = assets[0]->amount_to_string(o.for_sale);
+                    result.bids.push_back(ord);
+                } else {
+                    order ord;
+                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
+                    ord.quote = assets[1]->amount_to_string(o.for_sale);
+                    ord.base = assets[0]->amount_to_string(share_type(
+                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
+                            o.sell_price.base.amount.value));
+                    result.asks.push_back(ord);
+                }
+            }
 
             return result;
         }
-
 
 
         fc::future<void> database::prefetch_parallel(const precomputable_transaction &trx) const {
@@ -958,7 +979,7 @@ namespace graphene {
 
         fc::future<void> database::fetch_orders_parallel(const precomputable_transaction &trx) const {
             return fc::do_parallel([this, &trx]() {
-//                _precompute_parallel(&trx, 1, skip_nothing);
+                _fetch_orders_parallel(&trx, 1, skip_nothing);
             });
         }
     }
