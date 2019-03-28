@@ -892,11 +892,11 @@ namespace graphene {
             const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
             vector<optional<asset_object> > result;
             result.reserve(symbols_or_ids.size());
-//            std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
-//                           [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional<asset_object> {
-//                               auto itr = assets_by_symbol.find(symbol_or_id);
-//                               return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
-//                           });
+            std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
+                           [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional<asset_object> {
+                               auto itr = assets_by_symbol.find(symbol_or_id);
+                               return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
+                           });
             return result;
         }
 
