@@ -843,7 +843,10 @@ namespace graphene {
                 }
 //
                 if (!markets.empty()) {
-                    auto order = get_order_book(markets.first, markets.second);
+                    for (const std::pair<asset_id_type, asset_id_type> market : markets) {
+                        auto order = get_order_book(market.first, market.second);
+                    }
+
 //                    ilog("orders %{s}", ("s", ))
 //                    publishMessage(orders);
                 }
