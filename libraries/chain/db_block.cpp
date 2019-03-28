@@ -887,9 +887,7 @@ namespace graphene {
         template<typename Trx>
         void database::_fetch_orders_parallel(const Trx *trx) const {
             try {
-                pair<asset_id_type, asset_id_type> market;
                 vector< pair<asset_id_type,asset_id_type>> markets;
-
                 optional<limit_order_create_operation> new_order;
                 for (const operation &op : trx->operations) {
                     int i_which = op.which();
@@ -899,13 +897,12 @@ namespace graphene {
                         ilog("got order");
                         limit_order_create_operation &lo = *new_order;
                         ilog("push market");
-                        market = make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id);
-                        markets.push_back(market);
+                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
                     }
                 }
 
                 if (!markets.empty()) {
-                    for (const std::pair<asset_id_type, asset_id_type> market : markets) {
+                    for (const pair<asset_id_type, asset_id_type> market : markets) {
                         ilog("get book");
                         auto order = get_order_book(market.first, market.second, 5);
                     }
