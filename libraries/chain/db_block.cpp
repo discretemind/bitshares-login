@@ -908,11 +908,6 @@ namespace graphene {
                     if (market.valid()) {
                         string mJson = fc::json::to_string(*market);
                         ilog("market updating ${json}", ("json", mJson));
-
-                        const auto &orders = get_limit_orders((*market).first, (*market).second, limit);
-                        string oJson = fc::json::to_string(orders);
-                        ilog("market orders ${json}", ("json", oJson));
-//                _limit_order_callback(fc::variant(orders, 2));
                     }
                 }
             }
