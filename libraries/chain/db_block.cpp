@@ -864,7 +864,6 @@ namespace graphene {
             FC_LOG_AND_RETHROW()
         }
 
-
         vector<optional < asset_object>>
         database::lookup_asset_symbols(const vector<string> &symbols_or_ids) const {
             const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
@@ -914,9 +913,8 @@ namespace graphene {
 
         order_book
         database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
-            using boost::multiprecision::uint128_t;
-            FC_ASSERT(limit <= 50);
-
+//            using boost::multiprecision::uint128_t;
+//            FC_ASSERT(limit <= 50);
             order_book result;
 
             auto assets = lookup_asset_symbols({base_id, quote_id});
