@@ -789,29 +789,69 @@ namespace graphene {
             }
         }
 
-
         void pack_book(limit_order_book book, uint8_t *buffer) {
+            int index = 0;
 
+            string base = book.base;
+            auto size = base.length();
+            memcpy(buffer, &size, 4);
+            index += 4;
+
+            memcpy(buffer + index, &base[0], base.length());
+            index += base.length();
+
+            string quote = book.quote;
+            size = quote.length();
+            memcpy(buffer+ index, &size, 4);
+            index += 4;
+
+            memcpy(buffer + index, &quote[0], size);
+            index += size;
+
+
+            auto count = book.bids.size();
+            memcpy(buffer + index, &count, 4);
+            index += 4;
+            for (const order o : book.bids) {
+                memcpy(buffer + index, &o.price, 8);
+                index += 8;
+                memcpy(buffer + index, &o.base, 8);
+                index += 8;
+                memcpy(buffer + index, &o.quote, 8);
+                index += 8;
+            }
+
+            count = book.asks.size();
+            memcpy(buffer + index, &count, 4);
+            index += 4;
+            for (const order o : book.asks) {
+                memcpy(buffer + index, &o.price, 8);
+                index += 8;
+                memcpy(buffer + index, &o.base, 8);
+                index += 8;
+                memcpy(buffer + index, &o.quote, 8);
+                index += 8;
+            }
+
+            printf("Size: %d\n", index);
         }
 
         void publishLimitOrders(limit_orders orders) {
             mtx.lock();
-            uint8_t buffer[256];
+            uint8_t buffer[320];
             memset(buffer, 1, 1);
-            memset(buffer + 1, 0, 255);
+            memset(buffer + 1, 0, 320);
             pack_orders(orders, buffer + 1);
-//            strcpy(buffer, message);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
         }
 
         void publishOrderBook(limit_order_book book) {
             mtx.lock();
-            uint8_t buffer[256];
+            uint8_t buffer[320];
             memset(buffer, 2, 1);
-            memset(buffer + 1, 0, 255);
+            memset(buffer + 1, 0, 320);
             pack_book(book, buffer + 1);
-//            strcpy(buffer, message);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
         }
