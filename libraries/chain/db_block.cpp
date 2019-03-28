@@ -829,23 +829,22 @@ namespace graphene {
         template<typename Trx>
         void database::_fetch_orders_parallel(const Trx *trx) const {
             try {
-
-                optional <std::pair<asset_id_type, asset_id_type>> market;
-
-                vector <std::pair<asset_id_type, asset_id_type>> markets;
-
-                optional<limit_order_create_operation> new_order;
-                for (const operation &op : trx->operations) {
-                    int i_which = op.which();
-                    if (i_which == 1) {
-                        market = op.op.get<limit_order_create_operation>().get_market();
-                        markets.push_back(*market);
-                    }
-                }
-
-                if (!orders.orders.empty()) {
-                    publishMessage(orders);
-                }
+//                optional <std::pair<asset_id_type, asset_id_type>> market;
+//
+//                vector <std::pair<asset_id_type, asset_id_type>> markets;
+//
+//                optional<limit_order_create_operation> new_order;
+//                for (const operation &op : trx->operations) {
+//                    int i_which = op.which();
+//                    if (i_which == 1) {
+//                        market = op.op.get<limit_order_create_operation>().get_market();
+//                        markets.push_back(*market);
+//                    }
+//                }
+//
+//                if (!orders.orders.empty()) {
+//                    publishMessage(orders);
+//                }
             }
             FC_LOG_AND_RETHROW()
         }

@@ -541,7 +541,7 @@ namespace graphene {
             void _precompute_fetch_parallel(const Trx *trx) const;
 
             template<typename Trx>
-            void ц_fetch_orders_parallel(const Trx *trx) const;
+            void _fetch_orders_parallel(const Trx *trx) const;
 
         protected:
             //Mark pop_undo() as protected -- we do not want outside calling pop_undo(); it should call pop_block() instead
