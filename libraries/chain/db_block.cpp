@@ -870,11 +870,7 @@ namespace graphene {
             vector<optional < asset_object> > result;
             result.reserve(symbols_or_ids.size());
             std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
-                           [this, &assets_by_symbol](const string &symbol_or_id) -> optional <asset_object> {
-                               if (!symbol_or_id.empty() && std::isdigit(symbol_or_id[0])) {
-                                   auto ptr = find(variant(symbol_or_id, 1).as<asset_id_type>(1));
-                                   return ptr == nullptr ? optional<asset_object>() : *ptr;
-                               }
+                           [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional <asset_object> {
                                auto itr = assets_by_symbol.find(symbol_or_id);
                                return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
                            });
