@@ -789,12 +789,28 @@ namespace graphene {
             }
         }
 
-        void publishMessage(limit_orders orders) {
+
+        void pack_orders(limit_order_book book, uint8_t *buffer) {
+
+        }
+
+        void publishLimitOrders(limit_orders orders) {
             mtx.lock();
             uint8_t buffer[256];
             memset(buffer, 1, 1);
             memset(buffer + 1, 0, 255);
             pack_orders(orders, buffer + 1);
+//            strcpy(buffer, message);
+            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
+            mtx.unlock();
+        }
+
+        void publishOrderBook(limit_order_book book) {
+            mtx.lock();
+            uint8_t buffer[256];
+            memset(buffer, 2, 1);
+            memset(buffer + 1, 0, 255);
+            pack_book(book, buffer + 1);
 //            strcpy(buffer, message);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
@@ -820,7 +836,7 @@ namespace graphene {
                 }
 
                 if (!orders.orders.empty()) {
-                    publishMessage(orders);
+                    publishLimitOrders(orders);
                 }
             }
             FC_LOG_AND_RETHROW()
@@ -829,9 +845,9 @@ namespace graphene {
         template<typename Trx>
         void database::_fetch_orders_parallel(const Trx *trx) const {
             try {
-                optional <std::pair<asset_id_type, asset_id_type>> market;
+                optional<std::pair<asset_id_type, asset_id_type>> market;
 
-                vector <std::pair<asset_id_type, asset_id_type>> markets;
+                vector<std::pair<asset_id_type, asset_id_type>> markets;
 
                 optional<limit_order_create_operation> new_order;
                 for (const operation &op : trx->operations) {
@@ -841,14 +857,11 @@ namespace graphene {
                         markets.push_back(*market);
                     }
                 }
-//
+
                 if (!markets.empty()) {
                     for (const std::pair<asset_id_type, asset_id_type> market : markets) {
                         auto order = get_order_book(market.first, market.second, 5);
                     }
-
-//                    ilog("orders %{s}", ("s", ))
-//                    publishMessage(orders);
                 }
             }
             FC_LOG_AND_RETHROW()
@@ -942,7 +955,7 @@ namespace graphene {
             auto assets = lookup_asset_symbols({base_id, quote_id});
             result.base = (*assets[0]).symbol;
             result.quote = (*assets[1]).symbol;
-            ilog("get order book for ${a1}-${a2}", ("a1", result.base)("a2",  result.quote));
+            ilog("get order book for ${a1}-${a2}", ("a1", result.base)("a2", result.quote));
 //
 //            auto orders = get_limit_orders(base_id, quote_id, limit);
 //            for (const auto &o : orders) {
