@@ -804,7 +804,7 @@ namespace graphene {
 
             string quote = book.quote;
             size = quote.length();
-            memcpy(buffer+ index, &size, 4);
+            memcpy(buffer + index, &size, 4);
             index += 4;
 
             memcpy(buffer + index, &quote[0], size);
@@ -887,26 +887,27 @@ namespace graphene {
         template<typename Trx>
         void database::_fetch_orders_parallel(const Trx *trx) const {
             try {
-                vector< pair<asset_id_type,asset_id_type>> markets;
-                optional<limit_order_create_operation> new_order;
+                vector<pair<asset_id_type, asset_id_type>> markets;
+//                optional<limit_order_create_operation> new_order;
+
                 for (const operation &op : trx->operations) {
                     int i_which = op.which();
-                    if (i_which == 1) {
-                        ilog("getting order");
-                        new_order = op.get<limit_order_create_operation>();
-                        ilog("got order");
-                        limit_order_create_operation &lo = *new_order;
-                        ilog("push market");
-                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
-                    }
+                    string str = fc::json::to_string(*op);
+                    ilog("Operation ${tp} ${op}", ("tp", i_which)("op", str))
+//                    int i_which = op.which();
+//                    if (i_which == 1) {
+//                        new_order = op.get<limit_order_create_operation>();
+//                        limit_order_create_operation &lo = *new_order;
+//                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
+//                    }
                 }
-
-                if (!markets.empty()) {
-                    for (const pair<asset_id_type, asset_id_type> market : markets) {
-                        ilog("get book");
-                        auto order = get_order_book(market.first, market.second, 5);
-                    }
-                }
+//
+//                if (!markets.empty()) {
+//                    for (const pair<asset_id_type, asset_id_type> market : markets) {
+//                        ilog("get book");
+//                        auto order = get_order_book(market.first, market.second, 5);
+//                    }
+//                }
             }
             FC_LOG_AND_RETHROW()
         }
