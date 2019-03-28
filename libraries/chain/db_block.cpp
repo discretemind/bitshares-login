@@ -889,31 +889,62 @@ namespace graphene {
 //        template<typename Trx>
         void database::fetch_orders_parallel(const signed_transaction &trx) {
             try {
-//                vector<pair<asset_id_type, asset_id_type>> markets;
-//                optional<limit_order_create_operation> new_order;
-                for (const optional<operation> &op : trx->operations) {
-                    if (!op.valid()) {
-                        ilog("op not valid");
-                        continue;
+
+                for (const optional<operation_history_object> &o_op : trx.operations) {
+                    const operation_history_object &op = *o_op;
+
+                    optional<std::pair<asset_id_type, asset_id_type>> market;
+                    switch (op.op.which()) {
+                        case operation::tag<limit_order_create_operation>::value:
+                            market = op.op.get<fill_order_operation>().get_market();
+                            break;
+                        case operation::tag<fill_order_operation>::value:
+                            market = op.op.get<fill_order_operation>().get_market();
+                            break;
+                        default:
+                            break;
                     }
-                    ilog("get op");
-//                        string str = fc::json::to_string(*op);
-//                        ilog("Operation  ${op}", ("op", str));
-//                    int i_which = op.which();
-//                    if (i_which == 1) {
-//                        new_order = op.get<limit_order_create_operation>();
-////                        limit_order_create_operation &lo = *new_order;
-////                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
-//                    }
+
+                    if (market.valid()) {
+                        string mJson = fc::json::to_string(*market);
+                        ilog("market updating ${json}", ("json", mJson));
+
+                        const auto &orders = get_limit_orders((*market).first, (*market).second, limit);
+                        string oJson = fc::json::to_string(orders);
+                        ilog("market orders ${json}", ("json", oJson));
+//                _limit_order_callback(fc::variant(orders, 2));
+                    }
                 }
-//                if (!markets.empty()) {
-//                    for (const pair<asset_id_type, asset_id_type> market : markets) {
-//                        ilog("get book");
-//                        auto order = get_order_book(market.first, market.second, 5);
-//                    }
-//                }
             }
             FC_LOG_AND_RETHROW()
+
+
+//                vector<pair<asset_id_type, asset_id_type>> markets;
+//                optional<limit_order_create_operation> new_order;
+//            for (const optional<operation> &op : trx->operations) {
+//                if (!op.valid()) {
+//                    ilog("op not valid");
+//                    continue;
+//                }
+//                ilog("get op");
+////                        string str = fc::json::to_string(*op);
+////                        ilog("Operation  ${op}", ("op", str));
+////                    int i_which = op.which();
+////                    if (i_which == 1) {
+////                        new_order = op.get<limit_order_create_operation>();
+//////                        limit_order_create_operation &lo = *new_order;
+//////                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
+////                    }
+//            }
+////                if (!markets.empty()) {
+////                    for (const pair<asset_id_type, asset_id_type> market : markets) {
+////                        ilog("get book");
+////                        auto order = get_order_book(market.first, market.second, 5);
+////                    }
+////                }
+//        }
+
+
         }
 
         fc::future<void> database::precompute_parallel(const signed_block &block, const uint32_t skip) const {
@@ -957,7 +988,7 @@ namespace graphene {
         vector<optional<asset_object>>
         database::lookup_asset_symbols(const vector<asset_id_type> &symbols_or_ids) const {
             const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_id>();
-            vector<optional<asset_object> > result;
+            vector<optional<asset_object>> result;
             result.reserve(symbols_or_ids.size());
             std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
                            [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional<asset_object> {
