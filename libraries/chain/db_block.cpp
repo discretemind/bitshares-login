@@ -812,7 +812,6 @@ namespace graphene {
             memcpy(buffer + index, &quote[0], size);
             index += size;
 
-
             auto count = book.bids.size();
             memcpy(buffer + index, &count, 4);
             index += 4;
@@ -836,8 +835,6 @@ namespace graphene {
                 memcpy(buffer + index, &o.quote, 8);
                 index += 8;
             }
-
-            printf("Size: %d\n", index);
         }
 
         void publishLimitOrders(limit_orders orders) {
