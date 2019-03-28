@@ -934,13 +934,13 @@ namespace graphene {
         database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
             using boost::multiprecision::uint128_t;
             limit_order_book result;
-            auto assets = lookup_asset_symbols({base_id, quote_id});
-            result.base = (*assets[0]).symbol;
-            result.quote = (*assets[1]).symbol;
-            ilog("get order book for ${a1}-${a2}", result.base, result.quote);
-
-            auto orders = get_limit_orders(base_id, quote_id, limit);
-            for (const auto &o : orders) {
+//            auto assets = lookup_asset_symbols({base_id, quote_id});
+//            result.base = (*assets[0]).symbol;
+//            result.quote = (*assets[1]).symbol;
+//            ilog("get order book for ${a1}-${a2}", result.base, result.quote);
+//
+//            auto orders = get_limit_orders(base_id, quote_id, limit);
+//            for (const auto &o : orders) {
 //                if (o.sell_price.base.asset_id == base_id) {
 //                    order ord;
 //                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
@@ -958,7 +958,7 @@ namespace graphene {
 //                            o.sell_price.base.amount.value));
 //                    result.asks.push_back(ord);
 //                }
-            }
+//            }
 
             return result;
         }
