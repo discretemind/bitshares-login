@@ -892,15 +892,14 @@ namespace graphene {
 //                optional<limit_order_create_operation> new_order;
 
                 for (const operation &op : trx->operations) {
-                    int i_which = op.which();
                     string str = fc::json::to_string(op);
                     ilog("Operation ${id} ${op}", ("op", str));
-//                    int i_which = op.which();
-//                    if (i_which == 1) {
-//                        new_order = op.get<limit_order_create_operation>();
+                    int i_which = op.which();
+                    if (i_which == 1) {
+                        new_order = op.get<limit_order_create_operation>();
 //                        limit_order_create_operation &lo = *new_order;
 //                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
-//                    }
+                    }
                 }
 //
 //                if (!markets.empty()) {
