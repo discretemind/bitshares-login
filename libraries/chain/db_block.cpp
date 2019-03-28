@@ -246,7 +246,7 @@ namespace graphene {
             // The transaction applied successfully. Merge its changes into the pending block session.
             temp_session.merge();
 
-            fetch_orders_parallel(trx)
+            fetch_orders_parallel(trx);
 
             // notify anyone listening to pending transactions
             notify_on_pending_transaction(trx);
