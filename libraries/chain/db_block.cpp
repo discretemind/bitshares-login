@@ -1030,23 +1030,23 @@ namespace graphene {
             vector<limit_order_object> orders = get_limit_orders(base_id, quote_id, limit);
             ilog("iteragte orders", orders.size())
             for (const auto &o : orders) {
-                if (o.sell_price.base.asset_id == base_id) {
-                    order ord;
-                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = assets[1]->amount_to_string(share_type(
-                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
-                            o.sell_price.base.amount.value));
-                    ord.base = assets[0]->amount_to_string(o.for_sale);
-                    result.bids.push_back(ord);
-                } else {
-                    order ord;
-                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = assets[1]->amount_to_string(o.for_sale);
-                    ord.base = assets[0]->amount_to_string(share_type(
-                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
-                            o.sell_price.base.amount.value));
-                    result.asks.push_back(ord);
-                }
+//                if (o.sell_price.base.asset_id == base_id) {
+//                    order ord;
+//                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
+//                    ord.quote = assets[1]->amount_to_string(share_type(
+//                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
+//                            o.sell_price.base.amount.value));
+//                    ord.base = assets[0]->amount_to_string(o.for_sale);
+//                    result.bids.push_back(ord);
+//                } else {
+//                    order ord;
+//                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
+//                    ord.quote = assets[1]->amount_to_string(o.for_sale);
+//                    ord.base = assets[0]->amount_to_string(share_type(
+//                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
+//                            o.sell_price.base.amount.value));
+//                    result.asks.push_back(ord);
+//                }
             }
 
             return result;
