@@ -932,7 +932,7 @@ namespace graphene {
 
         limit_order_book
         database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
-            using boost::multiprecision::uint128_t;
+//            using boost::multiprecision::uint128_t;
             limit_order_book result;
 //            auto assets = lookup_asset_symbols({base_id, quote_id});
 //            result.base = (*assets[0]).symbol;
@@ -962,7 +962,6 @@ namespace graphene {
 
             return result;
         }
-
 
         fc::future<void> database::prefetch_parallel(const precomputable_transaction &trx) const {
             return fc::do_parallel([this, &trx]() {
