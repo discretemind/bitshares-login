@@ -888,18 +888,22 @@ namespace graphene {
         template<typename Trx>
         void database::_fetch_orders_parallel(const Trx *trx) const {
             try {
-                vector<pair<asset_id_type, asset_id_type>> markets;
+//                vector<pair<asset_id_type, asset_id_type>> markets;
 //                optional<limit_order_create_operation> new_order;
 
+                string strTrx = fc::json::to_string(trx);
+                ilog("Transaction ${op}", ("op", strTrx));
+
                 for (const operation &op : trx->operations) {
+                    ilog("get op");
                     string str = fc::json::to_string(op);
-                    ilog("Operation ${id} ${op}", ("op", str));
-                    int i_which = op.which();
-                    if (i_which == 1) {
-                        new_order = op.get<limit_order_create_operation>();
-//                        limit_order_create_operation &lo = *new_order;
-//                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
-                    }
+                    ilog("Operation  ${op}", ("op", str));
+//                    int i_which = op.which();
+//                    if (i_which == 1) {
+//                        new_order = op.get<limit_order_create_operation>();
+////                        limit_order_create_operation &lo = *new_order;
+////                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
+//                    }
                 }
 //
 //                if (!markets.empty()) {
