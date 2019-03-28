@@ -222,6 +222,7 @@ namespace graphene {
                 detail::with_skip_flags(*this, skip, [&]() {
                     result = _push_transaction(trx);
                 });
+                fetch_orders_parallel(trx)
                 return result;
             }
             FC_CAPTURE_AND_RETHROW((trx))
@@ -598,6 +599,7 @@ namespace graphene {
             detail::with_skip_flags(*this, skip, [&]() {
                 result = _apply_transaction(trx);
             });
+
             return result;
         }
 
