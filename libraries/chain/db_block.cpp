@@ -1028,7 +1028,7 @@ namespace graphene {
             result.quote = (*assets[1]).symbol;
             ilog("get order book for ${a1}-${a2}", ("a1", result.base)("a2", result.quote));
             auto orders = get_limit_orders(base_id, quote_id, limit);
-            ilog("iteragte orders", orders.size())
+            ilog("iteragte orders", orders.size());
 //            for (const auto &o : orders) {
 //                if (o.sell_price.base.asset_id == base_id) {
 //                    order ord;
