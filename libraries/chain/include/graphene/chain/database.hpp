@@ -55,6 +55,11 @@ namespace graphene {
             vector<limit_order> orders;
         };
 
+        struct order_book {
+            string base;
+            string quote;
+        };
+
 //        struct limit_order_object {
 //
 //        };
@@ -515,7 +520,12 @@ namespace graphene {
 
             fc::future<void> prefetch_parallel(const precomputable_transaction &trx) const;
 
-            vector<limit_order_object> get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const;
+            vector<optional<asset_object>> lookup_asset_symbols(const vector<string> &symbols_or_ids) const;
+
+            vector<limit_order_object>
+            get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const;
+
+            order_book get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const;
 
             fc::future<void> fetch_orders_parallel(const precomputable_transaction &trx) const;
 

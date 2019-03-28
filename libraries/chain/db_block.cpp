@@ -865,6 +865,23 @@ namespace graphene {
         }
 
 
+        vector<optional < asset_object>>
+        database::lookup_asset_symbols(const vector<string> &symbols_or_ids) const {
+            const auto &assets_by_symbol = _db.get_index_type<asset_index>().indices().get<by_symbol>();
+            vector<optional < asset_object> > result;
+            result.reserve(symbols_or_ids.size());
+            std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
+                           [this, &assets_by_symbol](const string &symbol_or_id) -> optional <asset_object> {
+                               if (!symbol_or_id.empty() && std::isdigit(symbol_or_id[0])) {
+                                   auto ptr = _db.find(variant(symbol_or_id, 1).as<asset_id_type>(1));
+                                   return ptr == nullptr ? optional<asset_object>() : *ptr;
+                               }
+                               auto itr = assets_by_symbol.find(symbol_or_id);
+                               return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
+                           });
+            return result;
+        }
+
         vector<limit_order_object>
         database::get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const {
             FC_ASSERT(limit <= 300);
@@ -891,6 +908,42 @@ namespace graphene {
                 ++limit_itr;
                 ++count;
             }
+
+            return result;
+        }
+
+        order_book
+        database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
+            using boost::multiprecision::uint128_t;
+            FC_ASSERT(limit <= 50);
+
+            order_book result;
+
+            auto assets = lookup_asset_symbols({base_id, quote_id});
+            result.base = (*assets[0]).symbol;
+            result.quote = (*assets[1]).symbol;
+
+            auto orders = get_limit_orders(base_id, quote_id, limit);
+
+//            for (const auto &o : orders) {
+//                if (o.sell_price.base.asset_id == base_id) {
+//                    order ord;
+//                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
+//                    ord.quote = assets[1]->amount_to_string(share_type(
+//                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
+//                            o.sell_price.base.amount.value));
+//                    ord.base = assets[0]->amount_to_string(o.for_sale);
+//                    result.bids.push_back(ord);
+//                } else {
+//                    order ord;
+//                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
+//                    ord.quote = assets[1]->amount_to_string(o.for_sale);
+//                    ord.base = assets[0]->amount_to_string(share_type(
+//                            (uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value) /
+//                            o.sell_price.base.amount.value));
+//                    result.asks.push_back(ord);
+//                }
+//            }
 
             return result;
         }
