@@ -1062,16 +1062,14 @@ namespace graphene {
                 if (o.sell_price.base.asset_id == base_id) {
                     order ord;
                     ord.price = get_sell_price(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value /
-                                o.sell_price.base.amount.value;
-                    ord.base = o.for_sale;
+                    ord.quote = o.for_sale.value * o.sell_price.quote.amount.value / o.sell_price.base.amount.value;
+                    ord.base = o.for_sale.value;
                     result.bids.push_back(ord);
                 } else {
                     order ord;
                     ord.price = get_sell_price(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = o.for_sale;
-                    ord.base = uint128_t(o.for_sale.value) * o.sell_price.quote.amount.value /
-                               o.sell_price.base.amount.value;
+                    ord.quote = o.for_sale.value;
+                    ord.base = o.for_sale.value * o.sell_price.quote.amount.value / o.sell_price.base.amount.value;
                     result.asks.push_back(ord);
                 }
             }
