@@ -865,7 +865,7 @@ namespace graphene {
         }
 
         vector<optional < asset_object>>
-        database::lookup_asset_symbols(const vector<string> &symbols_or_ids) const {
+        database::lookup_asset_symbols(const vector<asset_id_type> &symbols_or_ids) const {
             const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
             vector<optional < asset_object> > result;
             result.reserve(symbols_or_ids.size());
