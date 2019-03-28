@@ -1029,7 +1029,7 @@ namespace graphene {
             ilog("get order book for ${a1}-${a2}", ("a1", result.base)("a2", result.quote));
             vector<limit_order_object> orders = get_limit_orders(base_id, quote_id, limit);
             ilog("iteragte orders", orders.size())
-            for (const auto &o : orders) {
+            for (const limit_order_object o : orders) {
 //                if (o.sell_price.base.asset_id == base_id) {
 //                    order ord;
 //                    ord.price = price_to_string(o.sell_price, *assets[0], *assets[1]);
