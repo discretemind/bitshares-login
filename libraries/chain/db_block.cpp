@@ -892,8 +892,8 @@ namespace graphene {
 
                 for (const operation &op : trx->operations) {
                     int i_which = op.which();
-                    string str = fc::json::to_string(*op);
-                    ilog("Operation ${tp} ${op}", ("tp", i_which)("op", str))
+                    string str = fc::json::to_string(op);
+                    ilog("Operation ${op}", ("op", str))
 //                    int i_which = op.which();
 //                    if (i_which == 1) {
 //                        new_order = op.get<limit_order_create_operation>();
