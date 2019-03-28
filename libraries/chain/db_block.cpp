@@ -840,7 +840,7 @@ namespace graphene {
             mtx.lock();
             uint8_t buffer[320];
             memset(buffer, 1, 1);
-            memset(buffer + 1, 0, 320);
+            memset(buffer + 1, 0, 319);
             pack_orders(orders, buffer + 1);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
@@ -850,7 +850,7 @@ namespace graphene {
             mtx.lock();
             uint8_t buffer[320];
             memset(buffer, 2, 1);
-            memset(buffer + 1, 0, 320);
+            memset(buffer + 1, 0, 319);
             pack_book(book, buffer + 1);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
             mtx.unlock();
