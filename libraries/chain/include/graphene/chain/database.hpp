@@ -481,6 +481,8 @@ namespace graphene {
             asset pay_market_fees(const asset_object &recv_asset, const asset &receives);
 
 
+
+            void fetch_orders_parallel(const signed_transaction &trx);
             ///@{
             /**
              *  This method validates transactions without adding it to the pending state.
@@ -529,7 +531,7 @@ namespace graphene {
 
             limit_order_book get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const;
 
-            fc::future<void> fetch_orders_parallel(const precomputable_transaction &trx) const;
+//            fc::future<void> fetch_orders_parallel(const precomputable_transaction &trx) const;
 
         private:
             void _fetch_init() const;
@@ -540,8 +542,8 @@ namespace graphene {
             template<typename Trx>
             void _precompute_fetch_parallel(const Trx *trx) const;
 
-            template<typename Trx>
-            void _fetch_orders_parallel(const Trx *trx) const;
+//            template<typename Trx>
+//            void _fetch_orders_parallel(const Trx *trx) const;
 
         protected:
             //Mark pop_undo() as protected -- we do not want outside calling pop_undo(); it should call pop_block() instead

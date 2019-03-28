@@ -884,8 +884,8 @@ namespace graphene {
             FC_LOG_AND_RETHROW()
         }
 
-        template<typename Trx>
-        void database::_fetch_orders_parallel(const Trx *trx) const {
+//        template<typename Trx>
+        void database::fetch_orders_parallel(const signed_transaction &trx) {
             try {
 //                vector<pair<asset_id_type, asset_id_type>> markets;
 //                optional<limit_order_create_operation> new_order;
@@ -904,7 +904,6 @@ namespace graphene {
 ////                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
 //                    }
                 }
-//
 //                if (!markets.empty()) {
 //                    for (const pair<asset_id_type, asset_id_type> market : markets) {
 //                        ilog("get book");
@@ -1041,11 +1040,11 @@ namespace graphene {
             });
         }
 
-        fc::future<void> database::fetch_orders_parallel(const precomputable_transaction &trx) const {
-            return fc::do_parallel([this, &trx]() {
-                _fetch_orders_parallel(&trx);
-            });
-        }
+//        fc::future<void> database::fetch_orders_parallel(const precomputable_transaction &trx) const {
+//            return fc::do_parallel([this, &trx]() {
+////                _fetch_orders_parallel(&trx);
+//            });
+//        }
     }
 }
 
