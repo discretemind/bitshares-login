@@ -875,22 +875,22 @@ namespace graphene {
             vector<limit_order_object> result;
             result.reserve(limit);
 
-//            uint32_t count = 0;
-//            auto limit_itr = limit_price_idx.lower_bound(price::max(a, b));
-//            auto limit_end = limit_price_idx.upper_bound(price::min(a, b));
-//            while (limit_itr != limit_end && count < limit) {
-//                result.push_back(*limit_itr);
-//                ++limit_itr;
-//                ++count;
-//            }
-//            count = 0;
-//            limit_itr = limit_price_idx.lower_bound(price::max(b, a));
-//            limit_end = limit_price_idx.upper_bound(price::min(b, a));
-//            while (limit_itr != limit_end && count < limit) {
-//                result.push_back(*limit_itr);
-//                ++limit_itr;
-//                ++count;
-//            }
+            uint32_t count = 0;
+            auto limit_itr = limit_price_idx.lower_bound(price::max(a, b));
+            auto limit_end = limit_price_idx.upper_bound(price::min(a, b));
+            while (limit_itr != limit_end && count < limit) {
+                result.push_back(*limit_itr);
+                ++limit_itr;
+                ++count;
+            }
+            count = 0;
+            limit_itr = limit_price_idx.lower_bound(price::max(b, a));
+            limit_end = limit_price_idx.upper_bound(price::min(b, a));
+            while (limit_itr != limit_end && count < limit) {
+                result.push_back(*limit_itr);
+                ++limit_itr;
+                ++count;
+            }
 
             return result;
         }
