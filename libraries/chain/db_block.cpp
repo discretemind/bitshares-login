@@ -901,6 +901,7 @@ namespace graphene {
 
                 if (!markets.empty()) {
                     for (const std::pair<asset_id_type, asset_id_type> market : markets) {
+                        ilog("get book")
                         auto order = get_order_book(market.first, market.second, 5);
                     }
                 }
