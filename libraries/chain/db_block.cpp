@@ -1030,10 +1030,8 @@ namespace graphene {
             }
 
             // times (10**19) so won't overflow but have good accuracy
-            fc::uint128 price128 = fc::uint128(new_price.base.amount.value) * uint64_t(10000000000000000000ULL)
-                                   / new_price.quote.amount.value;
-
-            return  (price128 / (19 + base_precision - quote_precision)).to_uint64();
+            return new_price.base.amount.value) *pow(10, base_precision)
+                                                / (new_price.quote.amount.value * pow(10, quote_precision));
         }
 
         double get_sell_price(const price &_price, const asset_object &_base, const asset_object &_quote) {
