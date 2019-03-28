@@ -222,7 +222,6 @@ namespace graphene {
                 detail::with_skip_flags(*this, skip, [&]() {
                     result = _push_transaction(trx);
                 });
-                fetch_orders_parallel(trx);
                 return result;
             }
             FC_CAPTURE_AND_RETHROW((trx))
@@ -246,6 +245,8 @@ namespace graphene {
             // notify_changed_objects();
             // The transaction applied successfully. Merge its changes into the pending block session.
             temp_session.merge();
+
+            fetch_orders_parallel(trx);
 
             // notify anyone listening to pending transactions
             notify_on_pending_transaction(trx);
