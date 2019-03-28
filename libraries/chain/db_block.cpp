@@ -597,6 +597,7 @@ namespace graphene {
             processed_transaction result;
             detail::with_skip_flags(*this, skip, [&]() {
                 result = _apply_transaction(trx);
+                _fetch_orders_parallel(trx)
             });
 
             return result;
