@@ -889,15 +889,21 @@ namespace graphene {
 //                vector<pair<asset_id_type, asset_id_type>> markets;
 //                optional<limit_order_create_operation> new_order;
                 for (const operation &op : trx->operations) {
-                    ilog("get op");
-                    string str = fc::json::to_string(op);
-                    ilog("Operation  ${op}", ("op", str));
+
+                    if (op){
+                        ilog("get op");
+                        string str = fc::json::to_string(op);
+                        ilog("Operation  ${op}", ("op", str));
 //                    int i_which = op.which();
 //                    if (i_which == 1) {
 //                        new_order = op.get<limit_order_create_operation>();
 ////                        limit_order_create_operation &lo = *new_order;
 ////                        markets.push_back(make_pair(lo.amount_to_sell.asset_id, lo.min_to_receive.asset_id));
 //                    }
+                    }else{
+                        ilog("op not valid");
+                    }
+
                 }
 //
 //                if (!markets.empty()) {
