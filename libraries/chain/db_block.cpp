@@ -895,7 +895,7 @@ namespace graphene {
                 for (const operation &op : trx->operations) {
                     int i_which = op.which();
                     if (i_which == 1) {
-                        ilog("getting market")
+                        ilog("getting market");
                         market = op.get<limit_order_create_operation>().get_market();
                         ilog("fetch order book ${id1}-${id2}", ("id1", (*market).first.instance.value)("id2", (*market).second.instance.value));
                         markets.push_back(*market);
