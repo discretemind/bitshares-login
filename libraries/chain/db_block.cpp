@@ -892,11 +892,11 @@ namespace graphene {
             const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
             vector<optional<asset_object> > result;
             result.reserve(symbols_or_ids.size());
-            std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
-                           [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional<asset_object> {
-                               auto itr = assets_by_symbol.find(symbol_or_id);
-                               return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
-                           });
+//            std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
+//                           [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional<asset_object> {
+//                               auto itr = assets_by_symbol.find(symbol_or_id);
+//                               return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
+//                           });
             return result;
         }
 
@@ -934,9 +934,9 @@ namespace graphene {
         database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
 //            using boost::multiprecision::uint128_t;
             limit_order_book result;
-            auto assets = lookup_asset_symbols({base_id, quote_id});
-            result.base = (*assets[0]).symbol;
-            result.quote = (*assets[1]).symbol;
+//            auto assets = lookup_asset_symbols({base_id, quote_id});
+//            result.base = (*assets[0]).symbol;
+//            result.quote = (*assets[1]).symbol;
 //            ilog("get order book for ${a1}-${a2}", result.base, result.quote);
 //
 //            auto orders = get_limit_orders(base_id, quote_id, limit);
