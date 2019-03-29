@@ -759,7 +759,8 @@ namespace graphene {
         void database::_fetch_init() const {
 
             for (const string ass : assets_strings) {
-                assets.insert(find(fc::variant(ass, 1).as<asset_id_type>(1)))
+                auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
+                assets.insert(asset);
             }
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
