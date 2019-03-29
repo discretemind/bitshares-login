@@ -793,7 +793,7 @@ namespace graphene {
                     }
                 }
             }
-            ilog("_assets loaded", assets.size());
+            ilog("_assets loaded ${size}", ("size",assets.size()));
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
