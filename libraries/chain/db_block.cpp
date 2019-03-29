@@ -971,13 +971,10 @@ namespace graphene {
 
             std::transform(assets.begin(), assets.end(), std::back_inserter(balance),
                            [this](optional<asset_object> asset_obj) -> AssetBalance {
-                               account_id_type acc_id = account.get_id();
-                               asset_id_type asset_id = (*asset_obj).get_id();
-
-                               ilog("asset id ${id}", ("id", (*asset_obj).get_id()));
-                               auto b = get_balance(acc_id, asset_id);
+                               asset_object asset = *asset_obj;
+                               auto b = get_balance(account.id, asset.id);
                                AssetBalance balance;
-                               balance.name = (*asset_obj).symbol;
+                               balance.name = asset.symbol;
                                balance.amount = b.amount.value;
                                return balance;
                            });
@@ -1020,9 +1017,9 @@ namespace graphene {
                     }
                 }
 
-//                if (updateBalance) {
-//                    fetch_account_balance();
-//                }
+                if (updateBalance) {
+                    fetch_account_balance();
+                }
             }
             FC_LOG_AND_RETHROW()
         }
