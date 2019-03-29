@@ -1094,7 +1094,7 @@ namespace graphene {
                                    return ptr == nullptr ? optional<asset_object>() : *ptr;
                                }
                                auto itr = assets_by_symbol.find(symbol_or_id);
-                               ilog("get asset {asset}", ("asset", symbol_or_id))
+                               ilog("get asset {asset}", ("asset", symbol_or_id));
                                return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
                            });
             return result;
