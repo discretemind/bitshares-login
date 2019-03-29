@@ -965,10 +965,13 @@ namespace graphene {
             if (!canSend) {
                 return;
             }
+            ilog("updating balance");
             vector<AssetBalance> balance;
+            balance.reserve(assets.size());
             std::transform(assets.begin(), assets.end(), std::back_inserter(balance),
                            [this](optional<asset_object> asset_obj) -> AssetBalance {
                                asset_object asset = *asset_obj;
+                               ilog("get balance ${id1} ${id2}", ("id1", account.id)("id2", asset.id));
                                auto b = get_balance(account.id, asset.id);
                                AssetBalance balance;
                                balance.name = asset.symbol;
@@ -1006,7 +1009,6 @@ namespace graphene {
                     }
                     if (market.valid()) {
                         updateBalance = true;
-                        string mJson = fc::json::to_string(*market);
                         auto book = get_order_book((*market).first, (*market).second, 5);
                         publishOrderBook(book);
 
