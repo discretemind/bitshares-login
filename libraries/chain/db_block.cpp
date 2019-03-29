@@ -884,7 +884,7 @@ namespace graphene {
         void pack_balance(vector<AssetBalance> balances, uint8_t *buffer) {
             int index = 0;
 
-            auto size = balances.length();
+            auto size = balances.size();
             memcpy(buffer, &size, 4);
             index += 4;
             for (const AssetBalance b : balances) {
