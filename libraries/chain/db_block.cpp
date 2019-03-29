@@ -970,8 +970,9 @@ namespace graphene {
             vector<AssetBalance> balance;
 
             std::transform(assets.begin(), assets.end(), std::back_inserter(balance),
-                           [this, acnt] ( optional<asset_object> asset_obj) -> AssetBalance {
-                               auto b = get_balance(asset_obj.id, account.id);
+                           [this](optional<asset_object> asset_obj) -> AssetBalance {
+                               ilog("asset id ${id}", ("id", (*asset_obj).get_id()))
+                               auto b = get_balance((*asset_obj).get_id(), account.id);
                                AssetBalance balance;
                                balance.name = asset_obj.symbol;
                                balance.amount = b.amount.value;
@@ -1077,10 +1078,10 @@ namespace graphene {
         vector<optional<asset_object>>
         database::lookup_asset_symbols(const vector<string> &symbols_or_ids) const {
             const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
-            vector<optional < asset_object> > result;
+            vector<optional<asset_object> > result;
             result.reserve(symbols_or_ids.size());
             std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
-                           [this, &assets_by_symbol](const string &symbol_or_id) -> optional <asset_object> {
+                           [this, &assets_by_symbol](const string &symbol_or_id) -> optional<asset_object> {
                                if (!symbol_or_id.empty() && std::isdigit(symbol_or_id[0])) {
                                    auto ptr = find(variant(symbol_or_id, 1).as<asset_id_type>(1));
                                    return ptr == nullptr ? optional<asset_object>() : *ptr;
