@@ -762,7 +762,7 @@ namespace graphene {
 
             for (const string ass : assets_strings) {
                 auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
-                assets.push_back(*asset)
+                assets.push_back(*asset);
 //                assets.insert(*asset);
             }
 
