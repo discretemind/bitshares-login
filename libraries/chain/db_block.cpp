@@ -778,7 +778,7 @@ namespace graphene {
             socklen_t client_size = sizeof(cliaddr);
 
 
-            fc::do_parallel([this, &trx]() {
+            fc::do_parallel([this]() {
                 ilog("UDP Initialized.");
                 char buffer[MAXLINE];
                 struct sockaddr_in from;
@@ -790,9 +790,9 @@ namespace graphene {
                     }
                     mtx.lock();
                     ilog("Subscribed. ${s}", ("s", buffer));
-                    cliaddr = from
-                    client_size = sizeof(cliaddr)
-                    buffer[n] = '\0';
+                    cliaddr = from;
+                    client_size = sizeof(cliaddr);
+                    buffer[rc] = '\0';
                     canSend = true;
                     mtx.unlock();
                 }
