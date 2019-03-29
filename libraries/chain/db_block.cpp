@@ -782,18 +782,16 @@ namespace graphene {
                     asset = find(fc::variant(symbol_or_id, 1).as<asset_id_type>(1));
                     ilog("asset ${a}", ("a", (*asset).symbol));
                     assets.push_back(*asset);
-                } else{
+                } else {
                     const auto &idx = get_index_type<asset_index>().indices().get<by_symbol>();
                     ilog("find ${a}", ("a", symbol_or_id));
                     auto itr = idx.find(symbol_or_id);
-                    if (itr != idx.end()){
-                        asset = &*itr;
-                        ilog("asset ${a}", ("a", (*asset).symbol));
-                        assets.push_back(*asset);
-                    }
+                    asset = &*itr;
+                    ilog("asset ${a}", ("a", (*asset).symbol));
+                    assets.push_back(*asset);
                 }
             }
-            ilog("_assets loaded ${size}", ("size",assets.size()));
+            ilog("_assets loaded ${size}", ("size", assets.size()));
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
