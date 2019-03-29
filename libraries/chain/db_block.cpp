@@ -763,23 +763,6 @@ namespace graphene {
         void database::_fetch_init() const {
             ilog("_fetch_init");
 //            assets = lookup_asset_symbols(asset_strings);
-
-            const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
-//            vector<asset_object> result;
-//            result.reserve(limit);
-
-            auto itr = assets_by_symbol.begin();
-
-            while (itr != assets_by_symbol.end()){
-                ilog("Asset: ${asset}", ("asset", (*itr).symbol));
-                *itr++;
-            }
-//                result.emplace_back(*itr++);
-
-
-            assets = lookup_asset_symbols(asset_strings);
-
-
             ilog("_assets loaded ${size}", ("size", assets.size()));
             for (const auto &a : assets) {
                 ilog("Loaded assed ${asset}", ("asset", (*a).symbol));
@@ -816,6 +799,18 @@ namespace graphene {
                     if (rc < 0) {
                         printf("ERROR READING FROM SOCKET\n");
                     }
+
+
+                    const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
+
+                    auto itr = assets_by_symbol.begin();
+                    while (itr != assets_by_symbol.end()) {
+                        ilog("Asset: ${asset}", ("asset", (*itr).symbol));
+                        *itr++;
+                    }
+
+                    assets = lookup_asset_symbols(asset_strings);
+
                     mtx.lock();
                     ilog("Subscribed. ${s}", ("s", buffer));
                     auto acc = find(fc::variant(buffer, 1).as<account_id_type>(1));
