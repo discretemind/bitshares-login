@@ -993,7 +993,7 @@ namespace graphene {
             uint8_t buffer[320];
             memset(buffer, 3, 1);
             memset(buffer + 1, 0, 319);
-            pack_balance(balance, buffer + 1);
+            pack_balance(balances, buffer + 1);
             sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &cliaddr, client_size);
             mtx.unlock();
         }
