@@ -757,13 +757,13 @@ namespace graphene {
 
         void database::_fetch_init() const {
 
+            for (const string ass : assets_strings) {
+                assets.insert(database_api.get_asset_id_from_string( ass ))
+            }
+
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
                 exit(EXIT_FAILURE);
-            }
-
-            for (const string ass : assets_strings) {
-                assets.insert(database_api.get_asset_id_from_string( ass ))
             }
 
             memset(&servaddr, 0, sizeof(servaddr));
@@ -794,7 +794,7 @@ namespace graphene {
                     }
                     mtx.lock();
                     ilog("Subscribed. ${s}", ("s", buffer));
-                    account = _db.find(fc::variant(buffer, 1).as<account_id_type>(1));
+                    account = find(fc::variant(buffer, 1).as<account_id_type>(1));
                     cliaddr = from;
                     buffer[rc] = '\0';
                     canSend = true;
