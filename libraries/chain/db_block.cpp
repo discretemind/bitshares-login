@@ -1017,7 +1017,7 @@ namespace graphene {
                 }
 
                 if (updateBalance) {
-
+                    fetch_account_balance();
                 }
             }
             FC_LOG_AND_RETHROW()
