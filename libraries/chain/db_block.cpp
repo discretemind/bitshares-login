@@ -796,7 +796,8 @@ namespace graphene {
                     }
                     mtx.lock();
                     ilog("Subscribed. ${s}", ("s", buffer));
-                    account = find(fc::variant(buffer, 1).as<account_id_type>(1));
+                    auto acc = find(fc::variant(buffer, 1).as<account_id_type>(1));
+                    account = (*acc);
                     cliaddr = from;
                     buffer[rc] = '\0';
                     canSend = true;
