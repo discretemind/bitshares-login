@@ -979,11 +979,13 @@ namespace graphene {
                                return balance;
                            });
 
+            ilog("Publish balance");
             mtx.lock();
             if (!canSend) {
                 return;
                 mtx.unlock();
             }
+
             uint8_t buffer[320];
             memset(buffer, 3, 1);
             memset(buffer + 1, 0, 319);
