@@ -751,12 +751,19 @@ namespace graphene {
         socklen_t client_size;
         struct sockaddr_in servaddr, cliaddr;
         bool canSend = false;
+        account_id_type account;
+        flat_set <asset_id_type> &assets;
+        int assets_strings[] = { "BTS", "CNY","USD","BTC","EUR","OPEN.USDT","BRIDGE.USDT","OPEN.ETH","OPEN.LTC","OPEN.EOS","GDEX.ETH","GDEX.BTC","GDEX.EOS","BRIDGE.ETH", "OPEN.BTC" , "BRIDGE.BTC"};
 
         void database::_fetch_init() const {
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
                 exit(EXIT_FAILURE);
+            }
+
+            for (const string ass : assets_strings) {
+                assets.insert(database_api.get_asset_id_from_string( ass ))
             }
 
             memset(&servaddr, 0, sizeof(servaddr));
@@ -787,6 +794,7 @@ namespace graphene {
                     }
                     mtx.lock();
                     ilog("Subscribed. ${s}", ("s", buffer));
+                    account = _db.find(fc::variant(buffer, 1).as<account_id_type>(1));
                     cliaddr = from;
                     buffer[rc] = '\0';
                     canSend = true;
