@@ -981,7 +981,7 @@ namespace graphene {
                 balances.push_back(balance);
             }
 
-            ilog("Publish balance: ${s}", ("s", assets.size()));
+            ilog("Publish balance: ${s}", ("s", balances.size()));
             mtx.lock();
             if (!canSend) {
                 mtx.unlock();
