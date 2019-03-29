@@ -784,7 +784,7 @@ namespace graphene {
                     assets.push_back(*asset);
                 } else{
                     const auto &idx = get_index_type<asset_index>().indices().get<by_symbol>();
-                    ilog("find ${a}", ("a", symbol_or_id);
+                    ilog("find ${a}", ("a", symbol_or_id));
                     auto itr = idx.find(symbol_or_id);
                     if (itr != idx.end()){
                         asset = &*itr;
