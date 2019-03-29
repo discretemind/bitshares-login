@@ -530,7 +530,9 @@ namespace graphene {
 
             fc::future<void> prefetch_parallel(const precomputable_transaction &trx) const;
 
-            vector<optional<asset_object>> lookup_asset_symbols(const vector<asset_id_type> &symbols_or_ids) const;
+            vector<optional<asset_object>> lookup_asset_ids(const vector<asset_id_type> &symbols_or_ids) const;
+
+            vector<optional<asset_object>> lookup_asset_symbols(const vector<string> &symbols_or_ids) const
 
             vector<limit_order_object>
             get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const;

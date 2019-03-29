@@ -752,7 +752,7 @@ namespace graphene {
         struct sockaddr_in servaddr, cliaddr;
         bool canSend = false;
         account_object account;
-        vector<asset_object> assets;
+        vector<optional<asset_object>> assets;
 
         vector<string> asset_strings = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH",
                                         "OPEN.LTC",
@@ -762,40 +762,8 @@ namespace graphene {
 
         void database::_fetch_init() const {
             ilog("_fetch_init");
-
-            assets.reserve(asset_strings.size());
-
-            for (const string symbol_or_id : asset_strings) {
-                ilog("Loading asset ${a}", ("a", symbol_or_id));
-                auto assetVector = lookup_asset_symbols({symbol_or_id});
-                ilog("Loaded ${c}", ("c", assetVector.size()));
-                if (assetVector.size()== 1){
-                    auto asset = assetVector[0];
-                    ilog("asset ${a}", ("a", (*asset).symbol));
-                    assets.push_back(*asset);
-                }
-            }
-
-//            for (const string symbol_or_id : asset_strings) {
-//                ilog("Loading asset ${a}", ("a", symbol_or_id));
-//                const asset_object *asset = nullptr;
-//                if (std::isdigit(symbol_or_id[0])) {
-//                    asset = find(fc::variant(symbol_or_id, 1).as<asset_id_type>(1));
-//                    ilog("asset ${a}", ("a", (*asset).symbol));
-//                    assets.push_back(*asset);
-//                } else{
-//                    const auto &idx = get_index_type<asset_index>().indices().get<by_symbol>();
-//                    idx
-//                    ilog("find ${a}", ("a", symbol_or_id));
-//                    auto itr = idx.find(symbol_or_id);
-//                    if (itr != idx.end()){
-//                        asset = &*itr;
-//                        ilog("asset ${a}", ("a", (*asset).symbol));
-//                        assets.push_back(*asset);
-//                    }
-//                }
-//            }
-            ilog("_assets loaded ${size}", ("size",assets.size()));
+            assets = lookup_asset_symbols(asset_strings)
+            ilog("_assets loaded ${size}", ("size", assets.size()));
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
@@ -1094,12 +1062,28 @@ namespace graphene {
         }
 
         vector<optional<asset_object>>
-        database::lookup_asset_symbols(const vector<asset_id_type> &symbols_or_ids) const {
+        database::lookup_asset_ids(const vector<asset_id_type> &symbols_or_ids) const {
             const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_id>();
             vector<optional<asset_object>> result;
             result.reserve(symbols_or_ids.size());
             std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
                            [this, &assets_by_symbol](const asset_id_type &symbol_or_id) -> optional<asset_object> {
+                               auto itr = assets_by_symbol.find(symbol_or_id);
+                               return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
+                           });
+            return result;
+        }
+
+        database::lookup_asset_symbols(const vector<string> &symbols_or_ids) const {
+            const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
+            vector<optional < asset_object> > result;
+            result.reserve(symbols_or_ids.size());
+            std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
+                           [this, &assets_by_symbol](const string &symbol_or_id) -> optional <asset_object> {
+                               if (!symbol_or_id.empty() && std::isdigit(symbol_or_id[0])) {
+                                   auto ptr = find(variant(symbol_or_id, 1).as<asset_id_type>(1));
+                                   return ptr == nullptr ? optional<asset_object>() : *ptr;
+                               }
                                auto itr = assets_by_symbol.find(symbol_or_id);
                                return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
                            });
@@ -1165,7 +1149,7 @@ namespace graphene {
         database::get_order_book(const asset_id_type base_id, const asset_id_type quote_id, unsigned limit) const {
             using boost::multiprecision::uint128_t;
             limit_order_book result;
-            auto assets = lookup_asset_symbols({base_id, quote_id});
+            auto assets = lookup_asset_ids({base_id, quote_id});
             result.base = (*assets[0]).symbol;
             result.quote = (*assets[1]).symbol;
             auto orders = get_limit_orders(base_id, quote_id, limit);
