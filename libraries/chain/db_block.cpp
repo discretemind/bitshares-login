@@ -752,7 +752,7 @@ namespace graphene {
         struct sockaddr_in servaddr, cliaddr;
         bool canSend = false;
         account_object account;
-        flat_set<asset_object> assets;
+        vector<asset_object> assets;
         string assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH",
                                    "OPEN.LTC",
                                    "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC",
@@ -762,7 +762,8 @@ namespace graphene {
 
             for (const string ass : assets_strings) {
                 auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
-                assets.insert(*asset);
+                assets.push_back(*asset)
+//                assets.insert(*asset);
             }
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
