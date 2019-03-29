@@ -970,7 +970,7 @@ namespace graphene {
             vector<AssetBalance> balance;
 
             std::transform(assets.begin(), assets.end(), std::back_inserter(balance),
-                           [this, acnt](asset_object &asset_obj) ->AssetBalance{
+                           [this, acnt] ( optional<asset_object> asset_obj) -> AssetBalance {
                                auto b = get_balance(asset_obj.id, account.id);
                                AssetBalance balance;
                                balance.name = asset_obj.symbol;
