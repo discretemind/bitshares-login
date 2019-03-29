@@ -751,7 +751,7 @@ namespace graphene {
         socklen_t client_size;
         struct sockaddr_in servaddr, cliaddr;
         bool canSend = false;
-        account_id_type account;
+        account_object account;
         flat_set<asset_id_type> assets;
         string assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH", "OPEN.LTC",
                                 "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC", "BRIDGE.BTC"};
