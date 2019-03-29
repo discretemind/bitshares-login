@@ -761,7 +761,7 @@ namespace graphene {
         void database::_fetch_init() const {
 
             for (const string ass : assets_strings) {
-                auto asset = find(fc::variant(ass, 1).as<asset_object>(1));
+                auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
                 assets.insert((*asset));
             }
 
