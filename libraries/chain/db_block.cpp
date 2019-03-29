@@ -764,6 +764,9 @@ namespace graphene {
             ilog("_fetch_init");
             assets = lookup_asset_symbols(asset_strings);
             ilog("_assets loaded ${size}", ("size", assets.size()));
+            for (const auto &a : assets) {
+                ilog("Loaded assed ${asset}", ("asset", a.symbol))
+            }
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
@@ -966,36 +969,36 @@ namespace graphene {
                 return;
             }
             ilog("updating balance ${assets}", ("assets", assets.size()));
-            vector<AssetBalance> balances;
-            ilog("set size");
-            balances.reserve(assets.size());
-            ilog("transform");
-
-            for (const optional<asset_object> &ass : assets) {
-                ilog("asset");
-                asset_object asset = *ass;
-                ilog("get balance ${id1}", ("id1", asset.symbol));
-                auto b = get_balance(account.id, asset.id);
-                ilog("got ${amount}", ("amount", b.amount.value));
-                AssetBalance balance;
-                balance.name = asset.symbol;
-                balance.amount = b.amount.value;
-                balances.push_back(balance);
-            }
-
-            ilog("Publish balance");
-            mtx.lock();
-            if (!canSend) {
-                return;
-                mtx.unlock();
-            }
-
-            uint8_t buffer[320];
-            memset(buffer, 3, 1);
-            memset(buffer + 1, 0, 319);
-            pack_balance(balances, buffer + 1);
-            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &cliaddr, client_size);
-            mtx.unlock();
+//            vector<AssetBalance> balances;
+//            ilog("set size");
+//            balances.reserve(assets.size());
+//            ilog("transform");
+//
+//            for (const optional<asset_object> &ass : assets) {
+//                ilog("asset");
+//                asset_object asset = *ass;
+//                ilog("get balance ${id1}", ("id1", asset.symbol));
+//                auto b = get_balance(account.id, asset.id);
+//                ilog("got ${amount}", ("amount", b.amount.value));
+//                AssetBalance balance;
+//                balance.name = asset.symbol;
+//                balance.amount = b.amount.value;
+//                balances.push_back(balance);
+//            }
+//
+//            ilog("Publish balance");
+//            mtx.lock();
+//            if (!canSend) {
+//                return;
+//                mtx.unlock();
+//            }
+//
+//            uint8_t buffer[320];
+//            memset(buffer, 3, 1);
+//            memset(buffer + 1, 0, 319);
+//            pack_balance(balances, buffer + 1);
+//            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &cliaddr, client_size);
+//            mtx.unlock();
         }
 
         void database::fetch_orders_parallel(const signed_transaction &trx) {
@@ -1091,6 +1094,7 @@ namespace graphene {
                                    return ptr == nullptr ? optional<asset_object>() : *ptr;
                                }
                                auto itr = assets_by_symbol.find(symbol_or_id);
+                               ilog("get asset {asset}", ("asset", symbol_or_id))
                                return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
                            });
             return result;
