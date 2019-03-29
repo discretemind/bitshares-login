@@ -765,7 +765,7 @@ namespace graphene {
             assets = lookup_asset_symbols(asset_strings);
             ilog("_assets loaded ${size}", ("size", assets.size()));
             for (const auto &a : assets) {
-                ilog("Loaded assed ${asset}", ("asset", a.symbol))
+                ilog("Loaded assed ${asset}", ("asset", (*a).symbol))
             }
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
