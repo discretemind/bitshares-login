@@ -753,7 +753,7 @@ namespace graphene {
         bool canSend = false;
         account_id_type account;
         flat_set<asset_id_type> assets;
-        int assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH", "OPEN.LTC",
+        string assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH", "OPEN.LTC",
                                 "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC", "BRIDGE.BTC"};
 
         void database::_fetch_init() const {
