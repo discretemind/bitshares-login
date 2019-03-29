@@ -797,11 +797,7 @@ namespace graphene {
                     }
 
                     assets = lookup_asset_symbols(asset_strings);
-
                     ilog("_assets loaded ${size}", ("size", assets.size()));
-                    for (const auto &a : assets) {
-                        ilog("Loaded assed ${asset}", ("asset", (*a).symbol));
-                    }
 
                     mtx.lock();
                     ilog("Subscribed. ${s}", ("s", buffer));
@@ -972,16 +968,11 @@ namespace graphene {
             if (!canSend) {
                 return;
             }
-            ilog("updating balance ${assets}", ("assets", assets.size()));
             vector<AssetBalance> balances;
-            ilog("set size");
-            balances.reserve(assets.size());
-            ilog("transform");
+//            balances.reserve(assets.size());
 
             for (const optional<asset_object> &ass : assets) {
-                ilog("asset");
                 asset_object asset = *ass;
-                ilog("get balance ${id1}", ("id1", asset.symbol));
                 auto b = get_balance(account.id, asset.id);
                 ilog("got ${amount}", ("amount", b.amount.value));
                 AssetBalance balance;
@@ -990,11 +981,11 @@ namespace graphene {
                 balances.push_back(balance);
             }
 
-            ilog("Publish balance");
+            ilog("Publish balance: ${s}", ("s", assets.size()));
             mtx.lock();
             if (!canSend) {
-                return;
                 mtx.unlock();
+                return;
             }
 
             uint8_t buffer[320];
