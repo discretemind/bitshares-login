@@ -762,7 +762,7 @@ namespace graphene {
 
         void database::_fetch_init() const {
             ilog("_fetch_init");
-            assets = lookup_asset_symbols(asset_strings)
+            assets = lookup_asset_symbols(asset_strings);
             ilog("_assets loaded ${size}", ("size", assets.size()));
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
