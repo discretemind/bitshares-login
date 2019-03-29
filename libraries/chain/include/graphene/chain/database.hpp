@@ -67,6 +67,11 @@ namespace graphene {
             vector<order> bids;
             vector<order> asks;
         };
+
+        struct AssetBalance {
+            string name;
+            double amount;
+        };
     }
 }
 FC_REFLECT( graphene::chain::limit_order, (base)(quote)
@@ -481,6 +486,7 @@ namespace graphene {
             asset pay_market_fees(const asset_object &recv_asset, const asset &receives);
 
 
+            void fetch_account_balance() const;
 
             void fetch_orders_parallel(const signed_transaction &trx);
             ///@{

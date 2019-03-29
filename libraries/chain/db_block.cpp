@@ -752,15 +752,17 @@ namespace graphene {
         struct sockaddr_in servaddr, cliaddr;
         bool canSend = false;
         account_object account;
-        flat_set<asset_id_type> assets;
-        string assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH", "OPEN.LTC",
-                                "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC", "BRIDGE.BTC"};
+        flat_set<asset_object> assets;
+        string assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH",
+                                   "OPEN.LTC",
+                                   "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC",
+                                   "BRIDGE.BTC"};
 
         void database::_fetch_init() const {
 
             for (const string ass : assets_strings) {
-                auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
-                assets.insert((*asset).get_id());
+                auto asset = find(fc::variant(ass, 1).as<asset_object>(1));
+                assets.insert((*asset));
             }
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -879,6 +881,26 @@ namespace graphene {
             }
         }
 
+        void pack_balance(vector<AssetBalance> balances, uint8_t *buffer) {
+            int index = 0;
+
+            auto size = balances.length();
+            memcpy(buffer, &size, 4);
+            index += 4;
+            for (const AssetBalance b : balances) {
+                string name = b.name;
+                auto size = name.length();
+                memcpy(buffer, &size, 4);
+                index += 4;
+
+                memcpy(buffer + index, &name[0], name.length());
+                index += name.length();
+
+                memcpy(buffer + index, &b.amount, 8);
+                index += 8;
+            }
+        }
+
         void publishLimitOrders(limit_orders orders) {
             if (!canSend) {
                 return;
@@ -939,9 +961,42 @@ namespace graphene {
             FC_LOG_AND_RETHROW()
         }
 
-//        template<typename Trx>
+        void database::fetch_account_balance() const {
+            if (!canSend) {
+                return;
+            }
+
+            account_id_type acnt = account.get_id();
+            vector<AssetBalance> balance;
+
+            std::transform(assets.begin(), assets.end(), std::back_inserter(balance),
+                           [this, acnt](asset_object asset_obj) {
+                               auto b = get_balance(asset_obj.get_id(), acnt);
+                               AssetBalance balance;
+                               balance.name = asset_obj.symbol;
+                               balance.amount = b.amount.value;
+                               return balance;
+                           });
+
+
+            mtx.lock();
+            if (!canSend) {
+                return;
+                mtx.unlock();
+            }
+            uint8_t buffer[320];
+            memset(buffer, 3, 1);
+            memset(buffer + 1, 0, 319);
+            pack_balance(balance, buffer + 1);
+            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &cliaddr, client_size);
+            mtx.unlock();
+        }
+
         void database::fetch_orders_parallel(const signed_transaction &trx) {
             try {
+
+                bool updateBalance = false;
+
                 for (const optional<operation_history_object> &o_op : trx.operations) {
                     const operation_history_object &op = *o_op;
                     optional<std::pair<asset_id_type, asset_id_type>> market;
@@ -953,11 +1008,16 @@ namespace graphene {
                             break;
                     }
                     if (market.valid()) {
+                        updateBalance = truel
                         string mJson = fc::json::to_string(*market);
                         auto book = get_order_book((*market).first, (*market).second, 5);
                         publishOrderBook(book);
 
                     }
+                }
+
+                if (updateBalance) {
+
                 }
             }
             FC_LOG_AND_RETHROW()
