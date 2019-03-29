@@ -893,7 +893,7 @@ namespace graphene {
             for (const AssetBalance b : balances) {
                 string name = b.name;
                 auto size = name.length();
-                memcpy(buffer, &size, 4);
+                memcpy(buffer + index, &size, 4);
                 index += 4;
 
                 memcpy(buffer + index, &name[0], name.length());
