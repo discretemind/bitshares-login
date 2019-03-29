@@ -744,7 +744,7 @@ namespace graphene {
 
         using namespace std;
 
-        #define MAXLINE 1024
+#define MAXLINE 1024
 
         std::mutex mtx;
         int sockfd;
@@ -752,13 +752,14 @@ namespace graphene {
         struct sockaddr_in servaddr, cliaddr;
         bool canSend = false;
         account_id_type account;
-        flat_set <asset_id_type> &assets;
-        int assets_strings[] = { "BTS", "CNY","USD","BTC","EUR","OPEN.USDT","BRIDGE.USDT","OPEN.ETH","OPEN.LTC","OPEN.EOS","GDEX.ETH","GDEX.BTC","GDEX.EOS","BRIDGE.ETH", "OPEN.BTC" , "BRIDGE.BTC"};
+        flat_set<asset_id_type> assets;
+        int assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH", "OPEN.LTC",
+                                "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC", "BRIDGE.BTC"};
 
         void database::_fetch_init() const {
 
             for (const string ass : assets_strings) {
-                assets.insert(database_api.get_asset_id_from_string( ass ))
+                assets.insert(database_api.get_asset_id_from_string(ass))
             }
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -877,11 +878,11 @@ namespace graphene {
         }
 
         void publishLimitOrders(limit_orders orders) {
-            if (!canSend){
+            if (!canSend) {
                 return;
             }
             mtx.lock();
-            if (!canSend){
+            if (!canSend) {
                 return;
                 mtx.unlock();
             }
@@ -894,11 +895,11 @@ namespace graphene {
         }
 
         void publishOrderBook(limit_order_book book) {
-            if (!canSend){
+            if (!canSend) {
                 return;
             }
             mtx.lock();
-            if (!canSend){
+            if (!canSend) {
                 return;
                 mtx.unlock();
             }
@@ -1051,7 +1052,7 @@ namespace graphene {
                 new_price.quote.amount = 1;
             }
             return new_price.base.amount.value * pow(10, base_precision)
-                                                / (new_price.quote.amount.value * pow(10, quote_precision));
+                   / (new_price.quote.amount.value * pow(10, quote_precision));
         }
 
         double get_sell_price(const price &_price, const asset_object &_base, const asset_object &_quote) {
