@@ -971,7 +971,7 @@ namespace graphene {
 
             std::transform(assets.begin(), assets.end(), std::back_inserter(balance),
                            [this, acnt](asset_object asset_obj) {
-                               auto b = get_balance(asset_obj.get_id(), acnt);
+                               auto b = get_balance(asset_obj.id, account.id);
                                AssetBalance balance;
                                balance.name = asset_obj.symbol;
                                balance.amount = b.amount.value;
