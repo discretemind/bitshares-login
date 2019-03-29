@@ -768,6 +768,7 @@ namespace graphene {
 //            vector<asset_object> result;
 //            result.reserve(limit);
 
+            string  lower_bound_symbol = "";
             auto itr = assets_by_symbol.lower_bound(lower_bound_symbol);
 
             if (lower_bound_symbol == "")
