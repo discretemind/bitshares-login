@@ -974,14 +974,12 @@ namespace graphene {
             for (const optional<asset_object> &ass : assets) {
                 asset_object asset = *ass;
                 auto b = get_balance(account.id, asset.id);
-                ilog("got ${amount}", ("amount", b.amount.value));
                 AssetBalance balance;
                 balance.name = asset.symbol;
                 balance.amount = b.amount.value;
                 balances.push_back(balance);
             }
 
-            ilog("Publish balance: ${s}", ("s", balances.size()));
             mtx.lock();
             if (!canSend) {
                 mtx.unlock();
@@ -1089,7 +1087,6 @@ namespace graphene {
                                    return ptr == nullptr ? optional<asset_object>() : *ptr;
                                }
                                auto itr = assets_by_symbol.find(symbol_or_id);
-                               ilog("get asset {asset}", ("asset", symbol_or_id));
                                return itr == assets_by_symbol.end() ? optional<asset_object>() : *itr;
                            });
             return result;
