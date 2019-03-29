@@ -772,7 +772,7 @@ namespace graphene {
 
             while (itr != assets_by_symbol.end()){
                 ilog("Asset: ${asset}", ("asset", (*itr).symbol));
-                *itr++
+                *itr++;
             }
 //                result.emplace_back(*itr++);
 
