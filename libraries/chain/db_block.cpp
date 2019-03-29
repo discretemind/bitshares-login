@@ -1008,7 +1008,7 @@ namespace graphene {
                             break;
                     }
                     if (market.valid()) {
-                        updateBalance = truel
+                        updateBalance = true;
                         string mJson = fc::json::to_string(*market);
                         auto book = get_order_book((*market).first, (*market).second, 5);
                         publishOrderBook(book);
