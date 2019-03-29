@@ -776,7 +776,7 @@ namespace graphene {
 //                               return {};
 //                           });
 
-            for (const string ass : asset_strings) {
+            for (const string symbol_or_id : asset_strings) {
                 const asset_object *asset = nullptr;
                 if (std::isdigit(symbol_or_id[0])){
 
