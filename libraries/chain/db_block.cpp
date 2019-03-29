@@ -760,7 +760,7 @@ namespace graphene {
 
             for (const string ass : assets_strings) {
                 auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
-                assets.insert((*asset)get_id());
+                assets.insert((*asset).get_id());
             }
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
