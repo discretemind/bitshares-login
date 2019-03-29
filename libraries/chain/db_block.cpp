@@ -802,7 +802,6 @@ namespace graphene {
         void pack_orders(limit_orders orders, uint8_t *buffer) {
             int index = 0;
             if (!orders.orders.empty()) {
-
                 uint64_t seller = orders.seller.instance.value;
                 memcpy(buffer + index, &seller, 8);
                 index += 8;
