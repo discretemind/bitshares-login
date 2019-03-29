@@ -773,9 +773,7 @@ namespace graphene {
                 exit(EXIT_FAILURE);
             }
 
-            int n;
             client_size = sizeof(cliaddr);
-
 
             fc::do_parallel([this]() {
                 ilog("UDP Initialized.");
@@ -794,7 +792,7 @@ namespace graphene {
                     canSend = true;
                     mtx.unlock();
                 }
-            })
+            });
         }
 
         void pack_orders(limit_orders orders, uint8_t *buffer) {
