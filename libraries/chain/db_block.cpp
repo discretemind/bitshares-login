@@ -755,10 +755,9 @@ namespace graphene {
         vector<asset_object> assets;
 
         vector<string> asset_strings = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH",
-                                   "OPEN.LTC",
-                                   "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC",
-                                   "BRIDGE.BTC"};
-
+                                        "OPEN.LTC",
+                                        "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC",
+                                        "BRIDGE.BTC"};
 
 
         void database::_fetch_init() const {
@@ -777,12 +776,20 @@ namespace graphene {
 //                           });
 
             for (const string symbol_or_id : asset_strings) {
+                ilog("Loading asset ${a}", ("a", symbol_or_id));
                 const asset_object *asset = nullptr;
-                if (std::isdigit(symbol_or_id[0])){
-
+                if (std::isdigit(symbol_or_id[0])) {
                     asset = find(fc::variant(symbol_or_id, 1).as<asset_id_type>(1));
                     ilog("asset ${a}", ("a", (*asset).symbol));
                     assets.push_back(*asset);
+                } else{
+                    const auto &idx = get_index_type<asset_index>().indices().get<by_symbol>();
+                    auto itr = idx.find(symbol_or_id);
+                    if (itr != idx.end()){
+                        asset = &*itr;
+                        ilog("asset ${a}", ("a", (*asset).symbol));
+                        assets.push_back(*asset);
+                    }
                 }
             }
             ilog("_assets loaded");
