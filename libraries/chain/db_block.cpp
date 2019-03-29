@@ -966,21 +966,22 @@ namespace graphene {
                 return;
             }
             ilog("updating balance ${assets}", ("assets", assets.size()));
-            vector<AssetBalance> balance;
+            vector<AssetBalance> balances;
             ilog("set size");
-            balance.reserve(assets.size());
+            balances.reserve(assets.size());
             ilog("transform");
-            std::transform(assets.begin(), assets.end(), std::back_inserter(balance),
-                           [this](optional<asset_object> asset_obj) -> AssetBalance {
-                               asset_object asset = *asset_obj;
-                               ilog("get balance ${id1}", ("id1", asset.symbol));
-                               auto b = get_balance(account.id, asset.id);
-                               ilog("got ${amount}", ("amount", b.amount.value));
-                               AssetBalance balance;
-                               balance.name = asset.symbol;
-                               balance.amount = b.amount.value;
-                               return balance;
-                           });
+
+
+            for (const optional<asset_object> ass : assets) {
+                asset_object asset = *ass;
+                ilog("get balance ${id1}", ("id1", asset.symbol));
+                auto b = get_balance(account.id, asset.id);
+                ilog("got ${amount}", ("amount", b.amount.value));
+                AssetBalance balance;
+                balance.name = asset.symbol;
+                balance.amount = b.amount.value;
+                balances.push_back(balance);
+            }
 
             ilog("Publish balance");
             mtx.lock();
