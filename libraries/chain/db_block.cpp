@@ -972,7 +972,7 @@ namespace graphene {
             ilog("transform");
 
             for (const optional<asset_object> &ass : assets) {
-                ilog("asset")
+                ilog("asset");
                 asset_object asset = *ass;
                 ilog("get balance ${id1}", ("id1", asset.symbol));
                 auto b = get_balance(account.id, asset.id);
