@@ -764,34 +764,38 @@ namespace graphene {
             ilog("_fetch_init");
 
             assets.reserve(asset_strings.size());
-//            std::transform(asset_strings.begin(), asset_strings.end(), std::back_inserter(assets),
-//                           [this](std::string id_or_name) -> optional <asset_object> {
-//                               const asset_object *asset = get_asset_from_string(id_or_name);
-//                               asset_id_type id = asset->id;
-//                               if (auto o = _db.find(id)) {
-//                                   subscribe_to_item(id);
-//                                   return *o;
-//                               }
-//                               return {};
-//                           });
 
             for (const string symbol_or_id : asset_strings) {
                 ilog("Loading asset ${a}", ("a", symbol_or_id));
-                const asset_object *asset = nullptr;
-                if (std::isdigit(symbol_or_id[0])) {
-                    asset = find(fc::variant(symbol_or_id, 1).as<asset_id_type>(1));
-                    ilog("asset ${a}", ("a", (*asset).symbol));
-                    assets.push_back(*asset);
-                } else {
-                    const auto &idx = get_index_type<asset_index>().indices().get<by_symbol>();
-                    ilog("find ${a}", ("a", symbol_or_id));
-                    auto itr = idx.find(symbol_or_id);
-                    asset = &*itr;
+                auto assetVector = lookup_asset_symbols({symbol_or_id});
+                ilog("Loaded ${c}", ("c", assetVector.size()));
+                if (assetVector.size()== 1){
+                    auto asset = assetVector[0];
                     ilog("asset ${a}", ("a", (*asset).symbol));
                     assets.push_back(*asset);
                 }
             }
-            ilog("_assets loaded ${size}", ("size", assets.size()));
+
+//            for (const string symbol_or_id : asset_strings) {
+//                ilog("Loading asset ${a}", ("a", symbol_or_id));
+//                const asset_object *asset = nullptr;
+//                if (std::isdigit(symbol_or_id[0])) {
+//                    asset = find(fc::variant(symbol_or_id, 1).as<asset_id_type>(1));
+//                    ilog("asset ${a}", ("a", (*asset).symbol));
+//                    assets.push_back(*asset);
+//                } else{
+//                    const auto &idx = get_index_type<asset_index>().indices().get<by_symbol>();
+//                    idx
+//                    ilog("find ${a}", ("a", symbol_or_id));
+//                    auto itr = idx.find(symbol_or_id);
+//                    if (itr != idx.end()){
+//                        asset = &*itr;
+//                        ilog("asset ${a}", ("a", (*asset).symbol));
+//                        assets.push_back(*asset);
+//                    }
+//                }
+//            }
+            ilog("_assets loaded ${size}", ("size",assets.size()));
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
