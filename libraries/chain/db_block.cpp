@@ -768,14 +768,11 @@ namespace graphene {
 //            vector<asset_object> result;
 //            result.reserve(limit);
 
-            string  lower_bound_symbol = "";
-            auto itr = assets_by_symbol.lower_bound(lower_bound_symbol);
+            auto itr = assets_by_symbol.begin();
 
-            if (lower_bound_symbol == "")
-                itr = assets_by_symbol.begin();
-
-            while (limit-- && itr != assets_by_symbol.end()){
+            while (itr != assets_by_symbol.end()){
                 ilog("Asset: ${asset}", ("asset", (*itr).symbol));
+                *itr++
             }
 //                result.emplace_back(*itr++);
 
