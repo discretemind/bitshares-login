@@ -741,27 +741,63 @@ namespace graphene {
             }
         }
 
+
         using namespace std;
+
+        #define MAXLINE 1024
+
         std::mutex mtx;
         int sockfd;
-        socklen_t serv_size;
-        struct sockaddr_in serv;
+        socklen_t client_size;
+        struct sockaddr_in servaddr, cliaddr;
+        bool canSend = false;
 
         void database::_fetch_init() const {
-            sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 
-            serv.sin_family = AF_INET;
-            serv.sin_port = htons(58585);
-//            serv.sin_addr.s_addr = inet_addr("0.0.0.0");
-            serv.sin_addr.s_addr = inet_addr("0.0.0.0");
-            serv_size = sizeof(serv);
+            if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+                perror("socket creation failed");
+                exit(EXIT_FAILURE);
+            }
 
-//            char buffer[512];
-//            memset(buffer, 0, 512);
-//            strcpy(buffer, message.c_str());
-            ilog("UDP Initialized.");
+            memset(&servaddr, 0, sizeof(servaddr));
+            memset(&cliaddr, 0, sizeof(cliaddr));
+
+            // Filling server information
+            servaddr.sin_family = AF_INET; // IPv4
+            servaddr.sin_addr.s_addr = INADDR_ANY;
+            servaddr.sin_port = htons(23232);
+
+            // Bind the socket with the server address
+            if (bind(sockfd, (const struct sockaddr *) &servaddr,
+                     sizeof(servaddr)) < 0) {
+                perror("bind failed");
+                exit(EXIT_FAILURE);
+            }
+
+            int n;
+            socklen_t client_size = sizeof(cliaddr);
+
+
+            fc::do_parallel([this, &trx]() {
+                ilog("UDP Initialized.");
+                char buffer[MAXLINE];
+                struct sockaddr_in from;
+                socklen_t from_size = sizeof(from);
+                while (1) {
+                    int rc = recvfrom(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &from, &from_size);
+                    if (rc < 0) {
+                        printf("ERROR READING FROM SOCKET\n");
+                    }
+                    mtx.lock();
+                    ilog("Subscribed. ${s}", ("s", buffer));
+                    cliaddr = from
+                    client_size = sizeof(cliaddr)
+                    buffer[n] = '\0';
+                    canSend = true;
+                    mtx.unlock();
+                }
+            })
         }
-
 
         void pack_orders(limit_orders orders, uint8_t *buffer) {
             int index = 0;
@@ -838,22 +874,36 @@ namespace graphene {
         }
 
         void publishLimitOrders(limit_orders orders) {
+            if (!canSend){
+                return;
+            }
             mtx.lock();
+            if (!canSend){
+                return;
+                mtx.unlock();
+            }
             uint8_t buffer[320];
             memset(buffer, 1, 1);
             memset(buffer + 1, 0, 319);
             pack_orders(orders, buffer + 1);
-            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
+            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &cliaddr, client_size);
             mtx.unlock();
         }
 
         void publishOrderBook(limit_order_book book) {
+            if (!canSend){
+                return;
+            }
             mtx.lock();
+            if (!canSend){
+                return;
+                mtx.unlock();
+            }
             uint8_t buffer[320];
             memset(buffer, 2, 1);
             memset(buffer + 1, 0, 319);
             pack_book(book, buffer + 1);
-            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &serv, serv_size);
+            sendto(sockfd, buffer, sizeof(buffer), 0, (struct sockaddr *) &cliaddr, client_size);
             mtx.unlock();
         }
 
