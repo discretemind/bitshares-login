@@ -971,9 +971,8 @@ namespace graphene {
             balances.reserve(assets.size());
             ilog("transform");
 
-
-            for (const optional<asset_object> ass : assets) {
-                asset_object asset = *ass;
+            for (const asset_object &asset : assets) {
+                ilog("asset")
                 ilog("get balance ${id1}", ("id1", asset.symbol));
                 auto b = get_balance(account.id, asset.id);
                 ilog("got ${amount}", ("amount", b.amount.value));
