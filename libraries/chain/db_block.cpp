@@ -764,12 +764,21 @@ namespace graphene {
             ilog("_fetch_init");
 //            assets = lookup_asset_symbols(asset_strings);
 
-            const auto &by_symbol_idx = get_index_type<asset_index>().indices().get<by_symbol>();
-            const auto &itr = by_symbol_idx;
-            while (itr != by_symbol_idx.end()) {
-                ilog("Asset: ${s}", ("a", (*itr).symbol));
-                ++itr;
+            const auto &assets_by_symbol = get_index_type<asset_index>().indices().get<by_symbol>();
+//            vector<asset_object> result;
+//            result.reserve(limit);
+
+            auto itr = assets_by_symbol.lower_bound(lower_bound_symbol);
+
+            if (lower_bound_symbol == "")
+                itr = assets_by_symbol.begin();
+
+            while (limit-- && itr != assets_by_symbol.end()){
+                ilog("Asset: ${asset}", ("asset", (*itr).symbol));
             }
+//                result.emplace_back(*itr++);
+
+
             assets = lookup_asset_symbols(asset_strings);
 
 
