@@ -781,7 +781,7 @@ namespace graphene {
                 if (std::isdigit(symbol_or_id[0])){
 
                     asset = find(fc::variant(symbol_or_id, 1).as<asset_id_type>(1));
-                    ilog("asset ${a}", ("a", (*asset).symbol))
+                    ilog("asset ${a}", ("a", (*asset).symbol));
                     assets.push_back(*asset);
                 }
             }
