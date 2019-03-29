@@ -784,6 +784,7 @@ namespace graphene {
                     assets.push_back(*asset);
                 } else{
                     const auto &idx = get_index_type<asset_index>().indices().get<by_symbol>();
+                    ilog("find ${a}", ("a", symbol_or_id);
                     auto itr = idx.find(symbol_or_id);
                     if (itr != idx.end()){
                         asset = &*itr;
@@ -792,7 +793,7 @@ namespace graphene {
                     }
                 }
             }
-            ilog("_assets loaded");
+            ilog("_assets loaded", assets.size());
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
