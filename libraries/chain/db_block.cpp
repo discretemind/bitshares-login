@@ -770,6 +770,8 @@ namespace graphene {
                 ilog("Asset: ${s}", ("a", (*itr).symbol));
                 ++itr;
             }
+            assets = lookup_asset_symbols(asset_strings);
+
 
             ilog("_assets loaded ${size}", ("size", assets.size()));
             for (const auto &a : assets) {
