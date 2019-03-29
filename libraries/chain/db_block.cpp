@@ -965,10 +965,7 @@ namespace graphene {
             if (!canSend) {
                 return;
             }
-
-            account_id_type acnt = account.get_id();
             vector<AssetBalance> balance;
-
             std::transform(assets.begin(), assets.end(), std::back_inserter(balance),
                            [this](optional<asset_object> asset_obj) -> AssetBalance {
                                asset_object asset = *asset_obj;
@@ -978,7 +975,6 @@ namespace graphene {
                                balance.amount = b.amount.value;
                                return balance;
                            });
-
 
             mtx.lock();
             if (!canSend) {
