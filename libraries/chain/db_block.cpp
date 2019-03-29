@@ -760,12 +760,12 @@ namespace graphene {
                                    "BRIDGE.BTC"};
 
         void database::_fetch_init() const {
-            ilog("_fetch_init")
+            ilog("_fetch_init");
             for (const string ass : assets_strings) {
                 auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
                 assets.push_back(*asset);
             }
-            ilog("_assets loaded")
+            ilog("_assets loaded");
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
                 perror("socket creation failed");
