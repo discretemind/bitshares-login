@@ -762,7 +762,15 @@ namespace graphene {
 
         void database::_fetch_init() const {
             ilog("_fetch_init");
-            assets = lookup_asset_symbols(asset_strings);
+//            assets = lookup_asset_symbols(asset_strings);
+
+            const auto &by_symbol_idx = get_index_type<asset_index>().indices().get<by_symbol>();
+            const auto &itr = by_symbol_idx;
+            while (itr != by_symbol_idx.end()) {
+                ilog("Asset: ${s}", ("a", (*itr).symbol));
+                ++itr;
+            }
+
             ilog("_assets loaded ${size}", ("size", assets.size()));
             for (const auto &a : assets) {
                 ilog("Loaded assed ${asset}", ("asset", (*a).symbol));
