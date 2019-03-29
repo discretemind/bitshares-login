@@ -753,17 +753,16 @@ namespace graphene {
         bool canSend = false;
         account_object account;
         vector<asset_object> assets;
+
         string assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH",
                                    "OPEN.LTC",
                                    "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC",
                                    "BRIDGE.BTC"};
 
         void database::_fetch_init() const {
-
             for (const string ass : assets_strings) {
                 auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
                 assets.push_back(*asset);
-//                assets.insert(*asset);
             }
 
             if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
@@ -1017,9 +1016,9 @@ namespace graphene {
                     }
                 }
 
-                if (updateBalance) {
-                    fetch_account_balance();
-                }
+//                if (updateBalance) {
+//                    fetch_account_balance();
+//                }
             }
             FC_LOG_AND_RETHROW()
         }
