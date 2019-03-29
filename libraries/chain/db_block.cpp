@@ -754,16 +754,36 @@ namespace graphene {
         account_object account;
         vector<asset_object> assets;
 
-        string assets_strings[] = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH",
+        vector<string> asset_strings = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH",
                                    "OPEN.LTC",
                                    "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC",
                                    "BRIDGE.BTC"};
 
+
+
         void database::_fetch_init() const {
             ilog("_fetch_init");
-            for (const string ass : assets_strings) {
-                auto asset = find(fc::variant(ass, 1).as<asset_id_type>(1));
-                assets.push_back(*asset);
+
+            assets.reserve(asset_strings.size());
+//            std::transform(asset_strings.begin(), asset_strings.end(), std::back_inserter(assets),
+//                           [this](std::string id_or_name) -> optional <asset_object> {
+//                               const asset_object *asset = get_asset_from_string(id_or_name);
+//                               asset_id_type id = asset->id;
+//                               if (auto o = _db.find(id)) {
+//                                   subscribe_to_item(id);
+//                                   return *o;
+//                               }
+//                               return {};
+//                           });
+
+            for (const string ass : asset_strings) {
+                const asset_object *asset = nullptr;
+                if (std::isdigit(symbol_or_id[0])){
+
+                    asset = find(fc::variant(symbol_or_id, 1).as<asset_id_type>(1));
+                    ilog("asset ${a}", ("a", (*asset).symbol))
+                    assets.push_back(*asset);
+                }
             }
             ilog("_assets loaded");
 
