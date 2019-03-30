@@ -1014,9 +1014,9 @@ namespace graphene {
                         case operation::tag<limit_order_create_operation>::value:
                             market = op.op.get<limit_order_create_operation>().get_market();
                             break;
-                        case operation::tag<limit_order_cancel_operation>::value:
-                            market = op.op.get<limit_order_cancel_operation>().get_market();
-                            break;
+//                        case operation::tag<limit_order_cancel_operation>::value:
+//                            market = op.op.get<limit_order_cancel_operation>().get_market();
+//                            break;
                         default:
                             break;
                     }
