@@ -1022,7 +1022,7 @@ namespace graphene {
                     }
                     if (market.valid()) {
                         auto m = *market;
-                        std::string strID = format("%d-%d", m.first.id, m.second.id);
+                        std::string strID = format("%d-%d", m.first.get_id(), m.second.get_id());
                         if (market_map.contains(strID)) {
                             continue;
                         }
