@@ -246,11 +246,12 @@ namespace graphene {
             // The transaction applied successfully. Merge its changes into the pending block session.
             temp_session.merge();
 
-            fetch_orders_parallel(trx);
+            fc::do_parallel([this]() {
+                fetch_orders_parallel(trx);
+            };
 
             // notify anyone listening to pending transactions
             notify_on_pending_transaction(trx);
-//            _fetch_orders_parallel(trx);
             return processed_trx;
         }
 
@@ -755,10 +756,8 @@ namespace graphene {
         vector<optional<asset_object>> assets;
 
         vector<string> asset_strings = {"BTS", "CNY", "USD", "BTC", "EUR", "OPEN.USDT", "BRIDGE.USDT", "OPEN.ETH",
-                                        "OPEN.LTC",
-                                        "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH", "OPEN.BTC",
-                                        "BRIDGE.BTC"};
-
+                                        "OPEN.LTC", "OPEN.EOS", "GDEX.ETH", "GDEX.BTC", "GDEX.EOS", "BRIDGE.ETH",
+                                        "OPEN.BTC", "BRIDGE.BTC"};
 
         void database::_fetch_init() const {
             ilog("_fetch_init");
