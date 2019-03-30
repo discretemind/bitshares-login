@@ -1028,7 +1028,7 @@ namespace graphene {
                     }
                     if (market.valid()) {
                         auto m = *market;
-                        std::string str = std::to_string(m.first.instance) + "-" + std::to_string(m.second.instance);
+                        std::string strID = std::to_string(m.first.instance) + "-" + std::to_string(m.second.instance);
                         if (market_map.contains(strID)) {
                             continue;
                         }
