@@ -1030,7 +1030,7 @@ namespace graphene {
                         char buff[20];
                         snprintf(buff, sizeof(buff), "%d-%d", int(m.first.instance), int(m.second.instance));
                         std::string strID = buff;
-                        if (market_map.find(strID) == market_map.end()) {
+                        if (market_map.find(strID) != market_map.end()) {
                             continue;
                         }
                         auto book = get_order_book(m.first, m.second, 5);
