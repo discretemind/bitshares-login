@@ -42,7 +42,7 @@
 
 #define GET_REQUIRED_FEES_MAX_RECURSION 4
 
-typedef std::map<std::pair<graphene::chain::asset_id_type, graphene::chain::asset_id_type>, std::vector<fc::variant> > market_queue_type;
+typedef std::map <std::pair<graphene::chain::asset_id_type, graphene::chain::asset_id_type>, std::vector<fc::variant>> market_queue_type;
 
 namespace graphene {
     namespace app {
@@ -55,7 +55,7 @@ namespace graphene {
 
 
             // Objects
-            fc::variants get_objects(const vector<object_id_type> &ids) const;
+            fc::variants get_objects(const vector <object_id_type> &ids) const;
 
             // Subscriptions
             void set_subscribe_callback(std::function<void(const variant &)> cb, bool notify_remove_create);
@@ -71,9 +71,9 @@ namespace graphene {
             // Blocks and transactions
             optional <block_header> get_block_header(uint32_t block_num) const;
 
-            map<uint32_t, optional < block_header>> get_block_header_batch(
-            const vector<uint32_t> block_nums
-            )const;
+            map <uint32_t, optional<block_header>> get_block_header_batch(
+                    const vector <uint32_t> block_nums
+            ) const;
 
             optional <signed_block> get_block(uint32_t block_num) const;
 
@@ -91,79 +91,79 @@ namespace graphene {
             dynamic_global_property_object get_dynamic_global_properties() const;
 
             // Keys
-            vector<vector<account_id_type>> get_key_references(vector<public_key_type> key) const;
+            vector <vector<account_id_type>> get_key_references(vector <public_key_type> key) const;
 
             bool is_public_key_registered(string public_key) const;
 
             // Accounts
             account_id_type get_account_id_from_string(const std::string &name_or_id) const;
 
-            vector<optional < account_object>> get_accounts(
-            const vector<std::string> &account_names_or_ids
-            )const;
+            vector <optional<account_object>> get_accounts(
+                    const vector <std::string> &account_names_or_ids
+            ) const;
 
-            std::map<string, full_account> get_full_accounts(const vector<string> &names_or_ids, bool subscribe);
+            std::map <string, full_account> get_full_accounts(const vector <string> &names_or_ids, bool subscribe);
 
             optional <account_object> get_account_by_name(string name) const;
 
-            vector<account_id_type> get_account_references(const std::string account_id_or_name) const;
+            vector <account_id_type> get_account_references(const std::string account_id_or_name) const;
 
-            vector<optional < account_object>> lookup_account_names(
-            const vector<string> &account_names
-            )const;
+            vector <optional<account_object>> lookup_account_names(
+                    const vector <string> &account_names
+            ) const;
 
-            map<string, account_id_type> lookup_accounts(const string &lower_bound_name, uint32_t limit) const;
+            map <string, account_id_type> lookup_accounts(const string &lower_bound_name, uint32_t limit) const;
 
             uint64_t get_account_count() const;
 
             // Balances
-            vector<asset>
+            vector <asset>
             get_account_balances(const std::string &account_name_or_id, const flat_set <asset_id_type> &assets) const;
 
-            vector<asset>
+            vector <asset>
             get_named_account_balances(const std::string &name, const flat_set <asset_id_type> &assets) const;
 
-            vector<balance_object> get_balance_objects(const vector<address> &addrs) const;
+            vector <balance_object> get_balance_objects(const vector <address> &addrs) const;
 
-            vector<asset> get_vested_balances(const vector<balance_id_type> &objs) const;
+            vector <asset> get_vested_balances(const vector <balance_id_type> &objs) const;
 
-            vector<vesting_balance_object> get_vesting_balances(const std::string account_id_or_name) const;
+            vector <vesting_balance_object> get_vesting_balances(const std::string account_id_or_name) const;
 
             // Assets
             asset_id_type get_asset_id_from_string(const std::string &symbol_or_id) const;
 
-            vector<optional < asset_object>> get_assets(
-            const vector<std::string> &asset_symbols_or_ids
-            )const;
+            vector <optional<asset_object>> get_assets(
+                    const vector <std::string> &asset_symbols_or_ids
+            ) const;
 
-            vector<asset_object> list_assets(const string &lower_bound_symbol, uint32_t limit) const;
+            vector <asset_object> list_assets(const string &lower_bound_symbol, uint32_t limit) const;
 
-            vector<optional < asset_object>> lookup_asset_symbols(
-            const vector<string> &symbols_or_ids
-            )const;
+            vector <optional<asset_object>> lookup_asset_symbols(
+                    const vector <string> &symbols_or_ids
+            ) const;
 
             uint64_t get_asset_count() const;
 
             // Markets / feeds
-            vector<limit_order_object>
+            vector <limit_order_object>
             get_limit_orders(const std::string &a, const std::string &b, uint32_t limit) const;
 
-            vector<limit_order_object>
+            vector <limit_order_object>
             get_market_orders(const std::string &a, const std::string &b, uint32_t limit) const;
 
-            vector<limit_order_object> get_account_limit_orders(const string &account_name_or_id,
-                                                                const string &base,
-                                                                const string &quote, uint32_t limit,
-                                                                optional <limit_order_id_type> ostart_id,
-                                                                optional <price> ostart_price);
+            vector <limit_order_object> get_account_limit_orders(const string &account_name_or_id,
+                                                                 const string &base,
+                                                                 const string &quote, uint32_t limit,
+                                                                 optional <limit_order_id_type> ostart_id,
+                                                                 optional <price> ostart_price);
 
-            vector<call_order_object> get_call_orders(const std::string &a, uint32_t limit) const;
+            vector <call_order_object> get_call_orders(const std::string &a, uint32_t limit) const;
 
-            vector<force_settlement_object> get_settle_orders(const std::string &a, uint32_t limit) const;
+            vector <force_settlement_object> get_settle_orders(const std::string &a, uint32_t limit) const;
 
-            vector<call_order_object> get_margin_positions(const std::string account_id_or_name) const;
+            vector <call_order_object> get_margin_positions(const std::string account_id_or_name) const;
 
-            vector<collateral_bid_object>
+            vector <collateral_bid_object>
             get_collateral_bids(const std::string &asset, uint32_t limit, uint32_t start) const;
 
             void subscribe_to_market(std::function<void(const variant &)> callback, const std::string &a,
@@ -177,49 +177,49 @@ namespace graphene {
 
             order_book get_order_book(const string &base, const string &quote, unsigned limit = 50) const;
 
-            vector<market_ticker> get_top_markets(uint32_t limit) const;
+            vector <market_ticker> get_top_markets(uint32_t limit) const;
 
-            vector<market_trade> get_trade_history(const string &base, const string &quote, fc::time_point_sec start,
-                                                   fc::time_point_sec stop, unsigned limit = 100) const;
+            vector <market_trade> get_trade_history(const string &base, const string &quote, fc::time_point_sec start,
+                                                    fc::time_point_sec stop, unsigned limit = 100) const;
 
-            vector<market_trade> get_trade_history_by_sequence(const string &base, const string &quote, int64_t start,
-                                                               fc::time_point_sec stop, unsigned limit = 100) const;
+            vector <market_trade> get_trade_history_by_sequence(const string &base, const string &quote, int64_t start,
+                                                                fc::time_point_sec stop, unsigned limit = 100) const;
 
             // Witnesses
-            vector<optional < witness_object>> get_witnesses(
-            const vector<witness_id_type> &witness_ids
-            )const;
+            vector <optional<witness_object>> get_witnesses(
+                    const vector <witness_id_type> &witness_ids
+            ) const;
 
             fc::optional <witness_object> get_witness_by_account(const std::string account_id_or_name) const;
 
-            map<string, witness_id_type> lookup_witness_accounts(const string &lower_bound_name, uint32_t limit) const;
+            map <string, witness_id_type> lookup_witness_accounts(const string &lower_bound_name, uint32_t limit) const;
 
             uint64_t get_witness_count() const;
 
             // Committee members
-            vector<optional < committee_member_object>> get_committee_members(
-            const vector<committee_member_id_type> &committee_member_ids
-            )const;
+            vector <optional<committee_member_object>> get_committee_members(
+                    const vector <committee_member_id_type> &committee_member_ids
+            ) const;
 
             fc::optional <committee_member_object>
             get_committee_member_by_account(const std::string account_id_or_name) const;
 
-            map<string, committee_member_id_type>
+            map <string, committee_member_id_type>
             lookup_committee_member_accounts(const string &lower_bound_name, uint32_t limit) const;
 
             uint64_t get_committee_count() const;
 
             // Workers
-            vector<worker_object> get_all_workers() const;
+            vector <worker_object> get_all_workers() const;
 
-            vector<optional < worker_object>> get_workers_by_account(
-            const std::string account_id_or_name
-            )const;
+            vector <optional<worker_object>> get_workers_by_account(
+                    const std::string account_id_or_name
+            ) const;
 
             uint64_t get_worker_count() const;
 
             // Votes
-            vector<variant> lookup_vote_ids(const vector<vote_id_type> &votes) const;
+            vector <variant> lookup_vote_ids(const vector <vote_id_type> &votes) const;
 
             // Authority / validation
             std::string get_transaction_hex(const signed_transaction &trx) const;
@@ -240,21 +240,21 @@ namespace graphene {
 
             processed_transaction validate_transaction(const signed_transaction &trx) const;
 
-            vector<fc::variant>
-            get_required_fees(const vector<operation> &ops, const std::string &asset_id_or_symbol) const;
+            vector <fc::variant>
+            get_required_fees(const vector <operation> &ops, const std::string &asset_id_or_symbol) const;
 
             // Proposed transactions
-            vector<proposal_object> get_proposed_transactions(const std::string account_id_or_name) const;
+            vector <proposal_object> get_proposed_transactions(const std::string account_id_or_name) const;
 
             // Blinded balances
-            vector<blinded_balance_object> get_blinded_balances(const flat_set <commitment_type> &commitments) const;
+            vector <blinded_balance_object> get_blinded_balances(const flat_set <commitment_type> &commitments) const;
 
             // Withdrawals
-            vector<withdraw_permission_object>
+            vector <withdraw_permission_object>
             get_withdraw_permissions_by_giver(const std::string account_id_or_name, withdraw_permission_id_type start,
                                               uint32_t limit) const;
 
-            vector<withdraw_permission_object>
+            vector <withdraw_permission_object>
             get_withdraw_permissions_by_recipient(const std::string account_id_or_name,
                                                   withdraw_permission_id_type start, uint32_t limit) const;
 
@@ -288,7 +288,7 @@ namespace graphene {
                 });
             }
 
-            const std::pair<asset_id_type, asset_id_type> get_order_market(const force_settlement_object &order) {
+            const std::pair <asset_id_type, asset_id_type> get_order_market(const force_settlement_object &order) {
                 // TODO cache the result to avoid repeatly fetching from db
                 asset_id_type backing_id = order.balance.asset_id(_db).bitasset_data(_db).options.short_backing_asset;
                 auto tmp = std::make_pair(order.balance.asset_id, backing_id);
@@ -328,12 +328,11 @@ namespace graphene {
                 return asset;
             }
 
-            vector<optional < asset_object>> get_assets(
-            const vector<asset_id_type> &asset_ids
-            )const
-            {
-                vector<optional < asset_object>>
-                result;
+            vector <optional<asset_object>> get_assets(
+                    const vector <asset_id_type> &asset_ids
+            ) const {
+                vector <optional<asset_object>>
+                        result;
                 result.reserve(asset_ids.size());
                 std::transform(asset_ids.begin(), asset_ids.end(), std::back_inserter(result),
                                [this](asset_id_type id) -> optional <asset_object> {
@@ -346,12 +345,12 @@ namespace graphene {
                 return result;
             }
 
-            vector<limit_order_object>
+            vector <limit_order_object>
             get_market_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const {
                 const auto &limit_order_idx = _db.get_index_type<limit_order_index>();
                 const auto &limit_price_idx = limit_order_idx.indices().get<by_price>();
 
-                vector<limit_order_object> result;
+                vector <limit_order_object> result;
                 result.reserve(limit);
 
                 uint32_t count = 0;
@@ -367,14 +366,14 @@ namespace graphene {
                 return result;
             }
 
-            vector<limit_order_object>
+            vector <limit_order_object>
             get_limit_orders(const asset_id_type a, const asset_id_type b, const uint32_t limit) const {
                 FC_ASSERT(limit <= 300);
 
                 const auto &limit_order_idx = _db.get_index_type<limit_order_index>();
                 const auto &limit_price_idx = limit_order_idx.indices().get<by_price>();
 
-                vector<limit_order_object> result;
+                vector <limit_order_object> result;
                 result.reserve(limit * 2);
 
                 uint32_t count = 0;
@@ -398,7 +397,7 @@ namespace graphene {
             }
 
             template<typename T>
-            const std::pair<asset_id_type, asset_id_type> get_order_market(const T &order) {
+            const std::pair <asset_id_type, asset_id_type> get_order_market(const T &order) {
                 return order.get_market();
             }
 
@@ -415,11 +414,11 @@ namespace graphene {
                 }
             }
 
-            void broadcast_updates(const vector<variant> &updates);
+            void broadcast_updates(const vector <variant> &updates);
 
             void broadcast_market_updates(const market_queue_type &queue);
 
-            void handle_object_changed(bool force_notify, bool full_object, const vector<object_id_type> &ids,
+            void handle_object_changed(bool force_notify, bool full_object, const vector <object_id_type> &ids,
                                        const flat_set <account_id_type> &impacted_accounts, std::function< const object
 
             *(
@@ -427,32 +426,30 @@ namespace graphene {
             )> find_object);
 
             /** called every time a block is applied to report the objects that were changed */
-            void on_objects_new(const vector<object_id_type> &ids, const flat_set <account_id_type> &impacted_accounts);
+            void
+            on_objects_new(const vector <object_id_type> &ids, const flat_set <account_id_type> &impacted_accounts);
 
             void
-            on_objects_changed(const vector<object_id_type> &ids, const flat_set <account_id_type> &impacted_accounts);
+            on_objects_changed(const vector <object_id_type> &ids, const flat_set <account_id_type> &impacted_accounts);
 
-            void on_objects_removed(const vector<object_id_type> &ids, const vector<const object *> &objs,
+            void on_objects_removed(const vector <object_id_type> &ids, const vector<const object *> &objs,
                                     const flat_set <account_id_type> &impacted_accounts);
 
             void on_applied_block();
 
-//            void on_pending_orders(const signed_transaction &trx, uint32_t limit);
-
             bool _notify_remove_create = false;
             mutable fc::bloom_filter _subscribe_filter;
-            std::set<account_id_type> _subscribed_accounts;
+            std::set <account_id_type> _subscribed_accounts;
             std::function<void(const fc::variant &)> _subscribe_callback;
             std::function<void(const fc::variant &)> _pending_trx_callback;
             std::function<void(const fc::variant &)> _block_applied_callback;
-//            std::function<void(const fc::variant &)> _limit_order_callback;
 
             boost::signals2::scoped_connection _new_connection;
             boost::signals2::scoped_connection _change_connection;
             boost::signals2::scoped_connection _removed_connection;
             boost::signals2::scoped_connection _applied_block_connection;
             boost::signals2::scoped_connection _pending_trx_connection;
-            map<pair<asset_id_type, asset_id_type>, std::function<void(const variant &)> > _market_subscriptions;
+            map <pair<asset_id_type, asset_id_type>, std::function<void(const variant &)>> _market_subscriptions;
             graphene::chain::database &_db;
             const application_options *_app_options = nullptr;
         };
@@ -472,22 +469,21 @@ namespace graphene {
                 : _db(db), _app_options(app_options) {
             wlog("creating database api ${x}", ("x", int64_t(this)));
             _new_connection = _db.new_objects.connect(
-                    [this](const vector<object_id_type> &ids, const flat_set <account_id_type> &impacted_accounts) {
+                    [this](const vector <object_id_type> &ids, const flat_set <account_id_type> &impacted_accounts) {
                         on_objects_new(ids, impacted_accounts);
                     });
             _change_connection = _db.changed_objects.connect(
-                    [this](const vector<object_id_type> &ids, const flat_set <account_id_type> &impacted_accounts) {
+                    [this](const vector <object_id_type> &ids, const flat_set <account_id_type> &impacted_accounts) {
                         on_objects_changed(ids, impacted_accounts);
                     });
             _removed_connection = _db.removed_objects.connect(
-                    [this](const vector<object_id_type> &ids, const vector<const object *> &objs,
+                    [this](const vector <object_id_type> &ids, const vector<const object *> &objs,
                            const flat_set <account_id_type> &impacted_accounts) {
                         on_objects_removed(ids, objs, impacted_accounts);
                     });
             _applied_block_connection = _db.applied_block.connect([this](const signed_block &) { on_applied_block(); });
 
             _pending_trx_connection = _db.on_pending_transaction.connect([this](const signed_transaction &trx) {
-//                on_pending_orders(trx, 3);
                 if (_pending_trx_callback) _pending_trx_callback(fc::variant(trx, GRAPHENE_MAX_NESTED_OBJECTS));
             });
         }
@@ -516,7 +512,7 @@ namespace graphene {
             fc::uint128 bv;
             fc::uint128 qv;
             price
-            latest_price = asset(mto.latest_base, mto.base) / asset(mto.latest_quote, mto.quote);
+                    latest_price = asset(mto.latest_base, mto.base) / asset(mto.latest_quote, mto.quote);
             if (mto.base != asset_base.id)
                 latest_price = ~latest_price;
             latest = database_api_impl::price_to_string(latest_price, asset_base, asset_quote);
@@ -524,7 +520,7 @@ namespace graphene {
                 && (mto.last_day_base != mto.latest_base || mto.last_day_quote != mto.latest_quote)) // price changed
             {
                 price
-                last_day_price = asset(mto.last_day_base, mto.base) / asset(mto.last_day_quote, mto.quote);
+                        last_day_price = asset(mto.last_day_base, mto.base) / asset(mto.last_day_quote, mto.quote);
                 if (mto.base != asset_base.id)
                     last_day_price = ~last_day_price;
                 percent_change = price_diff_percent_string(last_day_price, latest_price);
@@ -565,11 +561,11 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        fc::variants database_api::get_objects(const vector<object_id_type> &ids) const {
+        fc::variants database_api::get_objects(const vector <object_id_type> &ids) const {
             return my->get_objects(ids);
         }
 
-        fc::variants database_api_impl::get_objects(const vector<object_id_type> &ids) const {
+        fc::variants database_api_impl::get_objects(const vector <object_id_type> &ids) const {
             if (_subscribe_callback) {
                 for (auto id : ids) {
                     if (id.type() == operation_history_object_type && id.space() == protocol_ids) continue;
@@ -639,7 +635,8 @@ namespace graphene {
 
         void database_api_impl::cancel_all_subscriptions(bool reset_callback, bool reset_market_subscriptions) {
             if (reset_callback)
-                _subscribe_callback = std::function<void(const fc::variant &)>();
+                _subscribe_callback = std::function < void(
+            const fc::variant &)>();
 
             if (reset_market_subscriptions)
                 _market_subscriptions.clear();
@@ -667,17 +664,17 @@ namespace graphene {
             return {};
         }
 
-        map<uint32_t, optional < block_header>>
+        map <uint32_t, optional<block_header>>
 
-        database_api::get_block_header_batch(const vector<uint32_t> block_nums) const {
+        database_api::get_block_header_batch(const vector <uint32_t> block_nums) const {
             return my->get_block_header_batch(block_nums);
         }
 
-        map<uint32_t, optional < block_header>>
+        map <uint32_t, optional<block_header>>
 
-        database_api_impl::get_block_header_batch(const vector<uint32_t> block_nums) const {
-            map<uint32_t, optional < block_header>>
-            results;
+        database_api_impl::get_block_header_batch(const vector <uint32_t> block_nums) const {
+            map <uint32_t, optional<block_header>>
+                    results;
             for (const uint32_t block_num : block_nums) {
                 results[block_num] = get_block_header(block_num);
             }
@@ -763,7 +760,7 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<vector<account_id_type>> database_api::get_key_references(vector<public_key_type> key) const {
+        vector <vector<account_id_type>> database_api::get_key_references(vector <public_key_type> key) const {
             FC_ASSERT(key.size() <= 100, "Number of keys must be 100 or less");
             return my->get_key_references(key);
         }
@@ -771,12 +768,12 @@ namespace graphene {
 /**
  *  @return all accounts that referr to the key or account id in their owner or active authorities.
  */
-        vector<vector<account_id_type>> database_api_impl::get_key_references(vector<public_key_type> keys) const {
+        vector <vector<account_id_type>> database_api_impl::get_key_references(vector <public_key_type> keys) const {
             const auto &idx = _db.get_index_type<account_index>();
             const auto &aidx = dynamic_cast<const base_primary_index &>(idx);
             const auto &refs = aidx.get_secondary_index<graphene::chain::account_member_index>();
 
-            vector<vector<account_id_type> > final_result;
+            vector <vector<account_id_type>> final_result;
             final_result.reserve(keys.size());
 
             for (auto &key : keys) {
@@ -794,7 +791,7 @@ namespace graphene {
                 subscribe_to_item(a4);
                 subscribe_to_item(a5);
 
-                vector<account_id_type> result;
+                vector <account_id_type> result;
 
                 for (auto &a : {a1, a2, a3, a4, a5}) {
                     auto itr = refs.account_to_address_memberships.find(a);
@@ -854,17 +851,17 @@ namespace graphene {
             return my->get_account_from_string(name_or_id)->id;
         }
 
-        vector<optional < account_object>>
+        vector <optional<account_object>>
 
-        database_api::get_accounts(const vector<std::string> &account_names_or_ids) const {
+        database_api::get_accounts(const vector <std::string> &account_names_or_ids) const {
             return my->get_accounts(account_names_or_ids);
         }
 
-        vector<optional < account_object>>
+        vector <optional<account_object>>
 
-        database_api_impl::get_accounts(const vector<std::string> &account_names_or_ids) const {
-            vector<optional < account_object>>
-            result;
+        database_api_impl::get_accounts(const vector <std::string> &account_names_or_ids) const {
+            vector <optional<account_object>>
+                    result;
             result.reserve(account_names_or_ids.size());
             std::transform(account_names_or_ids.begin(), account_names_or_ids.end(), std::back_inserter(result),
                            [this](std::string id_or_name) -> optional <account_object> {
@@ -880,7 +877,7 @@ namespace graphene {
             return result;
         }
 
-        vector<limit_order_object>
+        vector <limit_order_object>
         database_api::get_account_limit_orders(const string &account_name_or_id, const string &base,
                                                const string &quote, uint32_t limit,
                                                optional <limit_order_id_type> ostart_id,
@@ -888,14 +885,14 @@ namespace graphene {
             return my->get_account_limit_orders(account_name_or_id, base, quote, limit, ostart_id, ostart_price);
         }
 
-        vector<limit_order_object>
+        vector <limit_order_object>
         database_api_impl::get_account_limit_orders(const string &account_name_or_id, const string &base,
                                                     const string &quote, uint32_t limit,
                                                     optional <limit_order_id_type> ostart_id,
                                                     optional <price> ostart_price) {
             FC_ASSERT(limit <= 101);
 
-            vector<limit_order_object> results;
+            vector <limit_order_object> results;
             uint32_t count = 0;
 
             const account_object *account = get_account_from_string(account_name_or_id);
@@ -959,18 +956,18 @@ namespace graphene {
             return results;
         }
 
-        std::map<string, full_account>
-        database_api::get_full_accounts(const vector<string> &names_or_ids, bool subscribe) {
+        std::map <string, full_account>
+        database_api::get_full_accounts(const vector <string> &names_or_ids, bool subscribe) {
             return my->get_full_accounts(names_or_ids, subscribe);
         }
 
-        std::map<std::string, full_account>
-        database_api_impl::get_full_accounts(const vector<std::string> &names_or_ids, bool subscribe) {
+        std::map <std::string, full_account>
+        database_api_impl::get_full_accounts(const vector <std::string> &names_or_ids, bool subscribe) {
             const auto &proposal_idx = _db.get_index_type<proposal_index>();
             const auto &pidx = dynamic_cast<const base_primary_index &>(proposal_idx);
             const auto &proposals_by_account = pidx.get_secondary_index<graphene::chain::required_approval_index>();
 
-            std::map<std::string, full_account> results;
+            std::map <std::string, full_account> results;
 
             for (const std::string &account_name_or_id : names_or_ids) {
                 const account_object *account = get_account_from_string(account_name_or_id);
@@ -1074,17 +1071,17 @@ namespace graphene {
             return optional<account_object>();
         }
 
-        vector<account_id_type> database_api::get_account_references(const std::string account_id_or_name) const {
+        vector <account_id_type> database_api::get_account_references(const std::string account_id_or_name) const {
             return my->get_account_references(account_id_or_name);
         }
 
-        vector<account_id_type> database_api_impl::get_account_references(const std::string account_id_or_name) const {
+        vector <account_id_type> database_api_impl::get_account_references(const std::string account_id_or_name) const {
             const auto &idx = _db.get_index_type<account_index>();
             const auto &aidx = dynamic_cast<const base_primary_index &>(idx);
             const auto &refs = aidx.get_secondary_index<graphene::chain::account_member_index>();
             const account_id_type account_id = get_account_from_string(account_id_or_name)->id;
             auto itr = refs.account_to_account_memberships.find(account_id);
-            vector<account_id_type> result;
+            vector <account_id_type> result;
 
             if (itr != refs.account_to_account_memberships.end()) {
                 result.reserve(itr->second.size());
@@ -1093,17 +1090,17 @@ namespace graphene {
             return result;
         }
 
-        vector<optional < account_object>>
+        vector <optional<account_object>>
 
-        database_api::lookup_account_names(const vector<string> &account_names) const {
+        database_api::lookup_account_names(const vector <string> &account_names) const {
             return my->lookup_account_names(account_names);
         }
 
-        vector<optional < account_object>>
+        vector <optional<account_object>>
 
-        database_api_impl::lookup_account_names(const vector<string> &account_names) const {
+        database_api_impl::lookup_account_names(const vector <string> &account_names) const {
             const auto &accounts_by_name = _db.get_index_type<account_index>().indices().get<by_name>();
-            vector<optional < account_object> > result;
+            vector <optional<account_object>> result;
             result.reserve(account_names.size());
             std::transform(account_names.begin(), account_names.end(), std::back_inserter(result),
                            [&accounts_by_name](const string &name) -> optional <account_object> {
@@ -1113,16 +1110,16 @@ namespace graphene {
             return result;
         }
 
-        map<string, account_id_type>
+        map <string, account_id_type>
         database_api::lookup_accounts(const string &lower_bound_name, uint32_t limit) const {
             return my->lookup_accounts(lower_bound_name, limit);
         }
 
-        map<string, account_id_type>
+        map <string, account_id_type>
         database_api_impl::lookup_accounts(const string &lower_bound_name, uint32_t limit) const {
             FC_ASSERT(limit <= 1000);
             const auto &accounts_by_name = _db.get_index_type<account_index>().indices().get<by_name>();
-            map<string, account_id_type> result;
+            map <string, account_id_type> result;
 
             for (auto itr = accounts_by_name.lower_bound(lower_bound_name);
                  limit-- && itr != accounts_by_name.end();
@@ -1149,16 +1146,16 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<asset> database_api::get_account_balances(const std::string &account_name_or_id,
-                                                         const flat_set <asset_id_type> &assets) const {
+        vector <asset> database_api::get_account_balances(const std::string &account_name_or_id,
+                                                          const flat_set <asset_id_type> &assets) const {
             return my->get_account_balances(account_name_or_id, assets);
         }
 
-        vector<asset> database_api_impl::get_account_balances(const std::string &account_name_or_id,
-                                                              const flat_set <asset_id_type> &assets) const {
+        vector <asset> database_api_impl::get_account_balances(const std::string &account_name_or_id,
+                                                               const flat_set <asset_id_type> &assets) const {
             const account_object *account = get_account_from_string(account_name_or_id);
             account_id_type acnt = account->id;
-            vector<asset> result;
+            vector <asset> result;
             if (assets.empty()) {
                 // if the caller passes in an empty list of assets, return balances for all assets the account owns
                 const auto &balance_index = _db.get_index_type < primary_index < account_balance_index > > ();
@@ -1176,21 +1173,21 @@ namespace graphene {
             return result;
         }
 
-        vector<asset> database_api::get_named_account_balances(const std::string &name,
-                                                               const flat_set <asset_id_type> &assets) const {
+        vector <asset> database_api::get_named_account_balances(const std::string &name,
+                                                                const flat_set <asset_id_type> &assets) const {
             return my->get_account_balances(name, assets);
         }
 
-        vector<balance_object> database_api::get_balance_objects(const vector<address> &addrs) const {
+        vector <balance_object> database_api::get_balance_objects(const vector <address> &addrs) const {
             return my->get_balance_objects(addrs);
         }
 
-        vector<balance_object> database_api_impl::get_balance_objects(const vector<address> &addrs) const {
+        vector <balance_object> database_api_impl::get_balance_objects(const vector <address> &addrs) const {
             try {
                 const auto &bal_idx = _db.get_index_type<balance_index>();
                 const auto &by_owner_idx = bal_idx.indices().get<by_owner>();
 
-                vector<balance_object> result;
+                vector <balance_object> result;
 
                 for (const auto &owner : addrs) {
                     subscribe_to_item(owner);
@@ -1205,13 +1202,13 @@ namespace graphene {
             FC_CAPTURE_AND_RETHROW((addrs))
         }
 
-        vector<asset> database_api::get_vested_balances(const vector<balance_id_type> &objs) const {
+        vector <asset> database_api::get_vested_balances(const vector <balance_id_type> &objs) const {
             return my->get_vested_balances(objs);
         }
 
-        vector<asset> database_api_impl::get_vested_balances(const vector<balance_id_type> &objs) const {
+        vector <asset> database_api_impl::get_vested_balances(const vector <balance_id_type> &objs) const {
             try {
-                vector<asset> result;
+                vector <asset> result;
                 result.reserve(objs.size());
                 auto now = _db.head_block_time();
                 for (auto obj : objs)
@@ -1221,15 +1218,15 @@ namespace graphene {
             FC_CAPTURE_AND_RETHROW((objs))
         }
 
-        vector<vesting_balance_object> database_api::get_vesting_balances(const std::string account_id_or_name) const {
+        vector <vesting_balance_object> database_api::get_vesting_balances(const std::string account_id_or_name) const {
             return my->get_vesting_balances(account_id_or_name);
         }
 
-        vector<vesting_balance_object>
+        vector <vesting_balance_object>
         database_api_impl::get_vesting_balances(const std::string account_id_or_name) const {
             try {
                 const account_id_type account_id = get_account_from_string(account_id_or_name)->id;
-                vector<vesting_balance_object> result;
+                vector <vesting_balance_object> result;
                 auto vesting_range = _db.get_index_type<vesting_balance_index>().indices().get<by_account>().equal_range(
                         account_id);
                 std::for_each(vesting_range.first, vesting_range.second,
@@ -1251,17 +1248,17 @@ namespace graphene {
             return my->get_asset_from_string(symbol_or_id)->id;
         }
 
-        vector<optional < asset_object>>
+        vector <optional<asset_object>>
 
-        database_api::get_assets(const vector<std::string> &asset_symbols_or_ids) const {
+        database_api::get_assets(const vector <std::string> &asset_symbols_or_ids) const {
             return my->get_assets(asset_symbols_or_ids);
         }
 
-        vector<optional < asset_object>>
+        vector <optional<asset_object>>
 
-        database_api_impl::get_assets(const vector<std::string> &asset_symbols_or_ids) const {
-            vector<optional < asset_object>>
-            result;
+        database_api_impl::get_assets(const vector <std::string> &asset_symbols_or_ids) const {
+            vector <optional<asset_object>>
+                    result;
             result.reserve(asset_symbols_or_ids.size());
             std::transform(asset_symbols_or_ids.begin(), asset_symbols_or_ids.end(), std::back_inserter(result),
                            [this](std::string id_or_name) -> optional <asset_object> {
@@ -1276,14 +1273,14 @@ namespace graphene {
             return result;
         }
 
-        vector<asset_object> database_api::list_assets(const string &lower_bound_symbol, uint32_t limit) const {
+        vector <asset_object> database_api::list_assets(const string &lower_bound_symbol, uint32_t limit) const {
             return my->list_assets(lower_bound_symbol, limit);
         }
 
-        vector<asset_object> database_api_impl::list_assets(const string &lower_bound_symbol, uint32_t limit) const {
+        vector <asset_object> database_api_impl::list_assets(const string &lower_bound_symbol, uint32_t limit) const {
             FC_ASSERT(limit <= 101);
             const auto &assets_by_symbol = _db.get_index_type<asset_index>().indices().get<by_symbol>();
-            vector<asset_object> result;
+            vector <asset_object> result;
             result.reserve(limit);
 
             auto itr = assets_by_symbol.lower_bound(lower_bound_symbol);
@@ -1305,17 +1302,17 @@ namespace graphene {
             return _db.get_index_type<asset_index>().indices().size();
         }
 
-        vector<optional < asset_object>>
+        vector <optional<asset_object>>
 
-        database_api::lookup_asset_symbols(const vector<string> &symbols_or_ids) const {
+        database_api::lookup_asset_symbols(const vector <string> &symbols_or_ids) const {
             return my->lookup_asset_symbols(symbols_or_ids);
         }
 
-        vector<optional < asset_object>>
+        vector <optional<asset_object>>
 
-        database_api_impl::lookup_asset_symbols(const vector<string> &symbols_or_ids) const {
+        database_api_impl::lookup_asset_symbols(const vector <string> &symbols_or_ids) const {
             const auto &assets_by_symbol = _db.get_index_type<asset_index>().indices().get<by_symbol>();
-            vector<optional < asset_object> > result;
+            vector <optional<asset_object>> result;
             result.reserve(symbols_or_ids.size());
             std::transform(symbols_or_ids.begin(), symbols_or_ids.end(), std::back_inserter(result),
                            [this, &assets_by_symbol](const string &symbol_or_id) -> optional <asset_object> {
@@ -1335,14 +1332,15 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<limit_order_object> database_api::get_market_orders(std::string a, std::string b, uint32_t limit) const {
+        vector <limit_order_object>
+        database_api::get_market_orders(std::string a, std::string b, uint32_t limit) const {
             return my->get_market_orders(a, b, limit);
         }
 
 /**
 *  @return the limit orders for both sides of the book for the two assets specified up to limit number on each side.
 */
-        vector<limit_order_object>
+        vector <limit_order_object>
         database_api_impl::get_market_orders(const std::string &a, const std::string &b, uint32_t limit) const {
             FC_ASSERT(limit <= 300);
 
@@ -1352,14 +1350,14 @@ namespace graphene {
             return get_market_orders(asset_a_id, asset_b_id, limit);
         }
 
-        vector<limit_order_object> database_api::get_limit_orders(std::string a, std::string b, uint32_t limit) const {
+        vector <limit_order_object> database_api::get_limit_orders(std::string a, std::string b, uint32_t limit) const {
             return my->get_limit_orders(a, b, limit);
         }
 
 /**
  *  @return the limit orders for both sides of the book for the two assets specified up to limit number on each side.
  */
-        vector<limit_order_object>
+        vector <limit_order_object>
         database_api_impl::get_limit_orders(const std::string &a, const std::string &b, uint32_t limit) const {
             FC_ASSERT(limit <= 300);
 
@@ -1369,20 +1367,20 @@ namespace graphene {
             return get_limit_orders(asset_a_id, asset_b_id, limit);
         }
 
-        vector<call_order_object> database_api::get_call_orders(const std::string &a, uint32_t limit) const {
+        vector <call_order_object> database_api::get_call_orders(const std::string &a, uint32_t limit) const {
             return my->get_call_orders(a, limit);
         }
 
-        vector<call_order_object> database_api_impl::get_call_orders(const std::string &a, uint32_t limit) const {
+        vector <call_order_object> database_api_impl::get_call_orders(const std::string &a, uint32_t limit) const {
             FC_ASSERT(limit <= 300);
 
             const asset_id_type asset_a_id = get_asset_from_string(a)->id;
             const auto &call_index = _db.get_index_type<call_order_index>().indices().get<by_price>();
             const asset_object &mia = _db.get(asset_a_id);
             price
-            index_price = price::min(mia.bitasset_data(_db).options.short_backing_asset, mia.get_id());
+                    index_price = price::min(mia.bitasset_data(_db).options.short_backing_asset, mia.get_id());
 
-            vector<call_order_object> result;
+            vector <call_order_object> result;
             auto itr_min = call_index.lower_bound(index_price.min());
             auto itr_max = call_index.lower_bound(index_price.max());
             while (itr_min != itr_max && result.size() < limit) {
@@ -1392,11 +1390,11 @@ namespace graphene {
             return result;
         }
 
-        vector<force_settlement_object> database_api::get_settle_orders(const std::string &a, uint32_t limit) const {
+        vector <force_settlement_object> database_api::get_settle_orders(const std::string &a, uint32_t limit) const {
             return my->get_settle_orders(a, limit);
         }
 
-        vector<force_settlement_object>
+        vector <force_settlement_object>
         database_api_impl::get_settle_orders(const std::string &a, uint32_t limit) const {
             FC_ASSERT(limit <= 300);
 
@@ -1404,7 +1402,7 @@ namespace graphene {
             const auto &settle_index = _db.get_index_type<force_settlement_index>().indices().get<by_expiration>();
             const asset_object &mia = _db.get(asset_a_id);
 
-            vector<force_settlement_object> result;
+            vector <force_settlement_object> result;
             auto itr_min = settle_index.lower_bound(mia.get_id());
             auto itr_max = settle_index.upper_bound(mia.get_id());
             while (itr_min != itr_max && result.size() < limit) {
@@ -1414,18 +1412,18 @@ namespace graphene {
             return result;
         }
 
-        vector<call_order_object> database_api::get_margin_positions(const std::string account_id_or_name) const {
+        vector <call_order_object> database_api::get_margin_positions(const std::string account_id_or_name) const {
             return my->get_margin_positions(account_id_or_name);
         }
 
-        vector<call_order_object> database_api_impl::get_margin_positions(const std::string account_id_or_name) const {
+        vector <call_order_object> database_api_impl::get_margin_positions(const std::string account_id_or_name) const {
             try {
                 const auto &idx = _db.get_index_type<call_order_index>();
                 const auto &aidx = idx.indices().get<by_account>();
                 const account_id_type id = get_account_from_string(account_id_or_name)->id;
                 auto start = aidx.lower_bound(boost::make_tuple(id, asset_id_type(0)));
                 auto end = aidx.lower_bound(boost::make_tuple(id + 1, asset_id_type(0)));
-                vector<call_order_object> result;
+                vector <call_order_object> result;
                 while (start != end) {
                     result.push_back(*start);
                     ++start;
@@ -1435,12 +1433,12 @@ namespace graphene {
             FC_CAPTURE_AND_RETHROW((account_id_or_name))
         }
 
-        vector<collateral_bid_object>
+        vector <collateral_bid_object>
         database_api::get_collateral_bids(const std::string &asset, uint32_t limit, uint32_t start) const {
             return my->get_collateral_bids(asset, limit, start);
         }
 
-        vector<collateral_bid_object>
+        vector <collateral_bid_object>
         database_api_impl::get_collateral_bids(const std::string &asset, uint32_t limit, uint32_t skip) const {
             try {
                 FC_ASSERT(limit <= 100);
@@ -1455,7 +1453,7 @@ namespace graphene {
                         boost::make_tuple(asset_id, price::max(back.id, asset_id), collateral_bid_id_type()));
                 auto end = aidx.lower_bound(boost::make_tuple(asset_id, price::min(back.id, asset_id),
                                                               collateral_bid_id_type(GRAPHENE_DB_MAX_INSTANCE_ID)));
-                vector<collateral_bid_object> result;
+                vector <collateral_bid_object> result;
                 while (skip-- > 0 && start != end) { ++start; }
                 while (start != end && limit-- > 0) {
                     result.push_back(*start);
@@ -1598,18 +1596,18 @@ namespace graphene {
             return result;
         }
 
-        vector<market_ticker> database_api::get_top_markets(uint32_t limit) const {
+        vector <market_ticker> database_api::get_top_markets(uint32_t limit) const {
             return my->get_top_markets(limit);
         }
 
-        vector<market_ticker> database_api_impl::get_top_markets(uint32_t limit) const {
+        vector <market_ticker> database_api_impl::get_top_markets(uint32_t limit) const {
             FC_ASSERT(_app_options && _app_options->has_market_history_plugin, "Market history plugin is not enabled.");
 
             FC_ASSERT(limit <= 100);
 
             const auto &volume_idx = _db.get_index_type<graphene::market_history::market_ticker_index>().indices().get<by_volume>();
             auto itr = volume_idx.rbegin();
-            vector<market_ticker> result;
+            vector <market_ticker> result;
             result.reserve(limit);
             const fc::time_point_sec now = _db.head_block_time();
 
@@ -1625,19 +1623,19 @@ namespace graphene {
             return result;
         }
 
-        vector<market_trade> database_api::get_trade_history(const string &base,
-                                                             const string &quote,
-                                                             fc::time_point_sec start,
-                                                             fc::time_point_sec stop,
-                                                             unsigned limit) const {
+        vector <market_trade> database_api::get_trade_history(const string &base,
+                                                              const string &quote,
+                                                              fc::time_point_sec start,
+                                                              fc::time_point_sec stop,
+                                                              unsigned limit) const {
             return my->get_trade_history(base, quote, start, stop, limit);
         }
 
-        vector<market_trade> database_api_impl::get_trade_history(const string &base,
-                                                                  const string &quote,
-                                                                  fc::time_point_sec start,
-                                                                  fc::time_point_sec stop,
-                                                                  unsigned limit) const {
+        vector <market_trade> database_api_impl::get_trade_history(const string &base,
+                                                                   const string &quote,
+                                                                   fc::time_point_sec start,
+                                                                   fc::time_point_sec stop,
+                                                                   unsigned limit) const {
             FC_ASSERT(_app_options && _app_options->has_market_history_plugin, "Market history plugin is not enabled.");
 
             FC_ASSERT(limit <= 100);
@@ -1657,7 +1655,7 @@ namespace graphene {
             uint32_t count = 0;
             const auto &history_idx = _db.get_index_type<graphene::market_history::history_index>().indices().get<by_market_time>();
             auto itr = history_idx.lower_bound(std::make_tuple(base_id, quote_id, start));
-            vector<market_trade> result;
+            vector <market_trade> result;
 
             while (itr != history_idx.end() && count < limit &&
                    !(itr->key.base != base_id || itr->key.quote != quote_id || itr->time < stop)) {
@@ -1706,7 +1704,7 @@ namespace graphene {
             return result;
         }
 
-        vector<market_trade> database_api::get_trade_history_by_sequence(
+        vector <market_trade> database_api::get_trade_history_by_sequence(
                 const string &base,
                 const string &quote,
                 int64_t start,
@@ -1715,7 +1713,7 @@ namespace graphene {
             return my->get_trade_history_by_sequence(base, quote, start, stop, limit);
         }
 
-        vector<market_trade> database_api_impl::get_trade_history_by_sequence(
+        vector <market_trade> database_api_impl::get_trade_history_by_sequence(
                 const string &base,
                 const string &quote,
                 int64_t start,
@@ -1743,7 +1741,7 @@ namespace graphene {
 
             uint32_t count = 0;
             auto itr = history_idx.lower_bound(hkey);
-            vector<market_trade> result;
+            vector <market_trade> result;
 
             while (itr != history_idx.end() && count < limit &&
                    !(itr->key.base != base_id || itr->key.quote != quote_id || itr->time < stop)) {
@@ -1808,17 +1806,17 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<optional < witness_object>>
+        vector <optional<witness_object>>
 
-        database_api::get_witnesses(const vector<witness_id_type> &witness_ids) const {
+        database_api::get_witnesses(const vector <witness_id_type> &witness_ids) const {
             return my->get_witnesses(witness_ids);
         }
 
-        vector<optional < witness_object>>
+        vector <optional<witness_object>>
 
-        database_api_impl::get_witnesses(const vector<witness_id_type> &witness_ids) const {
-            vector<optional < witness_object>>
-            result;
+        database_api_impl::get_witnesses(const vector <witness_id_type> &witness_ids) const {
+            vector <optional<witness_object>>
+                    result;
             result.reserve(witness_ids.size());
             std::transform(witness_ids.begin(), witness_ids.end(), std::back_inserter(result),
                            [this](witness_id_type id) -> optional <witness_object> {
@@ -1843,12 +1841,12 @@ namespace graphene {
             return {};
         }
 
-        map<string, witness_id_type>
+        map <string, witness_id_type>
         database_api::lookup_witness_accounts(const string &lower_bound_name, uint32_t limit) const {
             return my->lookup_witness_accounts(lower_bound_name, limit);
         }
 
-        map<string, witness_id_type>
+        map <string, witness_id_type>
         database_api_impl::lookup_witness_accounts(const string &lower_bound_name, uint32_t limit) const {
             FC_ASSERT(limit <= 1000);
             const auto &witnesses_by_id = _db.get_index_type<witness_index>().indices().get<by_id>();
@@ -1858,7 +1856,7 @@ namespace graphene {
             // get all the names and look them all up, sort them, then figure out what
             // records to return.  This could be optimized, but we expect the
             // number of witnesses to be few and the frequency of calls to be rare
-            std::map<std::string, witness_id_type> witnesses_by_account_name;
+            std::map <std::string, witness_id_type> witnesses_by_account_name;
             for (const witness_object &witness : witnesses_by_id)
                 if (auto account_iter = _db.find(witness.witness_account))
                     if (account_iter->name >= lower_bound_name) // we can ignore anything below lower_bound_name
@@ -1885,17 +1883,17 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<optional < committee_member_object>>
+        vector <optional<committee_member_object>>
 
-        database_api::get_committee_members(const vector<committee_member_id_type> &committee_member_ids) const {
+        database_api::get_committee_members(const vector <committee_member_id_type> &committee_member_ids) const {
             return my->get_committee_members(committee_member_ids);
         }
 
-        vector<optional < committee_member_object>>
+        vector <optional<committee_member_object>>
 
-        database_api_impl::get_committee_members(const vector<committee_member_id_type> &committee_member_ids) const {
-            vector<optional < committee_member_object>>
-            result;
+        database_api_impl::get_committee_members(const vector <committee_member_id_type> &committee_member_ids) const {
+            vector <optional<committee_member_object>>
+                    result;
             result.reserve(committee_member_ids.size());
             std::transform(committee_member_ids.begin(), committee_member_ids.end(), std::back_inserter(result),
                            [this](committee_member_id_type id) -> optional <committee_member_object> {
@@ -1921,12 +1919,12 @@ namespace graphene {
             return {};
         }
 
-        map<string, committee_member_id_type>
+        map <string, committee_member_id_type>
         database_api::lookup_committee_member_accounts(const string &lower_bound_name, uint32_t limit) const {
             return my->lookup_committee_member_accounts(lower_bound_name, limit);
         }
 
-        map<string, committee_member_id_type>
+        map <string, committee_member_id_type>
         database_api_impl::lookup_committee_member_accounts(const string &lower_bound_name, uint32_t limit) const {
             FC_ASSERT(limit <= 1000);
             const auto &committee_members_by_id = _db.get_index_type<committee_member_index>().indices().get<by_id>();
@@ -1936,7 +1934,7 @@ namespace graphene {
             // get all the names and look them all up, sort them, then figure out what
             // records to return.  This could be optimized, but we expect the
             // number of committee_members to be few and the frequency of calls to be rare
-            std::map<std::string, committee_member_id_type> committee_members_by_account_name;
+            std::map <std::string, committee_member_id_type> committee_members_by_account_name;
             for (const committee_member_object &committee_member : committee_members_by_id)
                 if (auto account_iter = _db.find(committee_member.committee_member_account))
                     if (account_iter->name >= lower_bound_name) // we can ignore anything below lower_bound_name
@@ -1965,12 +1963,12 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<worker_object> database_api::get_all_workers() const {
+        vector <worker_object> database_api::get_all_workers() const {
             return my->get_all_workers();
         }
 
-        vector<worker_object> database_api_impl::get_all_workers() const {
-            vector<worker_object> result;
+        vector <worker_object> database_api_impl::get_all_workers() const {
+            vector <worker_object> result;
             const auto &workers_idx = _db.get_index_type<worker_index>().indices().get<by_id>();
             for (const auto &w : workers_idx) {
                 result.push_back(w);
@@ -1978,17 +1976,17 @@ namespace graphene {
             return result;
         }
 
-        vector<optional < worker_object>>
+        vector <optional<worker_object>>
 
         database_api::get_workers_by_account(const std::string account_id_or_name) const {
             return my->get_workers_by_account(account_id_or_name);
         }
 
-        vector<optional < worker_object>>
+        vector <optional<worker_object>>
 
         database_api_impl::get_workers_by_account(const std::string account_id_or_name) const {
-            vector<optional < worker_object>>
-            result;
+            vector <optional<worker_object>>
+                    result;
             const auto &workers_idx = _db.get_index_type<worker_index>().indices().get<by_account>();
 
             const account_id_type account = get_account_from_string(account_id_or_name)->id;
@@ -2015,11 +2013,11 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<variant> database_api::lookup_vote_ids(const vector<vote_id_type> &votes) const {
+        vector <variant> database_api::lookup_vote_ids(const vector <vote_id_type> &votes) const {
             return my->lookup_vote_ids(votes);
         }
 
-        vector<variant> database_api_impl::lookup_vote_ids(const vector<vote_id_type> &votes) const {
+        vector <variant> database_api_impl::lookup_vote_ids(const vector <vote_id_type> &votes) const {
             FC_ASSERT(votes.size() < 1000, "Only 1000 votes can be queried at a time");
 
             const auto &witness_idx = _db.get_index_type<witness_index>().indices().get<by_vote_id>();
@@ -2027,7 +2025,7 @@ namespace graphene {
             const auto &for_worker_idx = _db.get_index_type<worker_index>().indices().get<by_vote_for>();
             const auto &against_worker_idx = _db.get_index_type<worker_index>().indices().get<by_vote_against>();
 
-            vector<variant> result;
+            vector <variant> result;
             result.reserve(votes.size());
             for (auto id : votes) {
                 switch (id.type()) {
@@ -2148,7 +2146,7 @@ namespace graphene {
             // Insert keys in required "other" authories
             flat_set <account_id_type> required_active;
             flat_set <account_id_type> required_owner;
-            vector<authority> other;
+            vector <authority> other;
             trx.get_required_authorities(required_active, required_owner, other);
             for (const auto &auth : other)
                 for (const auto &key : auth.get_keys())
@@ -2201,7 +2199,7 @@ namespace graphene {
             // create a dummy transfer
             transfer_operation op;
             op.from = get_account_from_string(account_name_or_id)->id;
-            std::vector<operation> ops;
+            std::vector <operation> ops;
             ops.emplace_back(op);
 
             try {
@@ -2224,8 +2222,8 @@ namespace graphene {
             return _db.validate_transaction(trx);
         }
 
-        vector<fc::variant>
-        database_api::get_required_fees(const vector<operation> &ops, const std::string &asset_id_or_symbol) const {
+        vector <fc::variant>
+        database_api::get_required_fees(const vector <operation> &ops, const std::string &asset_id_or_symbol) const {
             return my->get_required_fees(ops, asset_id_or_symbol);
         }
 
@@ -2256,7 +2254,7 @@ namespace graphene {
 
             fc::variant set_proposal_create_op_fees(operation &proposal_create_op) {
                 proposal_create_operation &op = proposal_create_op.get<proposal_create_operation>();
-                std::pair<asset, fc::variants> result;
+                std::pair <asset, fc::variants> result;
                 for (op_wrapper &prop_op : op.proposed_ops) {
                     FC_ASSERT(current_recursion < max_recursion);
                     ++current_recursion;
@@ -2277,15 +2275,15 @@ namespace graphene {
             uint32_t current_recursion = 0;
         };
 
-        vector<fc::variant> database_api_impl::get_required_fees(const vector<operation> &ops,
-                                                                 const std::string &asset_id_or_symbol) const {
-            vector<operation> _ops = ops;
+        vector <fc::variant> database_api_impl::get_required_fees(const vector <operation> &ops,
+                                                                  const std::string &asset_id_or_symbol) const {
+            vector <operation> _ops = ops;
             //
             // we copy the ops because we need to mutate an operation to reliably
             // determine its fee, see #435
             //
 
-            vector<fc::variant> result;
+            vector <fc::variant> result;
             result.reserve(ops.size());
             const asset_object &a = *get_asset_from_string(asset_id_or_symbol);
             get_required_fees_helper helper(
@@ -2304,15 +2302,15 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<proposal_object> database_api::get_proposed_transactions(const std::string account_id_or_name) const {
+        vector <proposal_object> database_api::get_proposed_transactions(const std::string account_id_or_name) const {
             return my->get_proposed_transactions(account_id_or_name);
         }
 
 /** TODO: add secondary index that will accelerate this process */
-        vector<proposal_object>
+        vector <proposal_object>
         database_api_impl::get_proposed_transactions(const std::string account_id_or_name) const {
             const auto &idx = _db.get_index_type<proposal_index>();
-            vector<proposal_object> result;
+            vector <proposal_object> result;
             const account_id_type id = get_account_from_string(account_id_or_name)->id;
 
             idx.inspect_all_objects([&](const object &obj) {
@@ -2333,14 +2331,14 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<blinded_balance_object>
+        vector <blinded_balance_object>
         database_api::get_blinded_balances(const flat_set <commitment_type> &commitments) const {
             return my->get_blinded_balances(commitments);
         }
 
-        vector<blinded_balance_object>
+        vector <blinded_balance_object>
         database_api_impl::get_blinded_balances(const flat_set <commitment_type> &commitments) const {
-            vector<blinded_balance_object> result;
+            vector <blinded_balance_object> result;
             result.reserve(commitments.size());
             const auto &bal_idx = _db.get_index_type<blinded_balance_index>();
             const auto &by_commitment_idx = bal_idx.indices().get<by_commitment>();
@@ -2358,17 +2356,17 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        vector<withdraw_permission_object>
+        vector <withdraw_permission_object>
         database_api::get_withdraw_permissions_by_giver(const std::string account_id_or_name,
                                                         withdraw_permission_id_type start, uint32_t limit) const {
             return my->get_withdraw_permissions_by_giver(account_id_or_name, start, limit);
         }
 
-        vector<withdraw_permission_object>
+        vector <withdraw_permission_object>
         database_api_impl::get_withdraw_permissions_by_giver(const std::string account_id_or_name,
                                                              withdraw_permission_id_type start, uint32_t limit) const {
             FC_ASSERT(limit <= 101);
-            vector<withdraw_permission_object> result;
+            vector <withdraw_permission_object> result;
 
             const auto &withdraw_idx = _db.get_index_type<withdraw_permission_index>().indices().get<by_from>();
             auto withdraw_index_end = withdraw_idx.end();
@@ -2382,18 +2380,18 @@ namespace graphene {
             return result;
         }
 
-        vector<withdraw_permission_object>
+        vector <withdraw_permission_object>
         database_api::get_withdraw_permissions_by_recipient(const std::string account_id_or_name,
                                                             withdraw_permission_id_type start, uint32_t limit) const {
             return my->get_withdraw_permissions_by_recipient(account_id_or_name, start, limit);
         }
 
-        vector<withdraw_permission_object>
+        vector <withdraw_permission_object>
         database_api_impl::get_withdraw_permissions_by_recipient(const std::string account_id_or_name,
                                                                  withdraw_permission_id_type start,
                                                                  uint32_t limit) const {
             FC_ASSERT(limit <= 101);
-            vector<withdraw_permission_object> result;
+            vector <withdraw_permission_object> result;
 
             const auto &withdraw_idx = _db.get_index_type<withdraw_permission_index>().indices().get<by_authorized>();
             auto withdraw_index_end = withdraw_idx.end();
@@ -2413,7 +2411,7 @@ namespace graphene {
 //                                                                  //
 //////////////////////////////////////////////////////////////////////
 
-        void database_api_impl::broadcast_updates(const vector<variant> &updates) {
+        void database_api_impl::broadcast_updates(const vector <variant> &updates) {
             if (updates.size() && _subscribe_callback) {
                 auto capture_this = shared_from_this();
                 fc::async([capture_this, updates]() {
@@ -2437,7 +2435,7 @@ namespace graphene {
         }
 
         void
-        database_api_impl::on_objects_removed(const vector<object_id_type> &ids, const vector<const object *> &objs,
+        database_api_impl::on_objects_removed(const vector <object_id_type> &ids, const vector<const object *> &objs,
                                               const flat_set <account_id_type> &impacted_accounts) {
             handle_object_changed(_notify_remove_create, false, ids, impacted_accounts,
                                   [objs](object_id_type id) -> const object * {
@@ -2453,14 +2451,14 @@ namespace graphene {
             );
         }
 
-        void database_api_impl::on_objects_new(const vector<object_id_type> &ids,
+        void database_api_impl::on_objects_new(const vector <object_id_type> &ids,
                                                const flat_set <account_id_type> &impacted_accounts) {
             handle_object_changed(_notify_remove_create, true, ids, impacted_accounts,
                                   std::bind(&object_database::find_object, &_db, std::placeholders::_1)
             );
         }
 
-        void database_api_impl::on_objects_changed(const vector<object_id_type> &ids,
+        void database_api_impl::on_objects_changed(const vector <object_id_type> &ids,
                                                    const flat_set <account_id_type> &impacted_accounts) {
             handle_object_changed(false, true, ids, impacted_accounts,
                                   std::bind(&object_database::find_object, &_db, std::placeholders::_1)
@@ -2468,7 +2466,8 @@ namespace graphene {
         }
 
         void
-        database_api_impl::handle_object_changed(bool force_notify, bool full_object, const vector<object_id_type> &ids,
+        database_api_impl::handle_object_changed(bool force_notify, bool full_object,
+                                                 const vector <object_id_type> &ids,
                                                  const flat_set <account_id_type> &impacted_accounts,
                                                  std::function< const object
 
@@ -2476,7 +2475,7 @@ namespace graphene {
         object_id_type id
         )> find_object) {
         if ( _subscribe_callback ) {
-        vector<variant> updates;
+        vector <variant> updates;
 
         for (
         auto id
@@ -2565,36 +2564,6 @@ broadcast_market_updates(broadcast_queue);
 }
 }
 
-//void database_api_impl::on_pending_orders(const signed_transaction &trx, uint32_t limit) {
-//    if (_limit_order_callback) {
-//        for (const optional <operation_history_object> &o_op : trx.operations) {
-//            const operation_history_object &op = *o_op;
-//
-//            optional <std::pair<asset_id_type, asset_id_type>> market;
-//            switch (op.op.which()) {
-//                case operation::tag<limit_order_create_operation>::value:
-//                    market = op.op.get<fill_order_operation>().get_market();
-//                    break;
-//                case operation::tag<fill_order_operation>::value:
-//                    market = op.op.get<fill_order_operation>().get_market();
-//                    break;
-//                default:
-//                    break;
-//            }
-//
-//            if (market.valid()) {
-//                string mJson = fc::json::to_string(*market);
-//                ilog("market updating ${json}", ("json", mJson));
-//
-//                const auto &orders = get_limit_orders((*market).first, (*market).second, limit);
-//                string oJson = fc::json::to_string(orders);
-//                ilog("market orders ${json}", ("json", oJson));
-////                _limit_order_callback(fc::variant(orders, 2));
-//            }
-//        }
-//    }
-//}
-
 /** note: this method cannot yield because it is called in the middle of
  * apply a block.
  */
@@ -2611,8 +2580,8 @@ void database_api_impl::on_applied_block() {
         return;
 
     const auto &ops = _db.get_applied_operations();
-    map < std::pair<asset_id_type, asset_id_type>, vector < pair < operation, operation_result >> >
-                                                                              subscribed_markets_ops;
+    map < std::pair < asset_id_type, asset_id_type >, vector < pair < operation, operation_result >> >
+                                                                                 subscribed_markets_ops;
     for (const optional <operation_history_object> &o_op : ops) {
         if (!o_op.valid())
             continue;
