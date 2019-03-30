@@ -1153,8 +1153,8 @@ namespace graphene {
                 new_price.base.amount = std::numeric_limits<int64_t>::max();
                 new_price.quote.amount = 1;
             }
-            return new_price.base.amount.value * quick_pow10(quote_precision)
-                   / (new_price.quote.amount.value * quick_pow10(base_precision));
+            return double(new_price.base.amount.value * quick_pow10(quote_precision))
+                   / double(new_price.quote.amount.value * quick_pow10(base_precision));
         }
 
         double get_sell_price(const price &_price, const asset_object &_base, const asset_object &_quote) {
@@ -1181,14 +1181,14 @@ namespace graphene {
                 if (o.sell_price.base.asset_id == base_id) {
                     order ord;
                     ord.price = get_sell_price(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = o.for_sale.value * o.sell_price.quote.amount.value / o.sell_price.base.amount.value;
+                    ord.quote = double(o.for_sale.value * o.sell_price.quote.amount.value) / double(o.sell_price.base.amount.value);
                     ord.base = o.for_sale.value;
                     result.bids.push_back(ord);
                 } else {
                     order ord;
                     ord.price = get_sell_price(o.sell_price, *assets[0], *assets[1]);
                     ord.quote = o.for_sale.value;
-                    ord.base = o.for_sale.value * o.sell_price.quote.amount.value / o.sell_price.base.amount.value;
+                    ord.base = double(o.for_sale.value * o.sell_price.quote.amount.value) / double(o.sell_price.base.amount.value);
                     result.asks.push_back(ord);
                 }
             }
