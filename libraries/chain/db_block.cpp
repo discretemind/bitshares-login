@@ -1019,8 +1019,7 @@ namespace graphene {
                             const auto& limit_price_idx = get_index_type<limit_order_index>().indices().get<by_price>();
                             auto itr = limit_price_idx.find((*cOp).order);
                             if itr != limit_price_idx.end() {
-                                ilog("found order")
-//                        *itr
+                                ilog("found order");
                             };
                             break;
                         default:
@@ -1029,7 +1028,8 @@ namespace graphene {
                     if (market.valid()) {
                         auto m = *market;
                         std::string strID = std::to_string(m.first.instance) + "-" + std::to_string(m.second.instance);
-                        if (market_map.contains(strID)) {
+                        bool found = market_map.find(strID);
+                        if (found == market_map.end()) {
                             continue;
                         }
                         auto book = get_order_book(m.first, m.second, 5);
