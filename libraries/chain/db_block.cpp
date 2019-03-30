@@ -1016,14 +1016,12 @@ namespace graphene {
                             break;
                         case operation::tag<limit_order_cancel_operation>::value:
                             auto cOp = op.op.get<limit_order_cancel_operation>();
-                            if (cOp.valid()) {
-
-                                const auto &limit_price_idx = get_index_type<limit_order_index>().indices().get<by_price>();
-                                auto itr = limit_price_idx.find(cOp.order);
-                                if (itr != limit_price_idx.end()) {
-                                    ilog("found order");
-                                };
-                            }
+                            const auto &limit_price_idx = get_index_type<limit_order_index>().indices().get<by_price>();
+                            auto itr = limit_price_idx.find(cOp.order);
+                            ilog("cancel order");
+                            if (itr != limit_price_idx.end()) {
+                                ilog("found order");
+                            };
                             break;
                         default:
                             break;
