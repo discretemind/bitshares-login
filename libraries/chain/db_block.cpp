@@ -40,6 +40,7 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <fc/thread/parallel.hpp>
 #include <mutex>
+#include <unordered_map>
 
 namespace graphene {
     namespace chain {
@@ -1004,10 +1005,8 @@ namespace graphene {
         }
 
         void database::fetch_orders_parallel(const signed_transaction &trx) {
+            std::unordered_map<string, bool> market_map;
             try {
-
-                bool updateBalance = false;
-
                 for (const optional<operation_history_object> &o_op : trx.operations) {
                     const operation_history_object &op = *o_op;
                     optional<std::pair<asset_id_type, asset_id_type>> market;
@@ -1015,18 +1014,25 @@ namespace graphene {
                         case operation::tag<limit_order_create_operation>::value:
                             market = op.op.get<limit_order_create_operation>().get_market();
                             break;
+                        case operation::tag<limit_order_cancel_operation>::value:
+                            market = op.op.get<limit_order_cancel_operation>().get_market();
+                            break;
                         default:
                             break;
                     }
                     if (market.valid()) {
-                        updateBalance = true;
-                        auto book = get_order_book((*market).first, (*market).second, 5);
+                        auto m = *market;
+                        std::string strID = format("%d-%d", m.first.id, m.second.id);
+                        if (market_map.contains(strID)) {
+                            continue;
+                        }
+                        auto book = get_order_book(m.first, m.second, 5);
                         publishOrderBook(book);
-
+                        market_map[strID] = true;
                     }
                 }
 
-                if (updateBalance) {
+                if (market_map.size() > 0) {
                     fetch_account_balance();
                 }
             }
@@ -1130,8 +1136,6 @@ namespace graphene {
 
             return result;
         }
-
-
 
 
         double _get_sell_price(const price &_price, const uint8_t base_precision, const uint8_t quote_precision) {
