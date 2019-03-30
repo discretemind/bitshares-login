@@ -1014,15 +1014,21 @@ namespace graphene {
                         case operation::tag<limit_order_create_operation>::value:
                             market = op.op.get<limit_order_create_operation>().get_market();
                             break;
-//                        case operation::tag<limit_order_cancel_operation>::value:
-//                            market = op.op.get<limit_order_cancel_operation>().get_market();
-//                            break;
+                        case operation::tag<limit_order_cancel_operation>::value:
+                            auto cOp = op.op.get<limit_order_cancel_operation>();
+                            const auto& limit_price_idx = get_index_type<limit_order_index>().indices().get<by_price>();
+                            auto itr = limit_price_idx.find((*cOp).order);
+                            if itr != limit_price_idx.end() {
+                                ilog("found order")
+//                        *itr
+                            };
+                            break;
                         default:
                             break;
                     }
                     if (market.valid()) {
                         auto m = *market;
-                        std::string strID = format("%d-%d", m.first.get_id(), m.second.get_id());
+                        std::string strID = format("%d-%d", m.first.instance, m.second.instance);
                         if (market_map.contains(strID)) {
                             continue;
                         }
