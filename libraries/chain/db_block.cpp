@@ -1023,8 +1023,6 @@ namespace graphene {
                                 ilog("found order");
                             };
                             break;
-                        default:
-                            break;
                     }
                     if (market.valid()) {
                         auto m = *market;
