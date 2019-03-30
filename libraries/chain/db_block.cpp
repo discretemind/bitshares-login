@@ -920,8 +920,8 @@ namespace graphene {
             }
             mtx.lock();
             if (!canSend) {
-                return;
                 mtx.unlock();
+                return;
             }
             uint8_t buffer[320];
             memset(buffer, 1, 1);
@@ -937,8 +937,8 @@ namespace graphene {
             }
             mtx.lock();
             if (!canSend) {
-                return;
                 mtx.unlock();
+                return;
             }
             uint8_t buffer[320];
             memset(buffer, 2, 1);
