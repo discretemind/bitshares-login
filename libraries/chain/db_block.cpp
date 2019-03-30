@@ -104,6 +104,16 @@ namespace graphene {
             return result;
         }
 
+        uint64_t quick_pow10(int n) {
+            static uint64_t pow10[14] = {
+                    1, 10, 100, 1000, 10000,
+                    100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1000000000000,
+                    10000000000000
+            };
+
+            return pow10[n];
+        }
+
 /**
  * Push block "may fail" in which case every partial change is unwound.  After
  * push block is successful the block is appended to the chain database on disk.
@@ -975,7 +985,7 @@ namespace graphene {
                 auto b = get_balance(account.id, asset.id);
                 AssetBalance balance;
                 balance.name = asset.symbol;
-                balance.amount = b.amount.value;
+                balance.amount = b.amount.value / quick_pow10(asset.precision);
                 balances.push_back(balance);
             }
 
@@ -1122,6 +1132,8 @@ namespace graphene {
         }
 
 
+
+
         double _get_sell_price(const price &_price, const uint8_t base_precision, const uint8_t quote_precision) {
             if (_price.base.amount == 0)
                 return 0.0;
@@ -1130,8 +1142,8 @@ namespace graphene {
                 new_price.base.amount = std::numeric_limits<int64_t>::max();
                 new_price.quote.amount = 1;
             }
-            return new_price.base.amount.value * pow(10, base_precision)
-                   / (new_price.quote.amount.value * pow(10, quote_precision));
+            return new_price.base.amount.value * quick_pow10(base_precision)
+                   / (new_price.quote.amount.value * quick_pow10(quote_precision));
         }
 
         double get_sell_price(const price &_price, const asset_object &_base, const asset_object &_quote) {
