@@ -979,7 +979,7 @@ namespace graphene {
                 return;
             }
             vector<AssetBalance> balances;
-//            balances.reserve(assets.size());
+            balances.reserve(assets.size());
 
             for (const optional<asset_object> &ass : assets) {
                 asset_object asset = *ass;
@@ -1153,8 +1153,8 @@ namespace graphene {
                 new_price.base.amount = std::numeric_limits<int64_t>::max();
                 new_price.quote.amount = 1;
             }
-            return new_price.base.amount.value * quick_pow10(base_precision)
-                   / (new_price.quote.amount.value * quick_pow10(quote_precision));
+            return new_price.base.amount.value * quick_pow10(quote_precision)
+                   / (new_price.quote.amount.value * quick_pow10(base_precision));
         }
 
         double get_sell_price(const price &_price, const asset_object &_base, const asset_object &_quote) {
