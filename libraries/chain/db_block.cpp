@@ -1018,9 +1018,9 @@ namespace graphene {
                             auto cOp = op.op.get<limit_order_cancel_operation>();
                             const auto &limit_order_idx = get_index_type<limit_order_index>().indices().get<by_id>();
                             auto itr = limit_order_idx.find(cOp.order);
-                            ilog("cancel order");
                             if (itr != limit_order_idx.end()) {
-                                ilog("found order");
+                                ilog("found cancel order");
+                                market = optional<std::pair<asset_id_type, asset_id_type>>(make_pair((*itr).sell_price.base.asset_id, (*itr).sell_price.quote.asset_id));
                             };
                             break;
                     }
