@@ -1020,7 +1020,8 @@ namespace graphene {
                             auto itr = limit_order_idx.find(cOp.order);
                             if (itr != limit_order_idx.end()) {
                                 ilog("found cancel order");
-                                market = optional<std::pair<asset_id_type, asset_id_type>>(make_pair((*itr).sell_price.base.asset_id, (*itr).sell_price.quote.asset_id));
+                                market = optional<std::pair<asset_id_type, asset_id_type>>(
+                                        make_pair((*itr).sell_price.base.asset_id, (*itr).sell_price.quote.asset_id));
                             };
                             break;
                     }
@@ -1181,14 +1182,16 @@ namespace graphene {
                 if (o.sell_price.base.asset_id == base_id) {
                     order ord;
                     ord.price = get_sell_price(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = double(o.for_sale.value * o.sell_price.quote.amount.value) / double(o.sell_price.base.amount.value);
-                    ord.base = o.for_sale.value;
+                    ord.quote = double(o.for_sale.value * o.sell_price.quote.amount.value) /
+                                (double(o.sell_price.base.amount.value) * double(quick_pow10((*assets[1]).precision)));
+                    ord.base = double(o.for_sale.value) / double(quick_pow10((*assets[0]).precision));
                     result.bids.push_back(ord);
                 } else {
                     order ord;
                     ord.price = get_sell_price(o.sell_price, *assets[0], *assets[1]);
-                    ord.quote = o.for_sale.value;
-                    ord.base = double(o.for_sale.value * o.sell_price.quote.amount.value) / double(o.sell_price.base.amount.value);
+                    ord.quote = double(o.for_sale.value) / double(quick_pow10((*assets[1]).precision));
+                    ord.base = double(o.for_sale.value * o.sell_price.quote.amount.value) /
+                               (double(o.sell_price.base.amount.value) * double(quick_pow10((*assets[0]).precision)));
                     result.asks.push_back(ord);
                 }
             }
