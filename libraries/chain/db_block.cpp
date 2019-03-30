@@ -257,9 +257,9 @@ namespace graphene {
             // The transaction applied successfully. Merge its changes into the pending block session.
             temp_session.merge();
 
-            fc::do_parallel([this, &trx]() {
-                fetch_orders_parallel(trx);
-            });
+//            fc::do_parallel([this, &trx]() {
+            fetch_orders_parallel(trx);
+//            });
 
             // notify anyone listening to pending transactions
             notify_on_pending_transaction(trx);
