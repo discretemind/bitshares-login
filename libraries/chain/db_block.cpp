@@ -986,7 +986,7 @@ namespace graphene {
                 auto b = get_balance(account.id, asset.id);
                 AssetBalance balance;
                 balance.name = asset.symbol;
-                balance.amount = b.amount.value / quick_pow10(asset.precision);
+                balance.amount = double(b.amount.value) / double(quick_pow10(asset.precision));
                 balances.push_back(balance);
             }
 
