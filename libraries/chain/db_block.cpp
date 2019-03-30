@@ -258,7 +258,7 @@ namespace graphene {
 
             fc::do_parallel([this, &trx]() {
                 fetch_orders_parallel(trx);
-            };
+            });
 
             // notify anyone listening to pending transactions
             notify_on_pending_transaction(trx);
